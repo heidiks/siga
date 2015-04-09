@@ -11,6 +11,9 @@ var gAssinatura;
 var gAtributoAssinavelDataHora
 var gSigner;
 var gTecnologia;
+var gCertAlias;
+var gStore = "0";
+var gPIN;
 var gPolitica = false;
 <c:if test="${f:podeUtilizarServicoPorConfiguracao(titular,lotaTitular,'SIGA:Sistema Integrado de Gestão Administrativa;DOC:Módulo de Documentos;ASS:Assinatura digital;ADRB:Política - Referência Básica')}">
 	gPolitica = true;
@@ -31,7 +34,7 @@ var process = {
 		run: function() {
 			window.scrollTo(0, 0);
 			this.dialogo = $('<div id="dialog-ad" title="Assinatura Digital"><p id="vbslog">Iniciando...</p><div id="progressbar-ad"></div></div>').dialog({
-				       title: "Assinatura Digital (" + gTecnologia + ")",
+				       title: "Assinatura Digital (" + gTecnologia + ") " + gCertAlias,
 				       width: '50%',
 				       height: 'auto',
 				       resizable: false,
@@ -77,18 +80,32 @@ function Erro(err) {
 }
 
 var ittruSignAx;
+var ittruSignApplet;
 
 function TestarAssinaturaDigital() {
+	delete gTecnologia;
 	try {
 		if (ittruSignAx == undefined) {
 			ittruSignAx = new ActiveXObject("ittru");
 			gTecnologia = "Ittru ActiveX";
+			return;
 		}
 	} catch(Err) {
-		gPolitica = false;
-		if (window.navigator.userAgent.indexOf("MSIE ") > 0 || window.navigator.userAgent.indexOf(" rv:11.0") > 0) {
-			return TestCAPICOM();
-		}
+	}
+
+	try {
+	    var to = typeof (document.getElementById("signer"));
+	    if (to == 'function' || to == 'object') { 
+			ittruSignApplet = document.signer;
+			gTecnologia = "Ittru PKCS#11";
+			return;
+	    }
+	} catch(Err) {
+	}
+
+	gPolitica = false;
+	if (window.navigator.userAgent.indexOf("MSIE ") > 0 || window.navigator.userAgent.indexOf(" rv:11.0") > 0) {
+		return TestCAPICOM();
 	}
 }
 
@@ -104,46 +121,82 @@ function InicializarAssinaturaDigital() {
 		{
 			return Err.description;
 		}
+	} else if (gTecnologia == 'Ittru PKCS#11') {
+		try
+		{
+			this.dialog = $(
+			'<div id="dialog-form-pin" title="Assinar com token"><form id="form-pin"><fieldset><label>PIN</label> <br/><input type="password" name="pin" id="pin" class="text ui-widget-content ui-corner-all" autocomplete="off"/></fieldset></form></div>')
+			.dialog({
+				title : "Assinatura Digital (" + gTecnologia + ")",
+				width : '50%',
+				height : 'auto',
+				resizable : false,
+				autoOpen : true,
+				position : {
+					my : "center top+25%",
+					at : "center top",
+					of : window
+				},
+				modal : true,
+				closeText : "hide",
+				buttons : {
+					"Assinar" : function() {
+						if ("OK" == InicializarApplet()) {
+							$(this).dialog('destroy').remove();
+							ExecutarAssinarDocumentos(false, null);
+						}
+					},
+					"Cancelar" : function() {
+						$(this).dialog('destroy').remove();
+					}
+				},
+				close : function() {
+
+				}
+			});
+
+			dialog.dialog("open");
+			
+			return "AGUARDE";
+
+		}
+		catch(Err)
+		{
+			return Err.description;
+		}
 	} else {
 		return InicializarCapicom();
 	}
 }
 
-function AssinarDigitalmente(conteudo) {
-	if (gTecnologia == 'Ittru ActiveX') {
-		var ret = {};
-		try {
-//			alert(conteudo);
-//			gAssinatura.Content = gUtil.Base64Decode(conteudo)
-			if (gPolitica) {
-				if (ittruSignAx.getKeySize() >= 2048) {
-					ret.assinaturaB64 = ittruSignAx.sign("sha256", conteudo);
-				} else {
-					ret.assinaturaB64 = ittruSignAx.sign("sha1", conteudo);
-				}
-			} else {
-				ret.assinaturaB64 = ittruSignAx.sign("PKCS7", conteudo);
-			}
-//			alert(ret.assinaturaB64);
-			ret.assinante = ittruSignAx.getSubject();
+function InicializarApplet(){
+	var Desprezar;
+	
+	var gPIN = $("#pin").val();
+	if(gPIN === ''){
+		return Erro({message:"PIN deve ser informado."});
+	}
 
-			var re = /CN=([^,]+),/gi; 
-			var m;
-			if ((m = re.exec(ret.assinante)) != null) {
-				ret.assinante = m[1];
-			}
-			ret.status = "OK"
-				return ret;
-		} catch(err) {
-			Erro(err);
-			ret.status = err.message;
-			return ret;
+	data = ittruSignApplet.listCerts(gStore,gPIN);
+
+	var json = $.parseJSON(data);
+
+	if (json.length == 1) {
+		gCertAlias = json[0].alias;
+		return "OK";
+	}
+	if (json.length == 0)
+		return Erro({message:"Nenhum certificado digital disponível."});
+
+	if (json.length > 1) {
+		var html = 'Selecione o certificado que deseja usar:<br />';
+		for(var i = 0; i < json.length; i++){
+	    	html += "<input type=\"radio\" name=\"cert_alias\" value=\"" + json[i].alias + "\">"
+			+ json[i].subject + "<br>";
 		}
-	} else {
-		return AssinarDocumento(conteudo);
+		$("#certChoice").html(html);
 	}
 }
-
 
 function InicializarCapicom(){
 	var Desprezar;
@@ -192,6 +245,107 @@ function InicializarCapicom(){
 	return "OK";
 }
 
+
+
+function AssinarDigitalmente(conteudo) {
+	if (gTecnologia == 'Ittru ActiveX') {
+		var ret = {};
+		try {
+//			alert(conteudo);
+//			gAssinatura.Content = gUtil.Base64Decode(conteudo)
+			if (gPolitica) {
+				if (ittruSignAx.getKeySize() >= 2048) {
+					ret.assinaturaB64 = ittruSignAx.sign("sha256", conteudo);
+				} else {
+					ret.assinaturaB64 = ittruSignAx.sign("sha1", conteudo);
+				}
+			} else {
+				ret.assinaturaB64 = ittruSignAx.sign("PKCS7", conteudo);
+			}
+//			alert(ret.assinaturaB64);
+			ret.assinante = ittruSignAx.getSubject();
+
+			var re = /CN=([^,]+),/gi; 
+			var m;
+			if ((m = re.exec(ret.assinante)) != null) {
+				ret.assinante = m[1];
+			}
+			ret.status = "OK"
+				return ret;
+		} catch(err) {
+			Erro(err);
+			ret.status = err.message;
+			return ret;
+		}
+	} else if (gTecnologia == 'Ittru PKCS#11') {
+		var ret = {};
+		try {
+			alert(conteudo);
+//			gAssinatura.Content = gUtil.Base64Decode(conteudo)
+			
+			certSel = ittruSignApplet.getCertificate(gCertAlias);		
+			var keySize = ittruSignApplet.getKeySize(gCertAlias);
+	
+			if (gPolitica) {
+				var alg = 'sha1';
+				if(keySize < 2048){
+					alert("assinando sha1");
+					ret.assinaturaB64 = document.signer.sign(gStore, 0, gPIN, gCertAlias,
+		        			conteudo);
+				} else {
+					alg = 'sha256';
+					alert("assinando sha256");
+					ret.assinaturaB64retSign = document.signer.sign(gStore, 2, gPIN, gCertAlias,
+		        			conteudo);
+				}
+			} else {
+				alert("assinando pkcs7");
+				ret.assinaturaB64 = document.signer.sign(gStore, 0, gPIN, gCertAlias,
+	        			conteudo);
+			}
+			alert(ret.assinaturaB64);
+			
+			ret.assinante = ittruSignApplet.getSubject(gCertAlias);
+			
+			alert(ret.assinante);
+
+			var re = /CN=([^,]+),/gi; 
+			var m;
+			if ((m = re.exec(ret.assinante)) != null) {
+				ret.assinante = m[1];
+			}
+			ret.status = "OK"
+				return ret;
+		} catch(err) {
+			Erro(err);
+			ret.status = err.message;
+			return ret;
+		}
+	} else {
+		return AssinarDocumento(conteudo);
+	}
+}
+
+/* Attempt to load the applet up to "X" times with a delay. If it succeeds, then execute the callback function. */
+function WaitForAppletLoad(applet_id, attempts, delay, onSuccessCallback, onFailCallback) {
+    //Test
+    var to = typeof (document.getElementById(applet_id));
+    if (to == 'function' || to == 'object') {
+        onSuccessCallback(); //Go do it.
+        return true;
+    } else {
+        if (attempts == 0) {
+            onFailCallback();
+            return false;
+        } else {
+            //Put it back in the hopper.
+            setTimeout(function () {
+                WaitForAppletLoad(applet_id, --attempts, delay, onSuccessCallback, onFailCallback);
+            }, delay);
+        }
+    }
+}
+
 function Conteudo(url){
 //	alert(url);
 
@@ -205,7 +359,7 @@ function Conteudo(url){
 		//Conteudo = objHTTP.responseText;
 		
 		//Conteudo = objHTTP.responseText;
-    	if (gTecnologia == 'Ittru ActiveX') {
+    	if (gTecnologia == 'Ittru ActiveX' || gTecnologia == 'Ittru PKCS#11') {
     		$.ajax({
         		   	 type:		"GET",
     		         url: 		url,
@@ -302,6 +456,12 @@ function removerPortaSeNaoForLocalhost(urlCompleta){
 
 function AssinarDocumentos(Copia, oElm){
 	TestarAssinaturaDigital();
+	
+	if ("OK" == InicializarAssinaturaDigital()) 
+		ExecutarAssinarDocumentos(Copia, oElm);
+}
+
+function ExecutarAssinarDocumentos(Copia, oElm){
 	process.reset();
 
 //   	oElm = document.getElementById(Id);
@@ -315,8 +475,6 @@ function AssinarDocumentos(Copia, oElm){
 		// alert("Iniciando assinatura")
      	process.push(function(){Log("Iniciando assinatura")});
     }
-
-	process.push(InicializarAssinaturaDigital);
     
     var oUrlPost, oNextUrl, oUrlBase, oUrlPath, oNome, oUrl, oChk;
 
@@ -497,21 +655,26 @@ function AssinarDocumentosSenha(Copia, oElm){
 
 
 function GravarAssinatura(url, datatosend) {
-	objHTTP = new ActiveXObject("MSXML2.XMLHTTP");
-	objHTTP.Open("POST", url, false);
-	objHTTP.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	objHTTP.send(datatosend); 
+	retorno = "OK"; 
+	$.ajax({				     				  
+		  url: url,
+		  type: "POST",
+		  data: datatosend,	
+		  async:  false,				    					   					 
+		  statusCode: {
+			200:function(Conteudo) {
+				retorno = TrataErro(Conteudo.responseText?Conteudo.responseText:Conteudo, retorno);
+			}
+		   ,400:function(Conteudo) {
+				retorno = TrataErro(Conteudo.responseText?Conteudo.responseText:Conteudo, retorno);
+			}
+		   ,500:function(Conteudo) {
+				retorno = TrataErro(Conteudo.responseText?Conteudo.responseText:Conteudo, retorno);
+			} 				    
+	 	 }
+	});	
 	
-	if((objHTTP.Status == 200)||(objHTTP.Status == 400)||(objHTTP.Status == 500)){
-		var Conteudo, Inicio, Fim, Texto;
-		//alert("OK, enviado");
-		Conteudo = objHTTP.responseText;
-		//Edson: adicionei a segunda sentença ao if abaixo porque, no caso da assinatura externa, a página
-		//de retorno é esta mesma, que obviamente já tem o texto gt-error-page-hd (na linha abaixo) sem
-		//significar que seja uma página de erro		
-		return TrataErro(Conteudo, "OK");
- 	}
-	return "OK";
+	return retorno;
 }
 
 
