@@ -1,0 +1,32 @@
+package br.gov.jfrj.siga.pp.models;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import br.gov.jfrj.siga.model.ActiveRecord;
+import br.gov.jfrj.siga.model.Objeto;
+
+/**
+ * @author Herval 11267
+ */
+@Entity(name = "peritos")
+@Table(name = "peritos", schema = "SIGAPMP")
+public class Peritos extends Objeto {
+
+    private static final long serialVersionUID = 1L;
+    public static final ActiveRecord<Peritos> AR = new ActiveRecord<>(Peritos.class);
+
+    @Id()
+    @Column(name = "cpf_perito", length = 50, nullable = false)
+    public String cpf_perito;
+
+    @Column(name = "nome_perito", length = 200, nullable = true)
+    public String nome_perito;
+
+    public Peritos(String cpf_perito_construt, String nome_perito_construt) {
+        this.cpf_perito = cpf_perito_construt;
+        this.nome_perito = nome_perito_construt;
+    }
+}

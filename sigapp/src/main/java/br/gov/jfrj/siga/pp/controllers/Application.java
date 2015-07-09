@@ -1,4 +1,4 @@
-package controllers;
+package br.gov.jfrj.siga.pp.controllers;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,29 +8,26 @@ import java.util.List;
 
 import javax.persistence.PersistenceException;
 
-import models.Agendamentos;
-import models.Foruns;
-import models.Locais;
-import models.UsuarioForum;
-import models.Peritos;
-
-import play.db.jpa.JPA;
-import play.mvc.Before;
-import play.mvc.Catch;
 import br.gov.jfrj.siga.dp.DpPessoa;
+import br.gov.jfrj.siga.model.ContextoPersistencia;
+import br.gov.jfrj.siga.pp.models.Agendamentos;
+import br.gov.jfrj.siga.pp.models.Foruns;
+import br.gov.jfrj.siga.pp.models.Locais;
+import br.gov.jfrj.siga.pp.models.Peritos;
+import br.gov.jfrj.siga.pp.models.UsuarioForum;
 
-public class Application extends SigaApplication {
+public class Application /*extends SigaApplication*/ {
 
-	@Before(priority = 1)
+//	@Before(priority = 1)
 	public static void addDefaultsAlways() throws Exception {
-		prepararSessao();
+//		prepararSessao();
 	}
 
-	@Before(priority = 2,unless = {"publicKnowledge", "dadosRI"})
+//	@Before(priority = 2,unless = {"publicKnowledge", "dadosRI"})
 	public static void addDefaults() throws Exception {
 
 		try {
-			obterCabecalhoEUsuario("rgb(235, 235, 232)");
+//			obterCabecalhoEUsuario("rgb(235, 235, 232)");
 		} catch (Exception e) {
 			tratarExcecoes(e);
 		}
@@ -40,26 +37,26 @@ public class Application extends SigaApplication {
 		// SigaApplication.assertAcesso("SR:MÃ³dulo de ServiÃ§os;" + path);
 	}
 
-	@Catch()
+//	@Catch()
 	public static void tratarExcecoes(Exception e) {
-		SigaApplication.tratarExcecoes(e);
+//		SigaApplication.tratarExcecoes(e);
 	}
 
 	public static void index() {
 		// desativado
-		render();
+//		render();
 		// models.Locais role
 	}
 
 	public static void home() {
 		// página inicial do sigapmp
-		String matriculaSessao = cadastrante().getMatricula().toString();
-		UsuarioForum objUsuario = UsuarioForum.find(
-				"matricula_usu =" + matriculaSessao).first();
+//		String matriculaSessao = cadastrante().getMatricula().toString();
+	    String matriculaSessao = "";
+		UsuarioForum objUsuario = UsuarioForum.AR.find("matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
 			try {
-				List<Locais> lstLocais = Locais.find("forumFk=" + objUsuario.forumFk.cod_forum	+ "order by ordem_apresentacao ").fetch();
-				Foruns objForum = Foruns.find("cod_forum=" + objUsuario.forumFk.cod_forum).first();
+				List<Locais> lstLocais = Locais.AR.find("forumFk=" + objUsuario.forumFk.cod_forum	+ "order by ordem_apresentacao ").fetch();
+				Foruns objForum = Foruns.AR.find("cod_forum=" + objUsuario.forumFk.cod_forum).first();
 				ArrayList vetorForuns = new ArrayList();
 				String texto = objForum.mural;
 				int i = 0;
@@ -70,7 +67,7 @@ public class Application extends SigaApplication {
 					texto = texto.substring(4, texto.length());
 					i++;
 				}
-				render(lstLocais, vetorForuns);
+//				render(lstLocais, vetorForuns);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -81,11 +78,11 @@ public class Application extends SigaApplication {
 
 	public static void sala_incluir() {
 		// pega usuario do sistema
-		String matriculaSessao = cadastrante().getMatricula().toString();
-		UsuarioForum objUsuario = UsuarioForum.find(
+		String matriculaSessao = "";//cadastrante().getMatricula().toString();
+		UsuarioForum objUsuario = UsuarioForum.AR.find(
 				"matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
-			render();
+//			render();
 		} else {
 			Excecoes("Usuario sem permissao" , null);
 		}
@@ -98,27 +95,27 @@ public class Application extends SigaApplication {
 		String resposta = "";
 		try {
 
-			System.out.println(JPA.em().createQuery("from Locais where cod_local ='" + varCodLocal+ "'").getSingleResult());
+			System.out.println(ContextoPersistencia.em().createQuery("from Locais where cod_local ='" + varCodLocal+ "'").getSingleResult());
 			resposta = "Sala ja existe. Confira o codigo da sala. ";
 
 		} catch (Exception e) {
 			try {
-				System.out.println(JPA.em().createQuery("from Foruns where cod_forum=" + cod_forum));
+				System.out.println(ContextoPersistencia.em().createQuery("from Foruns where cod_forum=" + cod_forum));
 				formLocal.save();
-				JPA.em().flush();
+				ContextoPersistencia.em().flush();
 				resposta = "Ok.";
 			} catch (Exception e2) {
 				resposta = "Forum da sala nao cadastrado. Confira o codigo do forum.";
 			}
 		}
-		render(resposta);
+//		render(resposta);
 	}
 
 	public static void salas_listar(String cod_local, String sala,
 			String desc_forum) {
 		// pega usuario do sistema
-		String matriculaSessao = cadastrante().getMatricula().toString();
-		UsuarioForum objUsuario = UsuarioForum.find(
+		String matriculaSessao = "";//cadastrante().getMatricula().toString();
+		UsuarioForum objUsuario = UsuarioForum.AR.find(
 				"matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
 			List<Locais> listLocais = new ArrayList<Locais>();
@@ -132,33 +129,33 @@ public class Application extends SigaApplication {
 				sala = "";
 			}
 			if (desc_forum.isEmpty() && cod_local.isEmpty() && sala.isEmpty()) {
-				listLocais = Locais.findAll();
-				render(listLocais);
+				listLocais = Locais.AR.findAll();
+//				render(listLocais);
 			} else if (!cod_local.isEmpty()) {
 				try {
-					Object auxLocal = Locais.findById(cod_local);
+					Object auxLocal = Locais.AR.findById(cod_local);
 					if (auxLocal.equals(null)) {
 						// retornou nulo
 					} else {
 						listLocais.add((Locais) auxLocal);
 					}
 				} finally {
-					render(listLocais);
+//					render(listLocais);
 				}
 			} else if (!sala.isEmpty()) {
 				try {
-					listLocais = JPA.em().createQuery(	"from Locais where local like '" + sala	+ "%'").getResultList();
+					listLocais = ContextoPersistencia.em().createQuery(	"from Locais where local like '" + sala	+ "%'").getResultList();
 				} catch (Exception e) {
 					e.printStackTrace();
 				} finally {
-					render(listLocais);
+//					render(listLocais);
 				}
 			} else if (!desc_forum.isEmpty()) {
 				try {
 					List<Foruns> listForuns = new ArrayList<Foruns>();
 					Foruns objForum = new Foruns(0, "", "");
 					List<Locais> listLocaisAux = new ArrayList<Locais>();
-					listForuns = JPA
+					listForuns = ContextoPersistencia
 							.em()
 							.createQuery(
 									"from Foruns where descricao_forum like'"
@@ -167,7 +164,7 @@ public class Application extends SigaApplication {
 					for (Iterator iterator01 = listForuns.iterator(); iterator01
 							.hasNext();) {
 						objForum = (Foruns) iterator01.next();
-						listLocaisAux = JPA
+						listLocaisAux = ContextoPersistencia
 								.em()
 								.createQuery(
 										"from Locais where forumFk ="
@@ -182,7 +179,7 @@ public class Application extends SigaApplication {
 				} catch (Exception e) {
 					e.printStackTrace();
 				} finally {
-					render(listLocais);
+//					render(listLocais);
 				}
 			}
 		} else {
@@ -195,7 +192,7 @@ public class Application extends SigaApplication {
 		if (!cod_sala.isEmpty()) {
 			try {
 				resposta = "Ok.";
-				Locais.delete("from Locais where cod_local='" + cod_sala + "'");
+//				Locais.AR.delete("from Locais where cod_local='" + cod_sala + "'");
 			} catch (Exception e) {
 				e.printStackTrace();
 				resposta = "Esta sala possui agendamentos. Delete primeiro os agendamentos referenciados.";
@@ -203,16 +200,16 @@ public class Application extends SigaApplication {
 		} else {
 			resposta = "Não Ok.";
 		}
-		render(resposta);
+//		render(resposta);
 	}
 
 	public static void forum_incluir() {
 		// pega usuario do sistema
-		String matriculaSessao = cadastrante().getMatricula().toString();
-		UsuarioForum objUsuario = UsuarioForum.find(
+		String matriculaSessao = "";//cadastrante().getMatricula().toString();
+		UsuarioForum objUsuario = UsuarioForum.AR.find(
 				"matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
-			render();
+//			render();
 		} else {
 			Excecoes("Usuario sem permissao", null);
 		}
@@ -224,7 +221,7 @@ public class Application extends SigaApplication {
 		try {
 			Foruns objForum = new Foruns(cod_forum, descricao, mural);
 			objForum.save();
-			JPA.em().flush();
+			ContextoPersistencia.em().flush();
 			resposta = "Ok.";
 		} catch (PersistenceException e) {
 			e.printStackTrace();
@@ -234,14 +231,14 @@ public class Application extends SigaApplication {
 				resposta = "Fórum já existe. Verifique se o código está correto.";
 			}
 		} finally {
-			render(resposta);
+//			render(resposta);
 		}
 	}
 
 	public static void foruns_listar(Integer cod_forum, String descricao_forum) {
 		// pega usuario do sistema
-		String matriculaSessao = cadastrante().getMatricula().toString();
-		UsuarioForum objUsuario = UsuarioForum.find(
+		String matriculaSessao = "";//cadastrante().getMatricula().toString();
+		UsuarioForum objUsuario = UsuarioForum.AR.find(
 				"matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
 			List<Foruns> listForuns = new ArrayList<Foruns>();
@@ -252,16 +249,16 @@ public class Application extends SigaApplication {
 				descricao_forum = "";
 			}
 			if (cod_forum == -1 && descricao_forum.isEmpty()) {
-				listForuns = Foruns.findAll();
-				render(listForuns);
+				listForuns = Foruns.AR.findAll();
+//				render(listForuns);
 			} else if (cod_forum >= 0) {
-				Object auxForum = Foruns.findById(cod_forum);
+				Object auxForum = Foruns.AR.findById(cod_forum);
 				if (auxForum != null) {
 					listForuns.add((Foruns) auxForum);
 				}
-				render(listForuns);
+//				render(listForuns);
 			} else if (!descricao_forum.isEmpty()) {
-				List<Foruns> resultado = JPA
+				List<Foruns> resultado = ContextoPersistencia
 						.em()
 						.createQuery(
 								"from Foruns where descricao_forum like '"
@@ -271,7 +268,7 @@ public class Application extends SigaApplication {
 						.hasNext();) {
 					listForuns.add((Foruns) iterator.next());
 				}
-				render(listForuns);
+//				render(listForuns);
 			}
 		} else {
 			Excecoes("Usuario sem permissao", null);
@@ -283,7 +280,7 @@ public class Application extends SigaApplication {
 		if (!cod_forum.isEmpty()) {
 			resposta = "Ok.";
 			try {
-				Foruns.delete("from Foruns where cod_forum=" + cod_forum);
+//				Foruns.delete("from Foruns where cod_forum=" + cod_forum);
 			} catch (PersistenceException e) {
 				if (e.getMessage().substring(23, 53)
 						.equals(".ConstraintViolationException:")) {
@@ -294,30 +291,30 @@ public class Application extends SigaApplication {
 				}
 
 			} finally {
-				render(resposta);
+//				render(resposta);
 			}
 		} else {
 			resposta = "Não Ok.";
-			render(resposta);
+//			render(resposta);
 		}
 	}
 
 	public static void agendamento_incluir_ajax(String fixo_perito_juizo) {
 		String fixo_perito_juizo_nome = "";
-		String lotacaoSessao = cadastrante().getLotacao().getSiglaLotacao();
+		String lotacaoSessao = "";// cadastrante().getLotacao().getSiglaLotacao();
 		List<Locais> listSalas = new ArrayList();
 		List<Peritos> listPeritos = new ArrayList();
 		// pega usuario do sistema
-		String matriculaSessao = cadastrante().getMatricula().toString();
-		UsuarioForum objUsuario = UsuarioForum.find(
+		String matriculaSessao = "";//cadastrante().getMatricula().toString();
+		UsuarioForum objUsuario = UsuarioForum.AR.find(
 				"matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
 			// Pega o usuário do sistema, e, busca os locais(salas) daquele
 			// forum onde ele está.
-			listSalas = (List) Locais.find(
+			listSalas = (List) Locais.AR.find(
 					"cod_forum='" + objUsuario.forumFk.cod_forum
 							+ "' order by ordem_apresentacao ").fetch(); // isso não dá erro no caso de retorno vazio.
-			listPeritos =  (List) Peritos.find("1=1 order by nome_perito").fetch();
+			listPeritos =  (List) Peritos.AR.find("1=1 order by nome_perito").fetch();
 			//   buscar o nome do perito fixo na lista se existir 
 			if(fixo_perito_juizo!=null){
 			 for(int i=0;i<listPeritos.size();i++) {
@@ -327,7 +324,7 @@ public class Application extends SigaApplication {
 			 }
 			}
 			
-			render(listSalas,lotacaoSessao, fixo_perito_juizo, fixo_perito_juizo_nome, listPeritos);
+//			render(listSalas,lotacaoSessao, fixo_perito_juizo, fixo_perito_juizo_nome, listPeritos);
 		} else {
 			Excecoes("Usuario sem permissao", null);
 		}
@@ -343,7 +340,7 @@ public class Application extends SigaApplication {
 		Agendamentos objAgendamento = new Agendamentos(parametro, null, null,
 				null, null, null, null, null, null);
 		try {
-			List<Agendamentos> results = Agendamentos.find(
+			List<Agendamentos> results = Agendamentos.AR.find(
 					"data_ag >= to_date('" + dtt.trim()
 							+ "','dd/MM/yyyy') and cod_local='"
 							+ frm_cod_local.trim() + "'  order by data_ag")
@@ -385,7 +382,7 @@ public class Application extends SigaApplication {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		render(listDatasLotadas);
+//		render(listDatasLotadas);
 	}
 
 	public static void horario_vetor(String frm_cod_local, String frm_data_ag) {
@@ -449,7 +446,7 @@ public class Application extends SigaApplication {
 			df.applyPattern("dd-MM-yyyy");
 			try {
 				dtt = frm_data_ag;
-				results = Agendamentos.find(
+				results = Agendamentos.AR.find(
 						"data_ag = to_date('" + dtt.trim()
 								+ "','dd-mm-yy') and cod_local='"
 								+ frm_cod_local.trim() + "'").fetch();
@@ -469,7 +466,7 @@ public class Application extends SigaApplication {
 					listHorasLivres.add("Erro de horário inválido na base.");
 				}
 			} finally {
-				render(listHorasLivres);
+//				render(listHorasLivres);
 			}
 		}
 
@@ -479,9 +476,9 @@ public class Application extends SigaApplication {
 			String frm_hora_ag, String frm_cod_local, String matricula,
 			String periciado, String perito_juizo, String perito_parte,
 			String orgao, String processo, Integer lote) {
-		matricula = cadastrante().getMatricula().toString();
+		matricula = "";//cadastrante().getMatricula().toString();
 		String resposta = "";
-		Locais auxLocal = Locais.findById(frm_cod_local);
+		Locais auxLocal = Locais.AR.findById(frm_cod_local);
 		String hr;
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		try {
@@ -499,7 +496,7 @@ public class Application extends SigaApplication {
 				String horaPretendida = null;
 				for(int i = 0; i < lote; i++){
 					horaPretendida=hrAux+minAux;
-					agendamentoEmConflito = Agendamentos.find("perito_juizo like '"+perito_juizo.trim()+"%' and perito_juizo <> '-' and hora_ag='" +horaPretendida+ "' and data_ag=to_date('"+ frm_data_ag +"' , 'yy-mm-dd')"  ).first();
+					agendamentoEmConflito = Agendamentos.AR.find("perito_juizo like '"+perito_juizo.trim()+"%' and perito_juizo <> '-' and hora_ag='" +horaPretendida+ "' and data_ag=to_date('"+ frm_data_ag +"' , 'yy-mm-dd')"  ).first();
 					if (agendamentoEmConflito!=null){
 						Excecoes("Perito nao disponivel no horario de " + agendamentoEmConflito.hora_ag.substring(0,2)+ "h" + agendamentoEmConflito.hora_ag.substring(2,4) + "min" , null );
 					}
@@ -516,8 +513,8 @@ public class Application extends SigaApplication {
 				for (int i = 0; i < lote; i++) {
 					objAgendamento.hora_ag = hrAux + minAux;
 					objAgendamento.save();
-					JPA.em().flush();
-					JPA.em().clear();
+					ContextoPersistencia.em().flush();
+					ContextoPersistencia.em().clear();
 					minAux = String.valueOf(Integer.parseInt(minAux)
 							+ auxLocal.intervalo_atendimento);
 					if (Integer.parseInt(minAux) >= 60) {
@@ -543,15 +540,15 @@ public class Application extends SigaApplication {
 				resposta = "Não Ok. Verifique se preencheu todos os campos do agendamento.";
 			}
 		} finally {
-			render(resposta, perito_juizo);
+//			render(resposta, perito_juizo);
 		}
 	}
 
 	public static void agendamento_excluir(String frm_data_ag) {
 		// pega matricula do usuario do sistema
-		String matriculaSessao = cadastrante().getMatricula().toString();
+		String matriculaSessao = "";//cadastrante().getMatricula().toString();
 		// pega a permissÃ£o do usuario
-		UsuarioForum objUsuario = UsuarioForum.find(
+		UsuarioForum objUsuario = UsuarioForum.AR.find(
 				"matricula_usu =" + matriculaSessao).first();
 		// verifica se tem permissao
 		if (objUsuario != null) {
@@ -559,10 +556,10 @@ public class Application extends SigaApplication {
 			// verifica se o formulÃ¡rio submeteu alguma data
 			if (frm_data_ag != null) {
 				// Busca os agendamentos da data do formulÃ¡rio
-				listAgendamentos = Agendamentos.find("data_ag = to_date('" + frm_data_ag + "','dd-mm-yy') order by hora_ag , cod_local")
+				listAgendamentos = Agendamentos.AR.find("data_ag = to_date('" + frm_data_ag + "','dd-mm-yy') order by hora_ag , cod_local")
 						.fetch();
 				// busca os locais do forum do usuario
-				List<Locais> listLocais = Locais.find(
+				List<Locais> listLocais = Locais.AR.find(
 						"cod_forum='" + objUsuario.forumFk.cod_forum + "'")
 						.fetch();
 				// Verifica se existe local naquele forum do usuÃ¡rio
@@ -592,11 +589,11 @@ public class Application extends SigaApplication {
 			}
 			if (listAgendamentos.size() != 0) {
 				List <Peritos> listPeritos = new ArrayList<Peritos>();
-				listPeritos = Peritos.findAll();
+				listPeritos = Peritos.AR.findAll();
 				// excluir do arraylist, os peritos que não possuem agendamentos nesta data.
-				render(listAgendamentos, listPeritos);
+//				render(listAgendamentos, listPeritos);
 			} else {
-				render();
+//				render();
 			}
 		} else {
 			Excecoes("Usuario sem permissao" , null);
@@ -610,18 +607,17 @@ public class Application extends SigaApplication {
 		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		String dtt = df.format(formAgendamento.data_ag);
 		try {
-			Agendamentos ag = Agendamentos.find(
+			Agendamentos ag = Agendamentos.AR.find(
 					"hora_ag = '" + formAgendamento.hora_ag
 							+ "' and localFk.cod_local='" + cod_local
 							+ "' and data_ag = to_date('" + dtt
 							+ "','dd/mm/yy')").first();
 			//--------------------------
-			String lotacaoSessao = cadastrante().getLotacao().getIdLotacao()
-					.toString();
+			String lotacaoSessao = "";//cadastrante().getLotacao().getIdLotacao().toString();
 			String matricula_ag = ag.matricula;
-			DpPessoa p = (DpPessoa) DpPessoa.find(
+			DpPessoa p = (DpPessoa) DpPessoa.AR.find(
 					"orgaoUsuario.idOrgaoUsu = "
-							+ cadastrante().getOrgaoUsuario().getIdOrgaoUsu()
+//							+ cadastrante().getOrgaoUsuario().getIdOrgaoUsu()
 							+ " and dataFimPessoa is null and matricula='"
 							+ matricula_ag + "'").first();
 			String lotacao_ag = p.getLotacao().getIdLotacao().toString(); 
@@ -637,25 +633,25 @@ public class Application extends SigaApplication {
 			e.printStackTrace();
 			resultado = "Não Ok.";
 		} finally {
-			render(resultado,dtt);
+//			render(resultado,dtt);
 		}
 	}
 
 	public static void agendamento_atualiza(String cod_sala, String data_ag, String hora_ag) {
 		// pega usuario do sistema
-		String matriculaSessao = cadastrante().getMatricula().toString();
-		UsuarioForum objUsuario = UsuarioForum.find(
+		String matriculaSessao = "";//cadastrante().getMatricula().toString();
+		UsuarioForum objUsuario = UsuarioForum.AR.find(
 				"matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
 			// Pega o usuário do sistema, e, busca os locais(salas) daquele
 			// forum onde ele está.
-			Locais objSala = Locais.find("cod_forum='" + objUsuario.forumFk.cod_forum + "' and cod_local='" + cod_sala + "'").first(); // isso não dá erro no caso de retorno vazio?
+			Locais objSala = Locais.AR.find("cod_forum='" + objUsuario.forumFk.cod_forum + "' and cod_local='" + cod_sala + "'").first(); // isso não dá erro no caso de retorno vazio?
 			String sala_ag = objSala.local;
-			String lotacaoSessao = cadastrante().getLotacao().getIdLotacao().toString();
+			String lotacaoSessao = "";//cadastrante().getLotacao().getIdLotacao().toString();
 			//System.out.println(lotacaoSessao);
-			Agendamentos objAgendamento = Agendamentos.find("cod_local='" + cod_sala + "' and data_ag = to_date('" + data_ag + "','yy-mm-dd') and hora_ag='" + hora_ag + "'").first();
+			Agendamentos objAgendamento = Agendamentos.AR.find("cod_local='" + cod_sala + "' and data_ag = to_date('" + data_ag + "','yy-mm-dd') and hora_ag='" + hora_ag + "'").first();
 			String matricula_ag = objAgendamento.matricula;
-			DpPessoa p = (DpPessoa) DpPessoa.find("orgaoUsuario.idOrgaoUsu = " + cadastrante().getOrgaoUsuario().getIdOrgaoUsu() + " and dataFimPessoa is null and matricula='"	+ matricula_ag + "'").first();
+			DpPessoa p = null;// (DpPessoa) DpPessoa.find("orgaoUsuario.idOrgaoUsu = " + cadastrante().getOrgaoUsuario().getIdOrgaoUsu() + " and dataFimPessoa is null and matricula='"	+ matricula_ag + "'").first();
 			String lotacao_ag = p.getLotacao().getIdLotacao().toString(); 
 			//System.out.println(p.getNomePessoa().toString()+ "Lotado em:" + lotacao_ag);
 			if(lotacaoSessao.trim().equals(lotacao_ag.trim())){
@@ -665,9 +661,9 @@ public class Application extends SigaApplication {
 				String perito_juizo = objAgendamento.perito_juizo;
 				String perito_parte = objAgendamento.perito_parte;
 				String orgao_julgador = objAgendamento.orgao;
-				JPA.em().flush();
+				ContextoPersistencia.em().flush();
 				List<Peritos> listPeritos = new ArrayList<Peritos>();
-				listPeritos = Peritos.find("1=1 order by nome_perito").fetch();
+				listPeritos = Peritos.AR.find("1=1 order by nome_perito").fetch();
 				if(perito_juizo==null){perito_juizo="-";}
 				if(!perito_juizo.trim().equals("-")){
 					for(int i=0;i<listPeritos.size();i++){
@@ -676,7 +672,7 @@ public class Application extends SigaApplication {
 						}
 					}
 				}
-				render(sala_ag, cod_sala, data_ag, hora_ag, processo, periciado, perito_juizo, nome_perito_juizo, perito_parte, orgao_julgador, listPeritos);
+//				render(sala_ag, cod_sala, data_ag, hora_ag, processo, periciado, perito_juizo, nome_perito_juizo, perito_parte, orgao_julgador, listPeritos);
 			}else{
 				Excecoes("Esse agendamento nao pode ser modificado; pertence a outra vara." , null);
 			}
@@ -691,14 +687,14 @@ public class Application extends SigaApplication {
 		try{
 			// Devo verificar agendamento conflitante, antes de fazer o UPDATE.
 			System.out.println(perito_juizo.trim()+""+data_ag+" "+hora_ag.substring(0,2)+hora_ag.substring(3,5));
-			agendamentoEmConflito = Agendamentos.find("perito_juizo like '"+perito_juizo.trim()+"%' and perito_juizo <> '-' and hora_ag='" +hora_ag.substring(0,2)+hora_ag.substring(3,5)+ "' and data_ag=to_date('"+ data_ag +"', 'dd-mm-yy' ) and localFk<>'"+cod_sala+"'").first();
+			agendamentoEmConflito = Agendamentos.AR.find("perito_juizo like '"+perito_juizo.trim()+"%' and perito_juizo <> '-' and hora_ag='" +hora_ag.substring(0,2)+hora_ag.substring(3,5)+ "' and data_ag=to_date('"+ data_ag +"', 'dd-mm-yy' ) and localFk<>'"+cod_sala+"'").first();
 			
 			if (agendamentoEmConflito!=null){
 				Excecoes("Perito nao disponivel no horario de " + agendamentoEmConflito.hora_ag.substring(0,2) +"h"+agendamentoEmConflito.hora_ag.substring(2,4)+"min" , " agendamento_excluir?frm_data_ag="+data_ag);
 			}
-			JPA.em().createQuery("update Agendamentos set processo = '"+ processo +"', "+ "periciado='"+ periciado +"', perito_juizo='"+ perito_juizo.trim() +"', perito_parte='"+perito_parte+"', orgao='"+orgao_ag+"' where cod_local='"+cod_sala+"' and  hora_ag='"+hora_ag.substring(0,2)+hora_ag.substring(3,5)+"' and data_ag=to_date('"+data_ag+"','dd-mm-yy')").executeUpdate();
-			JPA.em().flush();
-			Agendamentos objAgendamento = (Agendamentos) Agendamentos.find("cod_local='"+cod_sala+"' and  hora_ag='"+hora_ag.substring(0,2)+hora_ag.substring(3,5)+"' and data_ag=to_date('"+data_ag+"','dd-mm-yy')" ).first();
+			ContextoPersistencia.em().createQuery("update Agendamentos set processo = '"+ processo +"', "+ "periciado='"+ periciado +"', perito_juizo='"+ perito_juizo.trim() +"', perito_parte='"+perito_parte+"', orgao='"+orgao_ag+"' where cod_local='"+cod_sala+"' and  hora_ag='"+hora_ag.substring(0,2)+hora_ag.substring(3,5)+"' and data_ag=to_date('"+data_ag+"','dd-mm-yy')").executeUpdate();
+			ContextoPersistencia.em().flush();
+			Agendamentos objAgendamento = (Agendamentos) Agendamentos.AR.find("cod_local='"+cod_sala+"' and  hora_ag='"+hora_ag.substring(0,2)+hora_ag.substring(3,5)+"' and data_ag=to_date('"+data_ag+"','dd-mm-yy')" ).first();
 			if(objAgendamento==null){
 				resultado = "Nao Ok.";
 			}else{
@@ -711,18 +707,18 @@ public class Application extends SigaApplication {
 			ee.printStackTrace();
 			resultado = "Não Ok.";
 		}finally{
-			render(resultado,data_ag);
+//			render(resultado,data_ag);
 		}
 	}
 	public static void agendadas_hoje() {
 		// pega usuário do sistema
-		String matriculaSessao = cadastrante().getMatricula().toString();
-		UsuarioForum objUsuario = UsuarioForum.find(
+		String matriculaSessao = "";//cadastrante().getMatricula().toString();
+		UsuarioForum objUsuario = UsuarioForum.AR.find(
 				"matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
 			// busca locais em função da configuração do usuário
 			String criterioSalas="";
-			List<Locais> listaDeSalas = Locais.find("forumFk="+objUsuario.forumFk.cod_forum).fetch();
+			List<Locais> listaDeSalas = Locais.AR.find("forumFk="+objUsuario.forumFk.cod_forum).fetch();
 			// monta string de criterio
 			for(int j=0;j<listaDeSalas.size();j++){
 				criterioSalas = criterioSalas + "'" +listaDeSalas.get(j).cod_local.toString() + "'";
@@ -735,10 +731,10 @@ public class Application extends SigaApplication {
 			String dtt = df.format(hoje);
 			// busca agendamentos de hoje
 			if(criterioSalas.equals("")){criterioSalas="''";}
-			 List<Agendamentos> listAgendamentos = Agendamentos.find("data_ag = to_date('" + dtt + "','dd-mm-yy') and localFk in("+criterioSalas+") order by hora_ag, cod_local").fetch();
+			 List<Agendamentos> listAgendamentos = Agendamentos.AR.find("data_ag = to_date('" + dtt + "','dd-mm-yy') and localFk in("+criterioSalas+") order by hora_ag, cod_local").fetch();
 			 if (listAgendamentos.size() != 0) {
 				// busca as salas daquele forum
-				List<Locais> listLocais = Locais.find(
+				List<Locais> listLocais = Locais.AR.find(
 						"cod_forum='" + objUsuario.forumFk.cod_forum + "'")
 						.fetch();
 				// lista auxiliar
@@ -755,10 +751,10 @@ public class Application extends SigaApplication {
 					}
 				}
 				List<Peritos> listPeritos = new ArrayList<Peritos>();
-				listPeritos = Peritos.findAll();
-				render(listAgendamentos, listPeritos);
+				listPeritos = Peritos.AR.findAll();
+//				render(listAgendamentos, listPeritos);
 			} else {
-				render();
+//				render();
 			}
 		} else {
 			Excecoes("Usuario sem permissao" , null);
@@ -767,13 +763,13 @@ public class Application extends SigaApplication {
 	}
 	public static void agendadas_hoje_print(String frm_data_ag) {
 		// pega usuário do sistema
-		String matriculaSessao = cadastrante().getMatricula().toString();
-		UsuarioForum objUsuario = UsuarioForum.find(
+		String matriculaSessao = "";//cadastrante().getMatricula().toString();
+		UsuarioForum objUsuario = UsuarioForum.AR.find(
 				"matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
 			// busca locais em função da configuração do usuário
 			String criterioSalas="";
-			List<Locais> listaDeSalas = Locais.find("forumFk="+objUsuario.forumFk.cod_forum).fetch();
+			List<Locais> listaDeSalas = Locais.AR.find("forumFk="+objUsuario.forumFk.cod_forum).fetch();
 			// monta string de criterio
 			for(int j=0;j<listaDeSalas.size();j++){
 				criterioSalas = criterioSalas + "'" +listaDeSalas.get(j).cod_local.toString() + "'";
@@ -782,33 +778,33 @@ public class Application extends SigaApplication {
 				}
 			}
 			if (frm_data_ag.isEmpty()){
-				render();
+//				render();
 			}else{
-				List listAgendamentos = (List) Agendamentos.find("data_ag=to_date('"+frm_data_ag.substring(0,10)+"','dd-mm-yy') and localFk in("+criterioSalas+") order by hora_ag , localFk" ).fetch();
+				List listAgendamentos = (List) Agendamentos.AR.find("data_ag=to_date('"+frm_data_ag.substring(0,10)+"','dd-mm-yy') and localFk in("+criterioSalas+") order by hora_ag , localFk" ).fetch();
 				List<Peritos> listPeritos = new ArrayList<Peritos>();
-				listPeritos = Peritos.findAll();
-				render(listAgendamentos, listPeritos);
+				listPeritos = Peritos.AR.findAll();
+//				render(listAgendamentos, listPeritos);
 			}
 		}else {
 			Excecoes("Usuario sem permissao" , null);
 		}
 	}
 	public static void agendamento_imprime(String frm_data_ag){
-		String matriculaSessao = cadastrante().getMatricula().toString();
-		String lotacaoSessao = cadastrante().getLotacao().getSiglaLotacao();
+		String matriculaSessao = "";//cadastrante().getMatricula().toString();
+		String lotacaoSessao = "";//cadastrante().getLotacao().getSiglaLotacao();
 		List<Agendamentos> listAgendamentos = new ArrayList<Agendamentos>();
-		UsuarioForum objUsuario = UsuarioForum.find(
+		UsuarioForum objUsuario = UsuarioForum.AR.find(
 				"matricula_usu =" + matriculaSessao).first();
 	if (objUsuario != null) {
 		if(frm_data_ag==null){
 			frm_data_ag = "";
 		}else{
-			listAgendamentos = Agendamentos.find( "data_ag=to_date('" + frm_data_ag + "','dd-mm-yy') order by hora_ag, cod_local" ).fetch();
+			listAgendamentos = Agendamentos.AR.find( "data_ag=to_date('" + frm_data_ag + "','dd-mm-yy') order by hora_ag, cod_local" ).fetch();
 			DpPessoa p = null;
 			// deleta os agendamentos de outros orgãos
 			for(int i=0;i<listAgendamentos.size();i++){
-				 p = (DpPessoa) DpPessoa.find("orgaoUsuario.idOrgaoUsu = " + cadastrante().getOrgaoUsuario().getIdOrgaoUsu() 
-									+ " and dataFimPessoa is null and matricula='"+ listAgendamentos.get(i).matricula + "'").first(); 
+				 p = null;//(DpPessoa) DpPessoa.find("orgaoUsuario.idOrgaoUsu = " + cadastrante().getOrgaoUsuario().getIdOrgaoUsu() 
+							//		+ " and dataFimPessoa is null and matricula='"+ listAgendamentos.get(i).matricula + "'").first(); 
 				if(lotacaoSessao.trim().equals(p.getLotacao().getSiglaLotacao().toString().trim())){
 					System.out.println("");
 				}else{
@@ -818,41 +814,41 @@ public class Application extends SigaApplication {
 			}
 		}
 		List<Peritos> listPeritos = new ArrayList<Peritos>();
-		listPeritos = Peritos.findAll();
-		render(listAgendamentos, listPeritos);
+		listPeritos = Peritos.AR.findAll();
+//		render(listAgendamentos, listPeritos);
 	}else{
 		Excecoes("Usuario sem permissao" , null);
 	}
 	}
 	public static void agendamento_print(String frm_data_ag, String frm_sala_ag, String frm_processo_ag, String frm_periciado ){
-		List listAgendamentos = (List) Agendamentos.find("data_ag=to_date('"+frm_data_ag.substring(0,10)+"','yy-mm-dd') and localFk.cod_local='"+frm_sala_ag+"' and processo='"+frm_processo_ag+"' and periciado='"+frm_periciado+"'" ).fetch();
+		List listAgendamentos = (List) Agendamentos.AR.find("data_ag=to_date('"+frm_data_ag.substring(0,10)+"','yy-mm-dd') and localFk.cod_local='"+frm_sala_ag+"' and processo='"+frm_processo_ag+"' and periciado='"+frm_periciado+"'" ).fetch();
 		if(frm_periciado.isEmpty()){
 			Excecoes("Relatorio depende de nome de periciado preenchido para ser impresso." , null);
 		}else if(frm_processo_ag.isEmpty()){
 			Excecoes("Relatorio depende de numero de processo preenchido para ser impresso." , null);
 		}else{
 			List<Peritos> listPeritos = new ArrayList<Peritos>();
-			listPeritos = Peritos.findAll();
-			render(frm_processo_ag, listAgendamentos, listPeritos);
+			listPeritos = Peritos.AR.findAll();
+//			render(frm_processo_ag, listAgendamentos, listPeritos);
 		}
 	}
 	
 	public static void agendamento_sala_lista(String frm_cod_local, String frm_data_ag){
 		String local = "";
-		String lotacaoSessao = cadastrante().getLotacao().getSiglaLotacao();
+		String lotacaoSessao = "";//cadastrante().getLotacao().getSiglaLotacao();
 		List<Locais> listSalas = new ArrayList();
 		// pega usuario do sistema
-		String matriculaSessao = cadastrante().getMatricula().toString();
-		UsuarioForum objUsuario = UsuarioForum.find(
+		String matriculaSessao = "";//cadastrante().getMatricula().toString();
+		UsuarioForum objUsuario = UsuarioForum.AR.find(
 				"matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
 			// Pega o usuário do sistema, e, busca os locais(salas) daquele
 			// forum onde ele está.
-			listSalas = ((List) Locais.find("forumFk='" + objUsuario.forumFk.cod_forum + "' order by ordem_apresentacao ").fetch()); // isso não dá erro no caso de retorno vazio.
+			listSalas = ((List) Locais.AR.find("forumFk='" + objUsuario.forumFk.cod_forum + "' order by ordem_apresentacao ").fetch()); // isso não dá erro no caso de retorno vazio.
 			List<Agendamentos> listAgendamentosMeusSala = new ArrayList();
 			if(!(frm_cod_local==null||frm_data_ag.isEmpty())){
 				//lista os agendamentos do dia, e, da lotação do cadastrante
-				listAgendamentosMeusSala = ((List) Agendamentos.find("localFk.cod_local='" + frm_cod_local + "' and data_ag = to_date('" + frm_data_ag + "','yy-mm-dd') order by hora_ag").fetch());
+				listAgendamentosMeusSala = ((List) Agendamentos.AR.find("localFk.cod_local='" + frm_cod_local + "' and data_ag = to_date('" + frm_data_ag + "','yy-mm-dd') order by hora_ag").fetch());
 				for(int i=0;i<listSalas.size();i++){
 					if(listSalas.get(i).cod_local.equals(frm_cod_local)){
 						local = listSalas.get(i).local;
@@ -861,8 +857,8 @@ public class Application extends SigaApplication {
 				
 			}
 			List<Peritos> listPeritos = new ArrayList<Peritos>();
-			listPeritos = Peritos.findAll();
-			render(local, listSalas,listAgendamentosMeusSala,lotacaoSessao, listPeritos);
+			listPeritos = Peritos.AR.findAll();
+//			render(local, listSalas,listAgendamentosMeusSala,lotacaoSessao, listPeritos);
 		} else {
 			Excecoes("Usuario sem permissao" , null);
 		}
@@ -870,26 +866,26 @@ public class Application extends SigaApplication {
 	public static void usuario_atualiza(String paramCodForum) throws Exception {
 		String mensagem = "";
 		// pega usuario do sistema
-		String matriculaSessao = cadastrante().getMatricula().toString();
-		String nomeSessao = cadastrante().getNomeAbreviado();
-		UsuarioForum objUsuario = UsuarioForum.find(
+		String matriculaSessao = "";//cadastrante().getMatricula().toString();
+		String nomeSessao = "";//cadastrante().getNomeAbreviado();
+		UsuarioForum objUsuario = UsuarioForum.AR.find(
 				"matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
 			String descricaoForum = "";
 			if (paramCodForum != null && !paramCodForum.isEmpty()) {
-				Foruns objForum = Foruns.findById(Integer
+				Foruns objForum = Foruns.AR.findById(Integer
 						.parseInt(paramCodForum));
 				descricaoForum = objForum.descricao_forum;
 				objUsuario.delete();
-				JPA.em().flush();
-				JPA.em().clear();
+				ContextoPersistencia.em().flush();
+				ContextoPersistencia.em().clear();
 				objUsuario.forumFk = objForum;
 				objUsuario.matricula_usu = matriculaSessao;
 				objUsuario.nome_usu = nomeSessao;
 				try {
 					objUsuario.save();
-					JPA.em().flush();
-					JPA.em().clear();
+					ContextoPersistencia.em().flush();
+					ContextoPersistencia.em().clear();
 					mensagem = "Ok.";
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -897,16 +893,15 @@ public class Application extends SigaApplication {
 				}
 			} else {
 				paramCodForum = Integer.toString(objUsuario.forumFk.cod_forum);
-				Foruns objForum = Foruns.find(
+				Foruns objForum = Foruns.AR.find(
 						"cod_forum = " + Integer.parseInt(paramCodForum))
 						.first();
 				descricaoForum = objForum.descricao_forum;
-				JPA.em().flush();
+				ContextoPersistencia.em().flush();
 			}
-			List<Foruns> outrosForuns = Foruns.find(
+			List<Foruns> outrosForuns = Foruns.AR.find(
 					"cod_forum <> " + paramCodForum).fetch();
-			render(objUsuario, paramCodForum, descricaoForum, mensagem,
-					outrosForuns);
+//			render(objUsuario, paramCodForum, descricaoForum, mensagem,outrosForuns);
 		} else {
 			Excecoes("Usuario sem permissao." , null);
 		}
@@ -914,18 +909,18 @@ public class Application extends SigaApplication {
 	public static void permissao_inclui(String matricula_permitida, String nome_permitido, String forum_permitido ) throws Exception{
 		String mensagem = "";
 		// pega usuário do sistema
-		String matriculaSessao = cadastrante().getMatricula().toString();
+		String matriculaSessao = "";//cadastrante().getMatricula().toString();
 		// String nomeSessao = cadastrante().getNomeAbreviado();
-		String lotacaoSessao = cadastrante().getLotacao().getSiglaLotacao();
-		UsuarioForum objUsuario = UsuarioForum.find("matricula_usu = '"+matriculaSessao+"'").first();
+		String lotacaoSessao = "";// cadastrante().getLotacao().getSiglaLotacao();
+		UsuarioForum objUsuario = UsuarioForum.AR.find("matricula_usu = '"+matriculaSessao+"'").first();
 		if ((objUsuario !=null) && ((lotacaoSessao.trim().equals("CSIS") || lotacaoSessao.trim().equals("SESIA")))){
 			if((matricula_permitida!=null) && (nome_permitido!=null) && (forum_permitido!=null) && (!matricula_permitida.isEmpty()) && (!nome_permitido.isEmpty()) && (!forum_permitido.isEmpty())){
-				Foruns atribForum = (Foruns) Foruns.find("cod_forum='"+forum_permitido+"'").first();
+				Foruns atribForum = (Foruns) Foruns.AR.find("cod_forum='"+forum_permitido+"'").first();
 				UsuarioForum usuarioPermitido = new UsuarioForum(matricula_permitida, nome_permitido, atribForum);
 				try {
 					usuarioPermitido.save();
-					JPA.em().flush();
-					JPA.em().clear();
+					ContextoPersistencia.em().flush();
+					ContextoPersistencia.em().clear();
 					mensagem = "Ok.";
 				}catch (Exception e) {
 					e.printStackTrace();
@@ -935,11 +930,11 @@ public class Application extends SigaApplication {
 						mensagem = "Nao Ok.";
 					}
 				}finally{
-					render(mensagem);
+//					render(mensagem);
 				}
 			}else{
 				mensagem="";
-				render(mensagem);
+//				render(mensagem);
 			}
 			
 		}else{
@@ -950,43 +945,43 @@ public class Application extends SigaApplication {
 	public static void permissao_exclui(String matricula_proibida){
 		String mensagem = "";
 		// pega usuário do sistema
-		String matriculaSessao = cadastrante().getMatricula().toString();
-		String lotacaoSessao = cadastrante().getLotacao().getSiglaLotacao();
-		UsuarioForum objUsuario = UsuarioForum.find("matricula_usu = '"+matriculaSessao+"'").first();
+		String matriculaSessao = "";//cadastrante().getMatricula().toString();
+		String lotacaoSessao = "";//cadastrante().getLotacao().getSiglaLotacao();
+		UsuarioForum objUsuario = UsuarioForum.AR.find("matricula_usu = '"+matriculaSessao+"'").first();
 		if ((objUsuario !=null) && ( (lotacaoSessao.trim().equals("CSIS")||lotacaoSessao.trim().equals("SESIA")) )){ //pode excluir a permissão
 			List<UsuarioForum> listPermitidos = new ArrayList<UsuarioForum>();
 			if((matricula_proibida!=null) && (!matricula_proibida.isEmpty())){ // deleta permissao
 				try{
-					UsuarioForum objUsuarioProibido = UsuarioForum.find("matricula_usu='"+matricula_proibida+"'").first();
+					UsuarioForum objUsuarioProibido = UsuarioForum.AR.find("matricula_usu='"+matricula_proibida+"'").first();
 					objUsuarioProibido.delete();
-					JPA.em().flush();
-					JPA.em().clear();
+					ContextoPersistencia.em().flush();
+					ContextoPersistencia.em().clear();
 					mensagem = "Ok";
 				}catch(Exception e){
 					e.printStackTrace();
 					mensagem = "Nao Ok";
 				}finally{
-					render(mensagem);
+//					render(mensagem);
 				}
 			 } else{ // lista permitidos
 				try{
-					 listPermitidos = (List) UsuarioForum.find(" order by nome_usu ").fetch(); // isso não dá erro no caso de retorno vazio.
+					 listPermitidos = (List) UsuarioForum.AR.find(" order by nome_usu ").fetch(); // isso não dá erro no caso de retorno vazio.
 				}catch(Exception e){
 					e.printStackTrace();
 				}
 				finally{
-					render(listPermitidos);
+//					render(listPermitidos);
 				}
 			}
 		}
 	}
 	public static void perito_incluir(){
 		// pega usuário do sistema
-		String matriculaSessao = cadastrante().getMatricula().toString();
-		String lotacaoSessao = cadastrante().getLotacao().getSiglaLotacao();
-		UsuarioForum objUsuario = UsuarioForum.find("matricula_usu = '"+matriculaSessao+"'").first();
+		String matriculaSessao = "";//cadastrante().getMatricula().toString();
+		String lotacaoSessao = "";//cadastrante().getLotacao().getSiglaLotacao();
+		UsuarioForum objUsuario = UsuarioForum.AR.find("matricula_usu = '"+matriculaSessao+"'").first();
 		if ((objUsuario !=null)){ //pode incluir perito
-			render();
+//			render();
 		}else{
 			Excecoes("Usuario sem permissao." , null);
 		}
@@ -997,7 +992,7 @@ public class Application extends SigaApplication {
 		try{
 			Peritos objPerito = new Peritos(cpf_perito, nome_perito);
 			objPerito.save();
-			JPA.em().flush();
+			ContextoPersistencia.em().flush();
 			resposta="ok";
 		}catch(PersistenceException e){
 			e.printStackTrace();
@@ -1007,17 +1002,17 @@ public class Application extends SigaApplication {
 				resposta = "Verifique se o CPF do perito esta correto, ou, se o perito ja esta cadastrado. ";
 			}
 		}finally{
-			render(resposta);
+//			render(resposta);
 		}
 	}
 	public static void creditos() {
-		render();
+//		render();
 	}
 
-	@Catch
+//	@Catch
 	public static void Excecoes(String e , String l) {
 		String msg = e;
 		String lnk = l;
-		render("Application/erro.html", msg, lnk);
+//		render("Application/erro.html", msg, lnk);
 	}
 }

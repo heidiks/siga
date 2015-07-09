@@ -7,25 +7,7 @@
 			<module name="org.antlr"/>
 		</exclusions>
 		
-<!-- 		<dependencies> -->
-<!-- 			<module name="org.hibernate" export="true" /> -->
-<!-- 			<module name="org.picketlink" />  -->
-<!-- 			<module name="org.apache.commons.lang" /> -->
-<!-- 			<module name="org.apache.ws.xmlschema" /> -->
-<!-- 			<module name="org.apache.xerces" export="true" /> -->
-<!-- 			<module name="org.apache.commons.logging" /> -->
-<!-- 			<module name="javax.wsdl4j.api" /> -->
-<!-- 			<module name="asm.asm" /> -->
-
-<!-- 			<module name="sigadoc.org.bouncycastle" export="true" /> -->
-
-<!-- 			<module name="org.javassist" /> -->
-<!-- 			<module name="javax.api" /> -->
-<!-- 		</dependencies> -->
-		
 		<dependencies>
-<!-- 			<module name="sigadoc.rel" export="true" /> -->
-			
 			<module name="org.picketlink" />
 			<module name="asm.asm" />
 			<module name="com.google.guava"/>
