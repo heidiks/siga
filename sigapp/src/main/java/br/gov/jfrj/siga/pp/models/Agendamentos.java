@@ -19,27 +19,27 @@ public class Agendamentos extends Objeto {
     public static final ActiveRecord<Agendamentos> AR = new ActiveRecord<>(Agendamentos.class);
     @Id()
     @Column(name = "data_ag", nullable = false)
-    public Date data_ag;
+    private Date data_ag;
     @Id()
     @Column(name = "hora_ag", length = 4, nullable = false)
-    public String hora_ag;
+    private String hora_ag;
     @Id()
     @ManyToOne
     @JoinColumn(name = "cod_local", nullable = false)
     // FK
-    public Locais localFk;
+    private Locais localFk;
     @Column(name = "matricula", length = 9, nullable = true)
-    public String matricula;
+    private String matricula;
     @Column(name = "periciado", length = 50, nullable = true)
-    public String periciado;
+    private String periciado;
     @Column(name = "perito_juizo", length = 50, nullable = true)
-    public String perito_juizo;
+    private String perito_juizo;
     @Column(name = "perito_parte", length = 50, nullable = true)
-    public String perito_parte;
+    private String perito_parte;
     @Column(name = "processo", length = 50, nullable = true)
-    public String processo;
+    private String processo;
     @Column(name = "orgao", length = 15, nullable = true)
-    public String orgao;
+    private String orgao;
 
     public Agendamentos(Date data_ag, String hora_ag, Locais localFk, String matricula, String periciado, String perito_juizo, String perito_parte, String processo, String orgao) {
         this.data_ag = data_ag;
@@ -50,6 +50,78 @@ public class Agendamentos extends Objeto {
         this.perito_juizo = perito_juizo;
         this.perito_parte = perito_parte;
         this.processo = processo;
+        this.orgao = orgao;
+    }
+
+    public Date getData_ag() {
+        return data_ag;
+    }
+
+    public void setData_ag(Date data_ag) {
+        this.data_ag = data_ag;
+    }
+
+    public String getHora_ag() {
+        return hora_ag;
+    }
+
+    public void setHora_ag(String hora_ag) {
+        this.hora_ag = hora_ag;
+    }
+
+    public Locais getLocalFk() {
+        return localFk;
+    }
+
+    public void setLocalFk(Locais localFk) {
+        this.localFk = localFk;
+    }
+
+    public String getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public String getPericiado() {
+        return periciado;
+    }
+
+    public void setPericiado(String periciado) {
+        this.periciado = periciado;
+    }
+
+    public String getPerito_juizo() {
+        return perito_juizo;
+    }
+
+    public void setPerito_juizo(String perito_juizo) {
+        this.perito_juizo = perito_juizo;
+    }
+
+    public String getPerito_parte() {
+        return perito_parte;
+    }
+
+    public void setPerito_parte(String perito_parte) {
+        this.perito_parte = perito_parte;
+    }
+
+    public String getProcesso() {
+        return processo;
+    }
+
+    public void setProcesso(String processo) {
+        this.processo = processo;
+    }
+
+    public String getOrgao() {
+        return orgao;
+    }
+
+    public void setOrgao(String orgao) {
         this.orgao = orgao;
     }
 

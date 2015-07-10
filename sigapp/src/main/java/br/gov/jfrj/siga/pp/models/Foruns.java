@@ -22,26 +22,66 @@ public class Foruns extends Objeto {
 
     @Id()
     @Column(name = "cod_forum", length = 10, nullable = false)
-    public int cod_forum;
+    private int cod_forum;
 
     @OneToMany(mappedBy = "forumFk")
     // isso não é campo, mas um 'references'.
-    public List<Locais> lstLocal;
+    private List<Locais> lstLocal;
 
     @OneToMany(mappedBy = "forumFk")
     // isso não é campo, mas um 'references'.
-    public List<UsuarioForum> lstUsuarioForum;
+    private List<UsuarioForum> lstUsuarioForum;
 
     @Column(name = "descricao_forum", length = 40, nullable = true)
-    public String descricao_forum;
+    private String descricao_forum;
 
     @Column(name = "mural", length = 1000, nullable = true)
-    public String mural; // texto com tags html
+    private String mural; // texto com tags html
 
     public Foruns(int cod_forum_construt, String descricao_construt, String mural_construt) {
         this.cod_forum = cod_forum_construt;
         this.descricao_forum = descricao_construt;
         this.mural = mural_construt;
+    }
+
+    public int getCod_forum() {
+        return cod_forum;
+    }
+
+    public void setCod_forum(int cod_forum) {
+        this.cod_forum = cod_forum;
+    }
+
+    public List<Locais> getLstLocal() {
+        return lstLocal;
+    }
+
+    public void setLstLocal(List<Locais> lstLocal) {
+        this.lstLocal = lstLocal;
+    }
+
+    public List<UsuarioForum> getLstUsuarioForum() {
+        return lstUsuarioForum;
+    }
+
+    public void setLstUsuarioForum(List<UsuarioForum> lstUsuarioForum) {
+        this.lstUsuarioForum = lstUsuarioForum;
+    }
+
+    public String getDescricao_forum() {
+        return descricao_forum;
+    }
+
+    public void setDescricao_forum(String descricao_forum) {
+        this.descricao_forum = descricao_forum;
+    }
+
+    public String getMural() {
+        return mural;
+    }
+
+    public void setMural(String mural) {
+        this.mural = mural;
     }
 
 }
