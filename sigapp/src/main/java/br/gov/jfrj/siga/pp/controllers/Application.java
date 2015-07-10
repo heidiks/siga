@@ -318,8 +318,8 @@ public class Application /*extends SigaApplication*/ {
 			//   buscar o nome do perito fixo na lista se existir 
 			if(fixo_perito_juizo!=null){
 			 for(int i=0;i<listPeritos.size();i++) {
-				 if(listPeritos.get(i).cpf_perito.trim().equals( fixo_perito_juizo.trim() ) ){
-					 fixo_perito_juizo_nome = listPeritos.get(i).nome_perito;
+				 if(listPeritos.get(i).getCpf_perito().trim().equals( fixo_perito_juizo.trim() ) ){
+					 fixo_perito_juizo_nome = listPeritos.get(i).getNome_perito();
 				 }
 			 }
 			}
@@ -667,8 +667,8 @@ public class Application /*extends SigaApplication*/ {
 				if(perito_juizo==null){perito_juizo="-";}
 				if(!perito_juizo.trim().equals("-")){
 					for(int i=0;i<listPeritos.size();i++){
-						if(listPeritos.get(i).cpf_perito.trim().equals(perito_juizo.trim())){
-							nome_perito_juizo = listPeritos.get(i).nome_perito;
+						if(listPeritos.get(i).getCpf_perito().trim().equals(perito_juizo.trim())){
+							nome_perito_juizo = listPeritos.get(i).getNome_perito();
 						}
 					}
 				}
