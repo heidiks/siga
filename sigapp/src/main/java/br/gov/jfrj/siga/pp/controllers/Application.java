@@ -90,8 +90,8 @@ public class Application /*extends SigaApplication*/ {
 
 	public static void sala_insert(Locais formLocal, int cod_forum) {
 		Foruns objForum = new Foruns(cod_forum, " ", " ");
-		formLocal.forumFk = objForum;
-		String varCodLocal = formLocal.cod_local;
+		formLocal.setForumFk(objForum);
+		String varCodLocal = formLocal.getCod_local();
 		String resposta = "";
 		try {
 
@@ -501,7 +501,7 @@ public class Application /*extends SigaApplication*/ {
 						Excecoes("Perito nao disponivel no horario de " + agendamentoEmConflito.hora_ag.substring(0,2)+ "h" + agendamentoEmConflito.hora_ag.substring(2,4) + "min" , null );
 					}
 					minAux = String.valueOf(Integer.parseInt(minAux)
-							+ auxLocal.intervalo_atendimento);
+							+ auxLocal.getIntervalo_atendimento());
 					if (Integer.parseInt(minAux) >= 60) {
 						hrAux = String.valueOf(Integer.parseInt(hrAux) + 1);
 						minAux = "00";
@@ -516,7 +516,7 @@ public class Application /*extends SigaApplication*/ {
 					ContextoPersistencia.em().flush();
 					ContextoPersistencia.em().clear();
 					minAux = String.valueOf(Integer.parseInt(minAux)
-							+ auxLocal.intervalo_atendimento);
+							+ auxLocal.getIntervalo_atendimento());
 					if (Integer.parseInt(minAux) >= 60) {
 						hrAux = String.valueOf(Integer.parseInt(hrAux) + 1);
 						minAux = "00";
@@ -571,8 +571,8 @@ public class Application /*extends SigaApplication*/ {
 						// pega o agendamento
 						for (Integer ii = 0; ii < listLocais.size(); ii++) {
 							// varre os locais do forum
-							if (listAgendamentos.get(i).localFk.cod_local == listLocais
-									.get(ii).cod_local) {
+							if (listAgendamentos.get(i).localFk.getCod_local() == listLocais
+									.get(ii).getCod_local()) {
 								// pertence Ã  lista de agendamentos do forum do
 								// usuario
 								auxAgendamentos
@@ -646,7 +646,7 @@ public class Application /*extends SigaApplication*/ {
 			// Pega o usuário do sistema, e, busca os locais(salas) daquele
 			// forum onde ele está.
 			Locais objSala = Locais.AR.find("cod_forum='" + objUsuario.getForumFk().cod_forum + "' and cod_local='" + cod_sala + "'").first(); // isso não dá erro no caso de retorno vazio?
-			String sala_ag = objSala.local;
+			String sala_ag = objSala.getLocal();
 			String lotacaoSessao = "";//cadastrante().getLotacao().getIdLotacao().toString();
 			//System.out.println(lotacaoSessao);
 			Agendamentos objAgendamento = Agendamentos.AR.find("cod_local='" + cod_sala + "' and data_ag = to_date('" + data_ag + "','yy-mm-dd') and hora_ag='" + hora_ag + "'").first();
@@ -721,7 +721,7 @@ public class Application /*extends SigaApplication*/ {
 			List<Locais> listaDeSalas = Locais.AR.find("forumFk="+objUsuario.getForumFk().cod_forum).fetch();
 			// monta string de criterio
 			for(int j=0;j<listaDeSalas.size();j++){
-				criterioSalas = criterioSalas + "'" +listaDeSalas.get(j).cod_local.toString() + "'";
+				criterioSalas = criterioSalas + "'" +listaDeSalas.get(j).getCod_local().toString() + "'";
 				if(j+1<listaDeSalas.size()){
 					criterioSalas = criterioSalas + ",";
 				}
@@ -743,8 +743,8 @@ public class Application /*extends SigaApplication*/ {
 					// varre listAgendamentos
 					for (int ii = 0; ii < listLocais.size(); ii++) {
 						// compara com cada local do forum do usuÃ¡rio
-						if (listAgendamentos.get(i).localFk.cod_local == listLocais
-								.get(ii).cod_local) {
+						if (listAgendamentos.get(i).localFk.getCod_local() == listLocais
+								.get(ii).getCod_local()) {
 							auxAgendamentos.add((Agendamentos) listAgendamentos
 									.get(i));
 						}
@@ -772,7 +772,7 @@ public class Application /*extends SigaApplication*/ {
 			List<Locais> listaDeSalas = Locais.AR.find("forumFk="+objUsuario.getForumFk().cod_forum).fetch();
 			// monta string de criterio
 			for(int j=0;j<listaDeSalas.size();j++){
-				criterioSalas = criterioSalas + "'" +listaDeSalas.get(j).cod_local.toString() + "'";
+				criterioSalas = criterioSalas + "'" +listaDeSalas.get(j).getCod_local().toString() + "'";
 				if(j+1<listaDeSalas.size()){
 					criterioSalas = criterioSalas + ",";
 				}
@@ -850,8 +850,8 @@ public class Application /*extends SigaApplication*/ {
 				//lista os agendamentos do dia, e, da lotação do cadastrante
 				listAgendamentosMeusSala = ((List) Agendamentos.AR.find("localFk.cod_local='" + frm_cod_local + "' and data_ag = to_date('" + frm_data_ag + "','yy-mm-dd') order by hora_ag").fetch());
 				for(int i=0;i<listSalas.size();i++){
-					if(listSalas.get(i).cod_local.equals(frm_cod_local)){
-						local = listSalas.get(i).local;
+					if(listSalas.get(i).getCod_local().equals(frm_cod_local)){
+						local = listSalas.get(i).getLocal();
 					}
 				}
 				
