@@ -20,13 +20,30 @@ public class Peritos extends Objeto {
 
     @Id()
     @Column(name = "cpf_perito", length = 50, nullable = false)
-    public String cpf_perito;
+    private String cpf_perito;
 
     @Column(name = "nome_perito", length = 200, nullable = true)
-    public String nome_perito;
+    private String nome_perito;
 
     public Peritos(String cpf_perito_construt, String nome_perito_construt) {
         this.cpf_perito = cpf_perito_construt;
         this.nome_perito = nome_perito_construt;
     }
+
+    public String getCpf_perito() {
+        return cpf_perito;
+    }
+
+    public void setCpf_perito(String cpf_perito) {
+        this.cpf_perito = cpf_perito;
+    }
+
+    public String getNome_perito() {
+        return nome_perito;
+    }
+
+    public void setNome_perito(String nome_perito) {
+        this.nome_perito = nome_perito;
+    }
+    
 }
