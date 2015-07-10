@@ -19,20 +19,45 @@ public class UsuarioForum extends Objeto {
 
     @Id()
     @Column(name = "matricula_usu", length = 6, nullable = false, unique = true)
-    public String matricula_usu;
+    private String matricula_usu;
 
     @Id()
     @ManyToOne
     @JoinColumn(name = "cod_forum", nullable = false)
     // fk, e tem que atribuir via objeto forumfK
-    public Foruns forumFk; // isso é coluna, mas tem que atribuir como objeto
+    private Foruns forumFk; // isso é coluna, mas tem que atribuir como objeto
 
     @Column(name = "nome_usu", length = 50, nullable = true)
-    public String nome_usu;
+    private String nome_usu;
 
     public UsuarioForum(String matricula_usu_construt, String nome_usu_construt, Foruns cod_forum_construt) {
         this.matricula_usu = matricula_usu_construt;
         this.nome_usu = nome_usu_construt;
         this.forumFk = cod_forum_construt;
     }
+
+    public String getMatricula_usu() {
+        return matricula_usu;
+    }
+
+    public void setMatricula_usu(String matricula_usu) {
+        this.matricula_usu = matricula_usu;
+    }
+
+    public Foruns getForumFk() {
+        return forumFk;
+    }
+
+    public void setForumFk(Foruns forumFk) {
+        this.forumFk = forumFk;
+    }
+
+    public String getNome_usu() {
+        return nome_usu;
+    }
+
+    public void setNome_usu(String nome_usu) {
+        this.nome_usu = nome_usu;
+    }
+    
 }

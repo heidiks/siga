@@ -55,8 +55,8 @@ public class Application /*extends SigaApplication*/ {
 		UsuarioForum objUsuario = UsuarioForum.AR.find("matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
 			try {
-				List<Locais> lstLocais = Locais.AR.find("forumFk=" + objUsuario.forumFk.cod_forum	+ "order by ordem_apresentacao ").fetch();
-				Foruns objForum = Foruns.AR.find("cod_forum=" + objUsuario.forumFk.cod_forum).first();
+				List<Locais> lstLocais = Locais.AR.find("forumFk=" + objUsuario.getForumFk().cod_forum	+ "order by ordem_apresentacao ").fetch();
+				Foruns objForum = Foruns.AR.find("cod_forum=" + objUsuario.getForumFk().cod_forum).first();
 				ArrayList vetorForuns = new ArrayList();
 				String texto = objForum.mural;
 				int i = 0;
@@ -312,7 +312,7 @@ public class Application /*extends SigaApplication*/ {
 			// Pega o usuário do sistema, e, busca os locais(salas) daquele
 			// forum onde ele está.
 			listSalas = (List) Locais.AR.find(
-					"cod_forum='" + objUsuario.forumFk.cod_forum
+					"cod_forum='" + objUsuario.getForumFk().cod_forum
 							+ "' order by ordem_apresentacao ").fetch(); // isso não dá erro no caso de retorno vazio.
 			listPeritos =  (List) Peritos.AR.find("1=1 order by nome_perito").fetch();
 			//   buscar o nome do perito fixo na lista se existir 
@@ -560,7 +560,7 @@ public class Application /*extends SigaApplication*/ {
 						.fetch();
 				// busca os locais do forum do usuario
 				List<Locais> listLocais = Locais.AR.find(
-						"cod_forum='" + objUsuario.forumFk.cod_forum + "'")
+						"cod_forum='" + objUsuario.getForumFk().cod_forum + "'")
 						.fetch();
 				// Verifica se existe local naquele forum do usuÃ¡rio
 				if (listAgendamentos.size() != 0) {
@@ -645,7 +645,7 @@ public class Application /*extends SigaApplication*/ {
 		if (objUsuario != null) {
 			// Pega o usuário do sistema, e, busca os locais(salas) daquele
 			// forum onde ele está.
-			Locais objSala = Locais.AR.find("cod_forum='" + objUsuario.forumFk.cod_forum + "' and cod_local='" + cod_sala + "'").first(); // isso não dá erro no caso de retorno vazio?
+			Locais objSala = Locais.AR.find("cod_forum='" + objUsuario.getForumFk().cod_forum + "' and cod_local='" + cod_sala + "'").first(); // isso não dá erro no caso de retorno vazio?
 			String sala_ag = objSala.local;
 			String lotacaoSessao = "";//cadastrante().getLotacao().getIdLotacao().toString();
 			//System.out.println(lotacaoSessao);
@@ -718,7 +718,7 @@ public class Application /*extends SigaApplication*/ {
 		if (objUsuario != null) {
 			// busca locais em função da configuração do usuário
 			String criterioSalas="";
-			List<Locais> listaDeSalas = Locais.AR.find("forumFk="+objUsuario.forumFk.cod_forum).fetch();
+			List<Locais> listaDeSalas = Locais.AR.find("forumFk="+objUsuario.getForumFk().cod_forum).fetch();
 			// monta string de criterio
 			for(int j=0;j<listaDeSalas.size();j++){
 				criterioSalas = criterioSalas + "'" +listaDeSalas.get(j).cod_local.toString() + "'";
@@ -735,7 +735,7 @@ public class Application /*extends SigaApplication*/ {
 			 if (listAgendamentos.size() != 0) {
 				// busca as salas daquele forum
 				List<Locais> listLocais = Locais.AR.find(
-						"cod_forum='" + objUsuario.forumFk.cod_forum + "'")
+						"cod_forum='" + objUsuario.getForumFk().cod_forum + "'")
 						.fetch();
 				// lista auxiliar
 				List<Agendamentos> auxAgendamentos = new ArrayList<Agendamentos>();
@@ -769,7 +769,7 @@ public class Application /*extends SigaApplication*/ {
 		if (objUsuario != null) {
 			// busca locais em função da configuração do usuário
 			String criterioSalas="";
-			List<Locais> listaDeSalas = Locais.AR.find("forumFk="+objUsuario.forumFk.cod_forum).fetch();
+			List<Locais> listaDeSalas = Locais.AR.find("forumFk="+objUsuario.getForumFk().cod_forum).fetch();
 			// monta string de criterio
 			for(int j=0;j<listaDeSalas.size();j++){
 				criterioSalas = criterioSalas + "'" +listaDeSalas.get(j).cod_local.toString() + "'";
@@ -844,7 +844,7 @@ public class Application /*extends SigaApplication*/ {
 		if (objUsuario != null) {
 			// Pega o usuário do sistema, e, busca os locais(salas) daquele
 			// forum onde ele está.
-			listSalas = ((List) Locais.AR.find("forumFk='" + objUsuario.forumFk.cod_forum + "' order by ordem_apresentacao ").fetch()); // isso não dá erro no caso de retorno vazio.
+			listSalas = ((List) Locais.AR.find("forumFk='" + objUsuario.getForumFk().cod_forum + "' order by ordem_apresentacao ").fetch()); // isso não dá erro no caso de retorno vazio.
 			List<Agendamentos> listAgendamentosMeusSala = new ArrayList();
 			if(!(frm_cod_local==null||frm_data_ag.isEmpty())){
 				//lista os agendamentos do dia, e, da lotação do cadastrante
@@ -879,9 +879,9 @@ public class Application /*extends SigaApplication*/ {
 				objUsuario.delete();
 				ContextoPersistencia.em().flush();
 				ContextoPersistencia.em().clear();
-				objUsuario.forumFk = objForum;
-				objUsuario.matricula_usu = matriculaSessao;
-				objUsuario.nome_usu = nomeSessao;
+				objUsuario.setForumFk(objForum);
+				objUsuario.setMatricula_usu(matriculaSessao);
+				objUsuario.setNome_usu(nomeSessao);
 				try {
 					objUsuario.save();
 					ContextoPersistencia.em().flush();
@@ -892,7 +892,7 @@ public class Application /*extends SigaApplication*/ {
 					mensagem = "Não Ok.";
 				}
 			} else {
-				paramCodForum = Integer.toString(objUsuario.forumFk.cod_forum);
+				paramCodForum = Integer.toString(objUsuario.getForumFk().cod_forum);
 				Foruns objForum = Foruns.AR.find(
 						"cod_forum = " + Integer.parseInt(paramCodForum))
 						.first();
