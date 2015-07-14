@@ -7,6 +7,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import br.gov.jfrj.siga.feature.converter.entity.vraptor.ConvertableEntity;
 import br.gov.jfrj.siga.model.ActiveRecord;
 import br.gov.jfrj.siga.model.Objeto;
 
@@ -35,7 +36,10 @@ public class UsuarioForum extends Objeto {
         this.nome_usu = nome_usu_construt;
         this.forumFk = cod_forum_construt;
     }
-
+    
+    public UsuarioForum() {
+    }
+    
     public String getMatricula_usu() {
         return matricula_usu;
     }
@@ -58,6 +62,10 @@ public class UsuarioForum extends Objeto {
 
     public void setNome_usu(String nome_usu) {
         this.nome_usu = nome_usu;
+    }
+    
+    public static UsuarioForum findByMatricula(String matriculaSessao) {
+        return AR.find("matricula_usu =" + matriculaSessao).first();
     }
     
 }

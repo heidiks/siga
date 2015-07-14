@@ -38,6 +38,9 @@ public class Foruns extends Objeto {
     @Column(name = "mural", length = 1000, nullable = true)
     private String mural; // texto com tags html
 
+    public Foruns() {
+    }
+    
     public Foruns(int cod_forum_construt, String descricao_construt, String mural_construt) {
         this.cod_forum = cod_forum_construt;
         this.descricao_forum = descricao_construt;

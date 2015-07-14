@@ -25,6 +25,9 @@ public class Peritos extends Objeto {
     @Column(name = "nome_perito", length = 200, nullable = true)
     private String nome_perito;
 
+    public Peritos() {
+    }
+    
     public Peritos(String cpf_perito_construt, String nome_perito_construt) {
         this.cpf_perito = cpf_perito_construt;
         this.nome_perito = nome_perito_construt;

@@ -40,6 +40,9 @@ public class Agendamentos extends Objeto {
     private String processo;
     @Column(name = "orgao", length = 15, nullable = true)
     private String orgao;
+    
+    public Agendamentos() {
+    }
 
     public Agendamentos(Date data_ag, String hora_ag, Locais localFk, String matricula, String periciado, String perito_juizo, String perito_parte, String processo, String orgao) {
         this.data_ag = data_ag;

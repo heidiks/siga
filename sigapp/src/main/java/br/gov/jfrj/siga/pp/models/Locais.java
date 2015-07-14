@@ -51,6 +51,9 @@ public class Locais extends Objeto {
     @Column(name = "ordem_apresentacao", length = 2, nullable = false)
     private int ordem_apresentacao;
 
+    public Locais() {
+    }
+    
     public String getCod_local() {
         return cod_local;
     }

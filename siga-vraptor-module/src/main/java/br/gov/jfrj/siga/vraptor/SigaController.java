@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.HttpResult;
-import br.com.caelum.vraptor.view.Results;
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.base.util.Paginador;
 import br.gov.jfrj.siga.cp.CpIdentidade;
@@ -44,7 +43,6 @@ public class SigaController {
 	private Paginador p = new Paginador();
 		
 	private Integer postback;
-	
 	
 	private String mensagemAguarde = null;
 	
