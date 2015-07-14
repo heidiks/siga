@@ -22,9 +22,9 @@
 		<table border="2px" cellspacing="1px" cellpadding="2px" style="font-size:100%;" >
 			<tr>
 				<th>
-					ATEN&Ccedil;&Atilde;O
-					A fim de evitar que os periciandos aguardem excessivamente por atendimento no espa&ccedil;o de espera das salas de per&iacute;cia nas depend&ecirc;cias do Foro , &eacute; importante que o hor&aacute;rio para seu comparecimento &agrave;  per&iacute;cia, constante do mandado de intima&ccedil;&atilde;o, seja igual ao hor&aacute;rio efetivamente agendado no sistema SigaPP. 
-					Veja mais informa&ccedil;&otilde;µes no Of&iacute;cio Circular  <a href="http://portalintranet/documentos/grupo_172/oficios_circulares/2012/rjocd201200063a.pdf">RJ-OCD-2012/00063</a>. 
+					ATEN&Ccedil;&Atilde;O:
+					A fim de evitar que os periciandos aguardem excessivamente por atendimento no espa&ccedil;o de espera das salas de per&iacute;cia nas depend&ecirc;ncias do Foro , &eacute; importante que o hor&aacute;rio para seu comparecimento &agrave; per&iacute;cia, constante do mandado de intima&ccedil;&atilde;o, seja igual ao hor&aacute;rio efetivamente agendado no sistema SigaPP. 
+					Veja mais informa&ccedil;&otilde;es no Of&iacute;cio Circular  <a href="http://portalintranet/documentos/grupo_172/oficios_circulares/2012/rjocd201200063a.pdf">RJ-OCD-2012/00063</a>. 
 				</th>
 			</tr>
 		</table>
