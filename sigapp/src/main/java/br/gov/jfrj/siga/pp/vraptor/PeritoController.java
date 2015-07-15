@@ -30,7 +30,7 @@ public class PeritoController extends PpController{
         UsuarioForum objUsuario = UsuarioForum.AR.find("matricula_usu = '"+matriculaSessao+"'").first();
         
         if(objUsuario == null)
-            result.forwardTo(PrincipalController.class).erro("Usuario sem permissao", null);
+            redirecionaPaginaErro("Usuario sem permissao", null);
     }
     
     public void insert(String cpf_perito, String nome_perito){

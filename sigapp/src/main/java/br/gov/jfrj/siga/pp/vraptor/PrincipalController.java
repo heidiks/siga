@@ -52,7 +52,7 @@ public class PrincipalController extends PpController {
                 e.printStackTrace();
             }
         } else {
-            result.forwardTo(this).erro("Usuario sem permissao", null);
+            redirecionaPaginaErro("Usuario sem permissao", null);
         }
     }
     
