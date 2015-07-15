@@ -37,4 +37,7 @@ public class PpController extends SigaController {
         return context;
     }
     
+    protected String getUsuarioMatricula() {
+        return getCadastrante().getMatricula().toString();
+    }
 }
