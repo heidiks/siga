@@ -5,7 +5,6 @@ import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.caelum.vraptor.Path;
-import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.gov.jfrj.siga.dp.dao.CpDao;
@@ -26,13 +25,12 @@ public class PeritoController extends PpController{
     
     @Path("/incluir")
     public void incluir() {
-        String matriculaSessao = getUsuario();
+        String matriculaSessao = getUsuarioMatricula();
         
         UsuarioForum objUsuario = UsuarioForum.AR.find("matricula_usu = '"+matriculaSessao+"'").first();
         
         if(objUsuario == null)
-            exception();
-//            Excecoes("Usuario sem permissao." , null);
+            result.forwardTo(PrincipalController.class).erro("Usuario sem permissao", null);
     }
     
     public void insert(String cpf_perito, String nome_perito){
@@ -50,10 +48,6 @@ public class PeritoController extends PpController{
         } finally {
             result.include("resposta", resposta);
         }
-    }
-
-    private String getUsuario() {
-        return getCadastrante().getMatricula().toString();
     }
 
 }
