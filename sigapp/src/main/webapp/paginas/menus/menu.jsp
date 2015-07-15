@@ -18,7 +18,7 @@
 	<ul>
 	</ul>
  </li>
- <li><a href="@{agendamento_excluir()}">Cancelar<br>Editar</a>
+ <li><a href="${linkTo[AgendamentoController].excluir}">Cancelar<br>Editar</a>
 	<ul>
 		
 	</ul>
