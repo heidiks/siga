@@ -35,7 +35,7 @@
 		</li>
 	</ul>
  </li>
- <li><a href="@{perito_incluir()}">Inclui um perito</a>
+ <li><a href="${linkTo[PeritoController].incluir}">Inclui um perito</a>
  </li>
  <li><a href="@{usuario_atualiza()}">Configura&ccedil;&atilde;o</a>
  </li>

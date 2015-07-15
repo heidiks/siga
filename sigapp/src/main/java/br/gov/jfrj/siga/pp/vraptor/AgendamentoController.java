@@ -298,9 +298,8 @@ public class AgendamentoController extends PpController {
 		}
     }
 
-    @Path("/delete/{formAgendamento}")
-    public void delete(Agendamentos formAgendamento,
-    			String cod_local) {
+    @Path("/delete")
+    public void delete(Agendamentos formAgendamento, String cod_local) {
 		String resultado = "";
 		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		String dtt = df.format(formAgendamento.getData_ag());
@@ -311,11 +310,11 @@ public class AgendamentoController extends PpController {
 							+ "' and data_ag = to_date('" + dtt
 							+ "','dd/mm/yy')").first();
 			//--------------------------
-			String lotacaoSessao = "";//cadastrante().getLotacao().getIdLotacao().toString();
+			String lotacaoSessao = getCadastrante().getLotacao().getIdLotacao().toString();
 			String matricula_ag = ag.getMatricula();
 			DpPessoa p = (DpPessoa) DpPessoa.AR.find(
 					"orgaoUsuario.idOrgaoUsu = "
-						//	+ cadastrante().getOrgaoUsuario().getIdOrgaoUsu()
+							+ getCadastrante().getOrgaoUsuario().getIdOrgaoUsu()
 							+ " and dataFimPessoa is null and matricula='"
 							+ matricula_ag + "'").first();
 			String lotacao_ag = p.getLotacao().getIdLotacao().toString();
@@ -336,10 +335,10 @@ public class AgendamentoController extends PpController {
 		}
     }
 
-    @Path("/atualiza/{cod_sala}/{data_ag}/{hora_ag}")
+    @Path("/atualiza")
     public void atualiza(String cod_sala, String data_ag, String hora_ag) {
 		// pega usuario do sistema
-		String matriculaSessao = "";//cadastrante().getMatricula().toString();
+		String matriculaSessao = getCadastrante().getMatricula().toString();
 		UsuarioForum objUsuario = UsuarioForum.AR.find(
 				"matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
@@ -347,11 +346,11 @@ public class AgendamentoController extends PpController {
 			// forum onde ele está.
 			Locais objSala = Locais.AR.find("cod_forum='" + objUsuario.getForumFk().getCod_forum() + "' and cod_local='" + cod_sala + "'").first(); // isso não dá erro no caso de retorno vazio?
 			String sala_ag = objSala.getLocal();
-			String lotacaoSessao = "";//cadastrante().getLotacao().getIdLotacao().toString();
+			String lotacaoSessao = getCadastrante().getLotacao().getIdLotacao().toString();
 			//System.out.println(lotacaoSessao);
 			Agendamentos objAgendamento = Agendamentos.AR.find("cod_local='" + cod_sala + "' and data_ag = to_date('" + data_ag + "','yy-mm-dd') and hora_ag='" + hora_ag + "'").first();
 			String matricula_ag = objAgendamento.getMatricula();
-			DpPessoa p = null;// (DpPessoa) DpPessoa.find("orgaoUsuario.idOrgaoUsu = " + cadastrante().getOrgaoUsuario().getIdOrgaoUsu() + " and dataFimPessoa is null and matricula='"	+ matricula_ag + "'").first();
+			DpPessoa p = (DpPessoa) DpPessoa.AR.find("orgaoUsuario.idOrgaoUsu = " + getCadastrante().getOrgaoUsuario().getIdOrgaoUsu() + " and dataFimPessoa is null and matricula='"	+ matricula_ag + "'").first();
 			String lotacao_ag = p.getLotacao().getIdLotacao().toString();
 			//System.out.println(p.getNomePessoa().toString()+ "Lotado em:" + lotacao_ag);
 			if(lotacaoSessao.trim().equals(lotacao_ag.trim())){
