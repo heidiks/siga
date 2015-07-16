@@ -4,9 +4,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
-
-<siga:pagina titulo="Agendadas Hoje Print"/>
+<siga:pagina titulo="Agendadas Hoje Print"/> 
 <title>Imprime agendadas hoje</title>
+
 
 <script language="javascript">
 	alert('Quando terminar tecle BACKSPACE para retornar.');
@@ -19,10 +19,10 @@ Justi&ccedil;a Federal do Rio de Janeiro
 	<center><h4>AGENDAMENTOS DE HOJE - SigaPP</h4></center>
 <div style="position:absolute;left:10%;">
 	DATA:
-	<c:if test="${listAgendamentos != null}">
-		${listAgendamentos.data_ag.toString().substring(9,11)}/
-		${listAgendamentos.data_ag.toString().substring(6,8)}/
-		${listAgendamentos.data_ag.toString().substring(1,5)}
+	<c:if test="${(null != listAgendamentos)||(null != listAgendamentos[0])}">
+ 		${listAgendamentos[0].data_ag.toString().substring(9,11)}/ 
+ 		${listAgendamentos[0].data_ag.toString().substring(6,8)}/ 
+ 		${listAgendamentos[0].data_ag.toString().substring(1,5)} 
 	</c:if>
 </div>
 <br><br>
@@ -45,11 +45,11 @@ Justi&ccedil;a Federal do Rio de Janeiro
 				<c:if test="${'' == ag.perito_juizo.trim()}">
 					Sem perito do ju&iacute;zo.
 				</c:if>
-				<c:forEach items="${listPeritos}" var="prt"> 
-					<c:if test="${ag.perito_juizo.trim() == prt.cpf_perito.trim()}">
-						${prt.nome_perito}
-					</c:if>	
-		 		</c:forEach>
+ 				<c:forEach items="${listPeritos}" var="prt">  
+ 					<c:if test="${ag.perito_juizo.trim() == prt.cpf_perito.trim()}"> 
+ 						${prt.nome_perito} 
+ 					</c:if>	 
+ 		 		</c:forEach> 
 			</c:if>
 			&nbsp;
 		</td>

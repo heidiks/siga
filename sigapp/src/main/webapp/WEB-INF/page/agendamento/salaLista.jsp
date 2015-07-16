@@ -14,17 +14,17 @@ function funcData(){
 	var dt = document.getElementById('datepicker').value;
 	var sl = document.getElementById('frm_cod_local01').value;
 	if(sl=="Escolha a sala"){
-		alert('A sala de per&iacute;cia n&atilde;o foi escolhida.');
+		alert('A sala de peicia nao foi escolhida.');
 		return;	
 	}
 	if(dt==""){
-		alert('A data n&atilde;o foi escolhida');
+		alert('A data nao foi escolhida');
 		return;
 	}
 	
 	if(dt=="--"){
 		document.getElementById('datepicker').value="";
-		alert('Campo data n&atilde;o foi preenchido');
+		alert('Campo data nao foi preenchido');
 		return;
 	}else{
 		if(dt!=""){
@@ -65,12 +65,12 @@ function calendario_resposta(param){
 </script>
 <center><h3 class="ui-accordion-header">IMPRIME <i>MEUS</i> AGENDAMENTOS DE <i>UMA</i> SALA</h3></center>
 <div style="position:relative;left:05%;">
-	<h4 class="ui-accordion-header">&Otilde;RG&Atilde;ÉO:<input class="ui-spinner-input" type="text" value="${lotacaoSessao}" readonly="true" /></h4>
+	<h4 class="ui-accordion-header">&Oacute;RG&Atilde;ÉO:<input class="ui-spinner-input" type="text" value="${lotacaoSessao}" readonly="true" /></h4>
 	<br>
 	<h4 class="ui-accordion-header">SALA: &nbsp;<input class="ui-spinner-input" type="text" value="${local}" readonly="true" /></h4>
 	</div> 
 <table class="ui-tabs"  align="center" style="font-size:100%;">
-	<tr bgcolor="Silver"><th>&nbsp Data &nbsp</th><th>&nbsp Hora &nbsp</th><th>&nbsp Periciado &nbsp</th><th>&nbsp Processo &nbsp</th><th>&nbsp Perito Ju√≠zo &nbsp</th><th>&nbsp Perito Parte &nbsp</th><th>&nbsp</th>
+	<tr bgcolor="Silver"><th>&nbsp Data &nbsp</th><th>&nbsp Hora &nbsp</th><th>&nbsp Periciado &nbsp</th><th>&nbsp Processo &nbsp</th><th>&nbsp Perito Ju&iacute;zo &nbsp</th><th>&nbsp Perito Parte &nbsp</th><th>&nbsp</th>
  	</tr>
  	  <c:forEach items="${listAgendamentosMeusSala}" var="ag">	
 		  <tr class="ui-button-icon-only"
