@@ -48,15 +48,15 @@ Rio de Janeiro, <input id="data01" type="text" style="border: thin solid white;"
 		<td>${ag.orgao} &nbsp;</td>
 		<!-- <td>${ag.perito_juizo} &nbsp</td> -->
 		<td>
-		<c:if test="${ag.perito_juizo==null}">
+		<c:if test="${null == ag.perito_juizo}">
 			Sem perito do ju&iacute;zo
 		</c:if>
-		<c:if test="${ag.perito_juizo!=null}">
-			<c:if test="${ag.perito_juizo.trim()==""}">
+		<c:if test="${null != ag.perito_juizo}">
+			<c:if test="${'' == ag.perito_juizo.trim()}">
 				Sem perito do ju&iacute;zo.
 			</c:if>
 			<c:forEach items="${listPeritos}" var="prt"> 
-				<c:if test="${ag.perito_juizo.trim()==prt.cpf_perito.trim()}">
+				<c:if test="${ag.perito_juizo.trim() == prt.cpf_perito.trim()}">
 					${prt.nome_perito}
 				</c:if>
 	 		</c:forEach>
