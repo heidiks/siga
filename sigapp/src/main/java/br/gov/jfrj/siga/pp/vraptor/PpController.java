@@ -37,4 +37,11 @@ public class PpController extends SigaController {
         return context;
     }
     
+    protected String getUsuarioMatricula() {
+        return getCadastrante().getMatricula().toString();
+    }
+    
+    protected void redirecionaPaginaErro(String msg, String link) {
+        result.forwardTo(PrincipalController.class).erro(msg, link);
+    }
 }

@@ -52,7 +52,12 @@ public class PrincipalController extends PpController {
                 e.printStackTrace();
             }
         } else {
-            exception();
+            redirecionaPaginaErro("Usuario sem permissao", null);
         }
+    }
+    
+    public void erro(String msg , String link) {
+        result.include("msg", msg);
+        result.include("link", link);
     }
 }
