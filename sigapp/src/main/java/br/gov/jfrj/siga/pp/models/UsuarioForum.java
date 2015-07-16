@@ -7,7 +7,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import br.gov.jfrj.siga.feature.converter.entity.vraptor.ConvertableEntity;
 import br.gov.jfrj.siga.model.ActiveRecord;
 import br.gov.jfrj.siga.model.Objeto;
 
@@ -18,7 +17,7 @@ public class UsuarioForum extends Objeto {
     private static final long serialVersionUID = -698697354242184472L;
     public static final ActiveRecord<UsuarioForum> AR = new ActiveRecord<>(UsuarioForum.class);
 
-    @Id()
+    @Id
     @Column(name = "matricula_usu", length = 6, nullable = false, unique = true)
     private String matricula_usu;
 
@@ -67,5 +66,15 @@ public class UsuarioForum extends Objeto {
     public static UsuarioForum findByMatricula(String matriculaSessao) {
         return AR.find("matricula_usu =" + matriculaSessao).first();
     }
+
+//    @Override
+//    public String getId() {
+//        return getMatricula_usu();
+//    }
+//
+//    @Override
+//    public int compareTo(UsuarioForum o) {
+//        return this.matricula_usu.compareTo(o.matricula_usu);
+//    }
     
 }

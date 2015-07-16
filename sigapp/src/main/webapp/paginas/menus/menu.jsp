@@ -37,7 +37,7 @@
  </li>
  <li><a href="${linkTo[PeritoController].incluir}">Inclui um perito</a>
  </li>
- <li><a href="@{usuario_atualiza()}">Configura&ccedil;&atilde;o</a>
+ <li><a href="${linkTo[UsuarioFormController].atualiza}">Configura&ccedil;&atilde;o</a>
  </li>
  <li><a href="@{creditos()}">Cr&eacute;ditos</a>
 	<ul></ul>
