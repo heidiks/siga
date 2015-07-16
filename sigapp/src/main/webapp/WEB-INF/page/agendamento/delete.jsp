@@ -5,6 +5,7 @@
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
 <siga:pagina titulo="Agendamento Cancelar">
+	<link rel="stylesheet" href="/sigapp/stylesheets/jquery-ui.css" type="text/css" media="screen, projection" />
 	<br>
 	<h4 class="ui-widget" style="position:absolute;left:5%; color:red;">${resultado}</h4>
 	<br>

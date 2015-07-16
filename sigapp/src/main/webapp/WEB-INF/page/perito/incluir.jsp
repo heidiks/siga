@@ -2,6 +2,7 @@
 
 <meta charset="ISO-8859-1">
 <siga:pagina titulo="'Incluir Perito">
+ <link rel="stylesheet" href="/sigapp/stylesheets/jquery-ui.css" type="text/css" media="screen, projection" />
 	<form action="${linkTo[PeritoController].insert}"  method="post">
 		<br>
 		<font style="position: absolute;left:5%;right:77%;" class="ui-state-default" size="3px">CPF do Perito:</font><input type="text" name="cpf_perito" style="position:absolute;left:25%;" class="ui-widget"" size="11" maxlength="11" > <font style="position:absolute;left:50%;"" class="ui-state-default" size="3px">(digite sem pontos ou tra&ccedil;os)</font>

@@ -5,6 +5,7 @@
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
 <siga:pagina titulo="Agendamento Atualiza">
+	<link rel="stylesheet" href="/sigapp/stylesheets/jquery-ui.css" type="text/css" media="screen, projection" />
 	<br/><br/><br/><br/>
 	<div>
 	  <form enctype="multipart/form-data" name="agendamento_atualiza01" method="post" style="border-style: groove; border-color: silver;" action="${linkTo[AgendamentoController].update}">
