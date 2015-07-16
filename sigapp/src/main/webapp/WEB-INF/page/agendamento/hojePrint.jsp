@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
-<siga:pagina titulo="Agendadas Hoje Print"/>
+<siga:pagina titulo="Agendadas Hoje Print"/> 
 <title>Imprime agendadas hoje</title>
 
 
@@ -19,7 +19,7 @@ Justi&ccedil;a Federal do Rio de Janeiro
 	<center><h4>AGENDAMENTOS DE HOJE - SigaPP</h4></center>
 <div style="position:absolute;left:10%;">
 	DATA:
-	<c:if test="${listAgendamentos[0] != null}">
+	<c:if test="${(null != listAgendamentos)||(null != listAgendamentos[0])}">
  		${listAgendamentos[0].data_ag.toString().substring(9,11)}/ 
  		${listAgendamentos[0].data_ag.toString().substring(6,8)}/ 
  		${listAgendamentos[0].data_ag.toString().substring(1,5)} 

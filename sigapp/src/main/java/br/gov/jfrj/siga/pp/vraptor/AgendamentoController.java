@@ -33,9 +33,9 @@ public class AgendamentoController extends PpController {
     @Path("/hoje")
     public void hoje() {
 		// pega usuário do sistema
-		String matriculaSessao = "";//cadastrante().getMatricula().toString();
-		UsuarioForum objUsuario = UsuarioForum.AR.find("").first();
-//TODO:				"matricula_usu =" + matriculaSessao).first();
+		String matriculaSessao = getCadastrante().getMatricula().toString();
+		UsuarioForum objUsuario = UsuarioForum.AR.find(
+				"matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
 			// busca locais em função da configuração do usuário
 			String criterioSalas="";
@@ -81,12 +81,12 @@ public class AgendamentoController extends PpController {
 		}
     }
 
-    @Path("/hojePrint/{frm_data_ag}")
+    @Path("/hojePrint")
     public void hojePrint(String frm_data_ag) {
 		// pega usuário do sistema
-		String matriculaSessao = "";//cadastrante().getMatricula().toString();
-		UsuarioForum objUsuario = UsuarioForum.AR.find().first();
- //TODO:		"matricula_usu =" + matriculaSessao).first();
+		String matriculaSessao = getCadastrante().getMatricula().toString();
+		UsuarioForum objUsuario = UsuarioForum.AR.find(
+		    "matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
 			// busca locais em função da configuração do usuário
 			String criterioSalas=" null ";
@@ -112,8 +112,8 @@ public class AgendamentoController extends PpController {
 
     @Path("/print/{frm_data_ag}/{frm_sala_ag}/{frm_processo_ag}/{frm_periciado}")
     public void print(String frm_data_ag, String frm_sala_ag, String frm_processo_ag, String frm_periciado ){
-		List listAgendamentos = (List) Agendamentos.AR.find().fetch();
-		  //TODO: "data_ag=to_date('"+frm_data_ag.substring(0,10)+"','yy-mm-dd') and localFk.cod_local='"+frm_sala_ag+"' and processo='"+frm_processo_ag+"' and periciado='"+frm_periciado+"'" ).fetch();
+		List listAgendamentos = (List) Agendamentos.AR.find(
+		   "data_ag=to_date('"+frm_data_ag.substring(0,10)+"','yy-mm-dd') and localFk.cod_local='"+frm_sala_ag+"' and processo='"+frm_processo_ag+"' and periciado='"+frm_periciado+"'" ).fetch();
 		if(frm_periciado.isEmpty()){
 		    //TODO: Excecoes("Relatorio depende de nome de periciado preenchido para ser impresso." , null);
 		}else if(frm_processo_ag.isEmpty()){
@@ -127,15 +127,15 @@ public class AgendamentoController extends PpController {
 		}
     }
 
-    @Path("/salaLista/{frm_cod_local}/{frm_data_ag}")
+    @Path("/salaLista")
     public void salaLista(String frm_cod_local, String frm_data_ag){
 		String local = "";
-		String lotacaoSessao = "";//cadastrante().getLotacao().getSiglaLotacao();
+		String lotacaoSessao = getCadastrante().getLotacao().getSiglaLotacao();
 		List<Locais> listSalas = new ArrayList();
 		// pega usuario do sistema
-		String matriculaSessao = "";//cadastrante().getMatricula().toString();
-		UsuarioForum objUsuario = UsuarioForum.AR.find().first();
-		//TODO:		"matricula_usu =" + matriculaSessao).first();
+		String matriculaSessao = getCadastrante().getMatricula().toString();
+		UsuarioForum objUsuario = UsuarioForum.AR.find(
+			"matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
 			// Pega o usuário do sistema, e, busca os locais(salas) daquele
 			// forum onde ele está.
@@ -168,7 +168,7 @@ public class AgendamentoController extends PpController {
     			String frm_hora_ag, String frm_cod_local, String matricula,
     			String periciado, String perito_juizo, String perito_parte,
     			String orgao, String processo, Integer lote) {
-		matricula = "";//cadastrante().getMatricula().toString();
+		matricula = getCadastrante().getMatricula().toString();
 		String resposta = "";
 		Locais auxLocal = Locais.AR.findById(frm_cod_local);
 		String hr;
@@ -269,13 +269,13 @@ public class AgendamentoController extends PpController {
 		}
     }
 
-    @Path("/imprime/{frm_data_ag}")
+    @Path("/imprime")
     public void imprime(String frm_data_ag){
-		String matriculaSessao = "";//cadastrante().getMatricula().toString();
-		String lotacaoSessao = "";//cadastrante().getLotacao().getSiglaLotacao();
+		String matriculaSessao = getCadastrante().getMatricula().toString();
+		String lotacaoSessao = getCadastrante().getLotacao().getSiglaLotacao();
 		List<Agendamentos> listAgendamentos = new ArrayList<Agendamentos>();
-		UsuarioForum objUsuario = UsuarioForum.AR.find().first();
-			//TODO:	"matricula_usu =" + matriculaSessao).first();
+		UsuarioForum objUsuario = UsuarioForum.AR.find(
+				"matricula_usu =" + matriculaSessao).first();
     	if (objUsuario != null) {
     		if(frm_data_ag==null){
     			frm_data_ag = "";
