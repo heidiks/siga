@@ -6,12 +6,17 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 
+import br.com.caelum.vraptor.Path;
+import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.gov.jfrj.siga.dp.dao.CpDao;
 import br.gov.jfrj.siga.model.ContextoPersistencia;
+import br.gov.jfrj.siga.pp.models.Foruns;
 import br.gov.jfrj.siga.pp.models.UsuarioForum;
 import br.gov.jfrj.siga.vraptor.SigaObjects;
 
+@Resource
+@Path("/app/permissao")
 public class PermissaoController extends PpController {
 
     public PermissaoController(HttpServletRequest request, Result result, CpDao dao, SigaObjects so, EntityManager em) {
@@ -19,11 +24,12 @@ public class PermissaoController extends PpController {
         // TODO Auto-generated constructor stub
     }
 
-    public static void permissao_exclui(String matricula_proibida){
+    @Path("/exclui")
+    public void exclui(String matricula_proibida){
 		String mensagem = "";
 		// pega usuário do sistema
-		String matriculaSessao = "";//cadastrante().getMatricula().toString();
-		String lotacaoSessao = "";//cadastrante().getLotacao().getSiglaLotacao();
+		String matriculaSessao = getCadastrante().getMatricula().toString();
+		String lotacaoSessao = getCadastrante().getLotacao().getSiglaLotacao();
 		UsuarioForum objUsuario = UsuarioForum.AR.find("matricula_usu = '"+matriculaSessao+"'").first();
 		if ((objUsuario !=null) && ( (lotacaoSessao.trim().equals("CSIS")||lotacaoSessao.trim().equals("SESIA")) )){ //pode excluir a permissão
 			List<UsuarioForum> listPermitidos = new ArrayList<UsuarioForum>();
@@ -38,7 +44,7 @@ public class PermissaoController extends PpController {
 					e.printStackTrace();
 					mensagem = "Nao Ok";
 				}finally{
-//					render(mensagem);
+				    result.include("mensagem", mensagem);
 				}
 			 } else{ // lista permitidos
 				try{
@@ -47,21 +53,46 @@ public class PermissaoController extends PpController {
 					e.printStackTrace();
 				}
 				finally{
-//					render(listPermitidos);
+				    result.include("listPermitidos", listPermitidos);
 				}
 			}
 		}
     }
 
-    public static void perito_incluir(){
+    @Path("/inclui")
+    public void inclui(String matricula_permitida, String nome_permitido, String forum_permitido ) throws Exception{
+		String mensagem = "";
 		// pega usuário do sistema
 		String matriculaSessao = "";//cadastrante().getMatricula().toString();
-		String lotacaoSessao = "";//cadastrante().getLotacao().getSiglaLotacao();
+		// String nomeSessao = cadastrante().getNomeAbreviado();
+		String lotacaoSessao = "";// cadastrante().getLotacao().getSiglaLotacao();
 		UsuarioForum objUsuario = UsuarioForum.AR.find("matricula_usu = '"+matriculaSessao+"'").first();
-		if ((objUsuario !=null)){ //pode incluir perito
-//			render();
+		if ((objUsuario !=null) && ((lotacaoSessao.trim().equals("CSIS") || lotacaoSessao.trim().equals("SESIA")))){
+			if((matricula_permitida!=null) && (nome_permitido!=null) && (forum_permitido!=null) && (!matricula_permitida.isEmpty()) && (!nome_permitido.isEmpty()) && (!forum_permitido.isEmpty())){
+				Foruns atribForum = (Foruns) Foruns.AR.find("cod_forum='"+forum_permitido+"'").first();
+				UsuarioForum usuarioPermitido = new UsuarioForum(matricula_permitida, nome_permitido, atribForum);
+				try {
+					usuarioPermitido.save();
+					ContextoPersistencia.em().flush();
+					ContextoPersistencia.em().clear();
+					mensagem = "Ok.";
+				}catch (Exception e) {
+					e.printStackTrace();
+					if ((e.getMessage().substring(0,89).equals("a different object with the same identifier value was already associated with the session")) || (e.getMessage().substring(54,89).equals("Could not execute JDBC batch update"))){
+						mensagem="Usuario ja tinha permissao.";
+					}else{
+						mensagem = "Nao Ok.";
+					}
+				}finally{
+				    result.include("mensagem", mensagem);
+				}
+			}else{
+				mensagem="";
+				result.include("mensagem", mensagem);
+			}
+
 		}else{
-			Excecoes("Usuario sem permissao." , null);
+			//TODO: Excecoes("Usuario sem permissao." , null );
 		}
     }
 
