@@ -32,8 +32,7 @@ public class AgendamentoController extends PpController {
 
     @Path("/hoje")
     public void hoje() {
-		// pega usuário do sistema
-		String matriculaSessao = getCadastrante().getMatricula().toString();
+		String matriculaSessao = getUsuarioMatricula();
 		UsuarioForum objUsuario = UsuarioForum.AR.find(
 				"matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
@@ -77,7 +76,7 @@ public class AgendamentoController extends PpController {
 				result.include("listPeritos", listPeritos);
 			}
 		} else {
-		    //TODO: Excecoes("Usuario sem permissao" , null);
+		    redirecionaPaginaErro("Usuario sem permissao" , null);
 		}
     }
 

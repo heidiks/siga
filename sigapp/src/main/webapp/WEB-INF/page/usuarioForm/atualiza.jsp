@@ -33,6 +33,6 @@
 		<br>
 		<br>
 		<h4 class="ui-widget" style="position: absolute; left: 5%; color: red;">${mensagem}</h4>
+	<a style="position:absolute;left:5%" class="ui-state-hover" href="/sigapp/">Voltar</a>
 	</form>
-	<a style="position:absolute;left:5%;top:50%;" class="ui-state-hover" href="/sigapp/">Voltar</a>
 </siga:pagina>
