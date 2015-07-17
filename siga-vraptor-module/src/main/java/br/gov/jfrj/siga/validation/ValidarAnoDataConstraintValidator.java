@@ -17,7 +17,7 @@ public class ValidarAnoDataConstraintValidator implements ConstraintValidator<Va
 
 	@Override
 	public boolean isValid(Calendar value, ConstraintValidatorContext constraintValidatorContext) {
-	    if(!annotation.nullable()) 
+	    if(annotation.nullable() && (value == null || value.equals(""))) 
 	        return true;
 	    
 		if (!validarAnoData(value)) {
