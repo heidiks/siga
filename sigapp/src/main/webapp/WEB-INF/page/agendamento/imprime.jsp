@@ -1,15 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
-<siga:pagina titulo="Agendamento Imprime"/>
-
-<title>Agendamento Imprime</title>
-
-<script src="public/javascripts/jquery-1.9.1.js"></script>
-<script src="public/javascripts/jquery-ui.js"></script>
+<siga:pagina titulo="Agendamento Imprime">
+<link rel="stylesheet" href="/sigapp/stylesheets/jquery-ui.css" type="text/css" media="screen, projection" />
 <script type="text/javascript" language="Javascript1.1">
 
  $(function () {
@@ -98,3 +93,5 @@
   </form>
   <a style="position:absolute;left:5%;" class="ui-state-hover" href="/sigapp/">Voltar</a>
  </div>
+
+</siga:pagina>
