@@ -15,7 +15,7 @@
 		<br>
 		<div class="ui-state-default" style="position: absolute; left: 5%; right: 77%;">Nome:</div>
 		<input type="text" name="objUsuario.nome_usu" style="position: absolute; left: 25%;"
-		<c:if test="${ objUsuario!=null }">
+		<c:if test="${objUsuario!=null}">
 			value="${objUsuario.nome_usu}"
 		</c:if>
 		readonly="readonly" /> 

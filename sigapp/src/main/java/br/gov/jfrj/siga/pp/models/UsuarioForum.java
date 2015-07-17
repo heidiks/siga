@@ -8,7 +8,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.gov.jfrj.siga.model.ActiveRecord;
+import br.gov.jfrj.siga.model.ContextoPersistencia;
 import br.gov.jfrj.siga.model.Objeto;
+import br.gov.jfrj.siga.pp.dao.PpDao;
 
 @Entity
 @Table(name = "UsuarioForum", schema = "SIGAPMP")
@@ -65,6 +67,16 @@ public class UsuarioForum extends Objeto {
     
     public static UsuarioForum findByMatricula(String matriculaSessao) {
         return AR.find("matricula_usu =" + matriculaSessao).first();
+    }
+    
+    @Override
+    public void delete() {
+        ContextoPersistencia.em().remove(this);
+    }
+    
+    @Override
+    public void save() {
+        PpDao.getInstance().gravar(this);
     }
 
 //    @Override

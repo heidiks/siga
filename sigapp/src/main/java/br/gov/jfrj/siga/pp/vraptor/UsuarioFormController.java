@@ -3,7 +3,6 @@ package br.gov.jfrj.siga.pp.vraptor;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.caelum.vraptor.Path;
@@ -34,41 +33,31 @@ public class UsuarioFormController extends PpController {
         if (objUsuario != null) {
             String descricaoForum = "";
             if (paramCodForum != null && !paramCodForum.isEmpty()) {
-                Foruns objForum = Foruns.AR.findById(Integer
-                        .parseInt(paramCodForum));
+                Foruns objForum = Foruns.AR.findById(Long
+                        .parseLong(paramCodForum));
                 descricaoForum = objForum.getDescricao_forum();
-                EntityTransaction tx = UsuarioForum.AR.em().getTransaction();
-                if (!tx.isActive())
-                    tx.begin();
-
                 objUsuario.delete();
-                tx.commit();
-                    
-//                objUsuario.delete();
-//                ContextoPersistencia.em().flush();
-//                ContextoPersistencia.em().clear();
+                ContextoPersistencia.em().flush();
                 objUsuario.setForumFk(objForum);
                 objUsuario.setMatricula_usu(matriculaSessao);
                 objUsuario.setNome_usu(nomeSessao);
                 try {
                     objUsuario.save();
                     ContextoPersistencia.em().flush();
-                    ContextoPersistencia.em().clear();
                     mensagem = "Ok.";
                 } catch (Exception e) {
                     e.printStackTrace();
                     mensagem = "Não Ok.";
                 }
             } else {
-                paramCodForum = Integer.toString(objUsuario.getForumFk().getCod_forum());
+                paramCodForum = Long.toString(objUsuario.getForumFk().getCod_forum());
                 Foruns objForum = Foruns.AR.find(
-                        "cod_forum = " + Integer.parseInt(paramCodForum))
+                        "cod_forum = " + Long.parseLong(paramCodForum))
                         .first();
                 descricaoForum = objForum.getDescricao_forum();
                 ContextoPersistencia.em().flush();
             }
-            List<Foruns> outrosForuns = Foruns.AR.find(
-                    "cod_forum <> " + paramCodForum).fetch();
+            List<Foruns> outrosForuns = Foruns.AR.find("cod_forum <> " + paramCodForum).fetch();
             result.include("objUsuario", objUsuario);
             result.include("paramCodForum", paramCodForum);
             result.include("descricaoForum", descricaoForum);
