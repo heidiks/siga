@@ -188,11 +188,8 @@ public class AgendamentoController extends PpController {
 					horaPretendida=hrAux+minAux;
 					agendamentoEmConflito = Agendamentos.AR.find("perito_juizo like '"+perito_juizo.trim()+"%' and perito_juizo <> '-' and hora_ag='" +horaPretendida+ "' and data_ag=to_date('"+ frm_data_ag +"' , 'yy-mm-dd')"  ).first();
 					if (agendamentoEmConflito!=null){
-<<<<<<< HEAD
 					    redirecionaPaginaErro("Perito nao disponivel no horario de " + agendamentoEmConflito.getHora_ag().substring(0,2)+ "h" + agendamentoEmConflito.getHora_ag().substring(2,4) + "min" , null );
-=======
-						redirecionaPaginaErro("Perito nao disponivel no horario de " + agendamentoEmConflito.getHora_ag().substring(0,2)+ "h" + agendamentoEmConflito.getHora_ag().substring(2,4) + "min" , null );
->>>>>>> f2129cd60e36922dbcbb1cff7360e1b2b4a8c0a6
+
 					}
 					minAux = String.valueOf(Integer.parseInt(minAux)
 							+ auxLocal.getIntervalo_atendimento());
@@ -249,11 +246,7 @@ public class AgendamentoController extends PpController {
 			agendamentoEmConflito = Agendamentos.AR.find("perito_juizo like '"+perito_juizo.trim()+"%' and perito_juizo <> '-' and hora_ag='" +hora_ag.substring(0,2)+hora_ag.substring(3,5)+ "' and data_ag=to_date('"+ data_ag +"', 'dd-mm-yy' ) and localFk<>'"+cod_sala+"'").first();
 
 			if (agendamentoEmConflito!=null){
-<<<<<<< HEAD
-			    redirecionaPaginaErro("Perito nao disponivel no horario de " + agendamentoEmConflito.getHora_ag().substring(0,2) +"h"+agendamentoEmConflito.getHora_ag().substring(2,4)+"min" , " agendamento_excluir?frm_data_ag="+data_ag);
-=======
 				redirecionaPaginaErro("Perito nao disponivel no horario de " + agendamentoEmConflito.getHora_ag().substring(0,2) +"h"+agendamentoEmConflito.getHora_ag().substring(2,4)+"min" , " agendamento_excluir?frm_data_ag="+data_ag);
->>>>>>> f2129cd60e36922dbcbb1cff7360e1b2b4a8c0a6
 			}
 			ContextoPersistencia.em().createQuery("update Agendamentos set processo = '"+ processo +"', "+ "periciado='"+ periciado +"', perito_juizo='"+ perito_juizo.trim() +"', perito_parte='"+perito_parte+"', orgao='"+orgao_ag+"' where cod_local='"+cod_sala+"' and  hora_ag='"+hora_ag.substring(0,2)+hora_ag.substring(3,5)+"' and data_ag=to_date('"+data_ag+"','dd-mm-yy')").executeUpdate();
 			ContextoPersistencia.em().flush();
@@ -350,16 +343,9 @@ public class AgendamentoController extends PpController {
     @Path("/excluir")
     public void excluir(String data) {
         // pega matricula do usuario do sistema
-<<<<<<< HEAD
-        String matriculaSessao = getCadastrante().getMatricula().toString();
-        // pega a permissão do usuario
-        UsuarioForum objUsuario = UsuarioForum.AR.find(
-                "matricula_usu =" + matriculaSessao).first();
-=======
         String matriculaSessao = getUsuarioMatricula();
         // pega a permissão do usuario
         UsuarioForum objUsuario = UsuarioForum.findByMatricula(matriculaSessao);
->>>>>>> f2129cd60e36922dbcbb1cff7360e1b2b4a8c0a6
         // verifica se tem permissao
         if (objUsuario != null) {
             List<Agendamentos> listAgendamentos = new ArrayList<Agendamentos>();
@@ -396,7 +382,7 @@ public class AgendamentoController extends PpController {
                     listAgendamentos.addAll(auxAgendamentos);
                     auxAgendamentos.clear();
                 }
-<<<<<<< HEAD
+
             }
             if (listAgendamentos.size() != 0) {
                 List <Peritos> listPeritos = new ArrayList<Peritos>();
@@ -407,25 +393,10 @@ public class AgendamentoController extends PpController {
             } else {
 
             }
-=======
-            }
-            if (listAgendamentos.size() != 0) {
-                List <Peritos> listPeritos = new ArrayList<Peritos>();
-                listPeritos = Peritos.AR.findAll();
-                // excluir do arraylist, os peritos que n�o possuem agendamentos nesta data.
-                result.include("listAgendamentos", listAgendamentos);
-                result.include("listPeritos", listPeritos);
 
-//              render(listAgendamentos, listPeritos);
-            } else {
-//              render();
-            }
->>>>>>> f2129cd60e36922dbcbb1cff7360e1b2b4a8c0a6
         } else {
             exception();
         }
-    }
-
     }
 
     @Path("/atualiza/{cod_sala}/{data_ag}/{hora_ag}")
