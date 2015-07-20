@@ -8,13 +8,13 @@
 
  <li><a href="">Sala</a>
 	<ul>
-		<li><a href="${linkTo[SalaController].incluir}">Incluir sala</a>
+		<li><a href="@{sala_incluir()}">Incluir sala</a>
 		</li>
-		<li><a href="${linkTo[SalaController].listar}">Listar salas</a>
+		<li><a href="@{salas_listar()}">Listar salas</a>
 		</li>
 	</ul>
  </li>
- <li><a href="${linkTo[AgendamentoController].incluirAjax}">Agendar</a>
+ <li><a href="@{agendamento_incluir_ajax()}">Agendar</a>
 	<ul>
 	</ul>
  </li>
@@ -37,8 +37,8 @@
  </li>
  <li><a href="${linkTo[PeritoController].incluir}">Inclui um perito</a>
  </li>
- <li><a href="${linkTo[UsuarioController].atualiza}">Configura&ccedil;&atilde;o</a>
+ <li><a href="${linkTo[UsuarioFormController].atualiza}">Configura&ccedil;&atilde;o</a>
  </li>
- <li><a href="{linkTo[PrincipalController].creditos}">Cr&eacute;ditos</a>
+ <li><a href="@{creditos()}">Cr&eacute;ditos</a>
 	<ul></ul>
  </li>
