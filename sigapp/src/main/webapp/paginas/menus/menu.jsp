@@ -39,6 +39,6 @@
  </li>
  <li><a href="${linkTo[UsuarioFormController].atualiza}">Configura&ccedil;&atilde;o</a>
  </li>
- <li><a href="{creditos()}">Cr&eacute;ditos</a>
+ <li><a href="${linkTo[PrincipalController].creditos}">Cr&eacute;ditos</a>
 	<ul></ul>
  </li>
