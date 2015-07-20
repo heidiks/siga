@@ -1,7 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
 <siga:pagina titulo="Agendadas Hoje">
@@ -45,19 +44,20 @@
 				<td>&nbsp; ${ag.processo}</td>
 				<td>&nbsp; <c:if test="${null == ag.perito_juizo}">
 					Sem perito do ju&iacute;zo
-				</c:if> <c:if test="${null != ag.perito_juizo}">
+				</c:if> 
+				<c:if test="${null != ag.perito_juizo}">
 						<c:if test="${'' == ag.perito_juizo.trim()}">
 							<c:forEach items="${listPeritos}" var="prt">
 								<c:if test="${ag.perito_juizo.trim() == prt.cpf_perito.trim()}">
-								${prt.nome_perito}	
-							</c:if>
+									${prt.nome_perito}	
+								</c:if>
 							</c:forEach>
 						</c:if>
-					</c:if>
+				</c:if>
 				</td>
 				<td>&nbsp; ${ag.localFk.local}</td>
 			</tr>
 		</c:forEach>
 	</table>
+	<a style="position: absolute; left: 5%;" class="ui-state-hover" href="/sigapp/">Voltar</a>
 </siga:pagina>
-<a style="position: absolute; left: 5%;" class="ui-state-hover" href="/sigapp/">Voltar</a>
