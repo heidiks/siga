@@ -21,39 +21,39 @@ public class Locais extends Objeto {
     @Id
     @Column(name = "cod_local", length = 3, nullable = false)
     private String cod_local;
-    
+
     @Column(name = "local", length = 30, nullable = true)
     private String local;
-    
+
     @ManyToOne
     @JoinColumn(name = "cod_forum", nullable = true)
     // fk, e, tem que atribuir programaticamente como objeto.
     private Foruns forumFk; // Isso e´ coluna, mas, tem que atribuir como objeto.
-    
+
     @Column(name = "dias", length = 40, nullable = true)
     private String dias;
-    
+
     @Column(name = "hora_ini", length = 8, nullable = true)
     private String hora_ini;
-    
+
     @Column(name = "hora_fim", length = 8, nullable = true)
     private String hora_fim;
-    
+
     @Column(name = "intervalo_atendimento", length = 10, nullable = true)
     private int intervalo_atendimento;
-    
+
     @Column(name = "exibir", length = 2, nullable = false)
     private int exibir;
-    
+
     @Column(name = "endereco", length = 100, nullable = true)
     private String endereco;
-    
+
     @Column(name = "ordem_apresentacao", length = 2, nullable = false)
     private int ordem_apresentacao;
 
     public Locais() {
     }
-    
+
     public String getCod_local() {
         return cod_local;
     }

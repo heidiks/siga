@@ -21,7 +21,6 @@ public class PermissaoController extends PpController {
 
     public PermissaoController(HttpServletRequest request, Result result, CpDao dao, SigaObjects so, EntityManager em) {
         super(request, result, dao, so, em);
-        // TODO Auto-generated constructor stub
     }
 
     @Path("/exclui")
@@ -92,7 +91,7 @@ public class PermissaoController extends PpController {
 			}
 
 		}else{
-			//TODO: Excecoes("Usuario sem permissao." , null );
+		    redirecionaPaginaErro("Usuario sem permissao." , null );
 		}
     }
 

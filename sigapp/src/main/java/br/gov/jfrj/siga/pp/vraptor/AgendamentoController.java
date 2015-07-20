@@ -77,7 +77,7 @@ public class AgendamentoController extends PpController {
 				result.include("listPeritos", listPeritos);
 			}
 		} else {
-		    //TODO: Excecoes("Usuario sem permissao" , null);
+		    redirecionaPaginaErro("Usuario sem permissao" , null);
 		}
     }
 
@@ -106,7 +106,7 @@ public class AgendamentoController extends PpController {
 				result.include("listPeritos", listPeritos);
 			}
 		}else {
-		    //TODO: Excecoes("Usuario sem permissao" , null);
+		    redirecionaPaginaErro("Usuario sem permissao" , null);
 		}
     }
 
@@ -115,9 +115,9 @@ public class AgendamentoController extends PpController {
 		List listAgendamentos = (List) Agendamentos.AR.find(
 		   "data_ag=to_date('"+frm_data_ag.substring(0,10)+"','yy-mm-dd') and localFk.cod_local='"+frm_sala_ag+"' and processo='"+frm_processo_ag+"' and periciado='"+frm_periciado+"'" ).fetch();
 		if(frm_periciado.isEmpty()){
-		    //TODO: Excecoes("Relatorio depende de nome de periciado preenchido para ser impresso." , null);
+		    redirecionaPaginaErro("Relatorio depende de nome de periciado preenchido para ser impresso." , null);
 		}else if(frm_processo_ag.isEmpty()){
-		    //TODO: Excecoes("Relatorio depende de numero de processo preenchido para ser impresso." , null);
+		    redirecionaPaginaErro("Relatorio depende de numero de processo preenchido para ser impresso." , null);
 		}else{
 			List<Peritos> listPeritos = new ArrayList<Peritos>();
 			//TODO: listPeritos = Peritos.AR.findAll();
@@ -159,7 +159,7 @@ public class AgendamentoController extends PpController {
             result.include("lotacaoSessao", lotacaoSessao);
             result.include("listPeritos", listPeritos);
 		} else {
-		    //TODO: Excecoes("Usuario sem permissao" , null);
+		    redirecionaPaginaErro("Usuario sem permissao" , null);
 		}
     }
 
@@ -190,7 +190,7 @@ public class AgendamentoController extends PpController {
 					horaPretendida=hrAux+minAux;
 					agendamentoEmConflito = Agendamentos.AR.find("perito_juizo like '"+perito_juizo.trim()+"%' and perito_juizo <> '-' and hora_ag='" +horaPretendida+ "' and data_ag=to_date('"+ frm_data_ag +"' , 'yy-mm-dd')"  ).first();
 					if (agendamentoEmConflito!=null){
-						//TODO: Excecoes("Perito nao disponivel no horario de " + agendamentoEmConflito.getHora_ag().substring(0,2)+ "h" + agendamentoEmConflito.getHora_ag().substring(2,4) + "min" , null );
+					    redirecionaPaginaErro("Perito nao disponivel no horario de " + agendamentoEmConflito.getHora_ag().substring(0,2)+ "h" + agendamentoEmConflito.getHora_ag().substring(2,4) + "min" , null );
 					}
 					minAux = String.valueOf(Integer.parseInt(minAux)
 							+ auxLocal.getIntervalo_atendimento());
@@ -247,7 +247,7 @@ public class AgendamentoController extends PpController {
 			agendamentoEmConflito = Agendamentos.AR.find("perito_juizo like '"+perito_juizo.trim()+"%' and perito_juizo <> '-' and hora_ag='" +hora_ag.substring(0,2)+hora_ag.substring(3,5)+ "' and data_ag=to_date('"+ data_ag +"', 'dd-mm-yy' ) and localFk<>'"+cod_sala+"'").first();
 
 			if (agendamentoEmConflito!=null){
-				//TODO: Excecoes("Perito nao disponivel no horario de " + agendamentoEmConflito.getHora_ag().substring(0,2) +"h"+agendamentoEmConflito.getHora_ag().substring(2,4)+"min" , " agendamento_excluir?frm_data_ag="+data_ag);
+			    redirecionaPaginaErro("Perito nao disponivel no horario de " + agendamentoEmConflito.getHora_ag().substring(0,2) +"h"+agendamentoEmConflito.getHora_ag().substring(2,4)+"min" , " agendamento_excluir?frm_data_ag="+data_ag);
 			}
 			ContextoPersistencia.em().createQuery("update Agendamentos set processo = '"+ processo +"', "+ "periciado='"+ periciado +"', perito_juizo='"+ perito_juizo.trim() +"', perito_parte='"+perito_parte+"', orgao='"+orgao_ag+"' where cod_local='"+cod_sala+"' and  hora_ag='"+hora_ag.substring(0,2)+hora_ag.substring(3,5)+"' and data_ag=to_date('"+data_ag+"','dd-mm-yy')").executeUpdate();
 			ContextoPersistencia.em().flush();
@@ -299,7 +299,7 @@ public class AgendamentoController extends PpController {
             result.include("listAgendamentos", listAgendamentos);
             result.include("listPeritos", listPeritos);
     	}else{
-    	    //TODO: Excecoes("Usuario sem permissao" , null);
+    	    redirecionaPaginaErro("Usuario sem permissao" , null);
     	}
    	}
 
@@ -330,7 +330,7 @@ public class AgendamentoController extends PpController {
     		ag.delete();
     		resultado = "Ok.";
     		}else{
-    		    //TODO: Excecoes("Esse agendamento nao pode ser deletado; pertence a outra vara." , null);
+    		    redirecionaPaginaErro("Esse agendamento nao pode ser deletado; pertence a outra vara." , null);
     		}
     	} catch (Exception e) {
     		e.printStackTrace();
@@ -342,65 +342,63 @@ public class AgendamentoController extends PpController {
     }
 
     @Path("/excluir")
-        public void excluir(String data) {
-            // pega matricula do usuario do sistema
-            String matriculaSessao = getCadastrante().getMatricula().toString();
-            // pega a permissão do usuario
-            UsuarioForum objUsuario = UsuarioForum.AR.find(
-                    "matricula_usu =" + matriculaSessao).first();
-            // verifica se tem permissao
-            if (objUsuario != null) {
-                List<Agendamentos> listAgendamentos = new ArrayList<Agendamentos>();
-                // verifica se o formulário submeteu alguma data
-                if (data != null) {
-                    // Busca os agendamentos da data do formulário
-                    listAgendamentos = Agendamentos.AR.find("data_ag = to_date('" + data + "','dd-mm-yy') order by hora_ag , cod_local")
-                            .fetch();
-                    // busca os locais do forum do usuario
-                    List<Locais> listLocais = Locais.AR.find(
-                            "cod_forum='" + objUsuario.getForumFk().getCod_forum() + "'")
-                            .fetch();
-                    // Verifica se existe local naquele forum do usuário
-                    if (listAgendamentos.size() != 0) {
-                        // para cada agendamento, inlcui na lista a sala que é do
-                        // forum daquele usu�rio
-                        List<Agendamentos> auxAgendamentos = new ArrayList<Agendamentos>();
-                        for (Integer i = 0; i < listAgendamentos.size(); i++) {
-                            // pega o agendamento
-                            for (Integer ii = 0; ii < listLocais.size(); ii++) {
-                                // varre os locais do forum
-                                if (listAgendamentos.get(i).getLocalFk().getCod_local() == listLocais
-                                        .get(ii).getCod_local()) {
-                                    // pertence à lista de agendamentos do forum do
-                                    // usuario
-                                    auxAgendamentos
-                                            .add((Agendamentos) listAgendamentos
-                                                    .get(i));
-                                }
+    public void excluir(String data) {
+        // pega matricula do usuario do sistema
+        String matriculaSessao = getCadastrante().getMatricula().toString();
+        // pega a permissão do usuario
+        UsuarioForum objUsuario = UsuarioForum.AR.find(
+                "matricula_usu =" + matriculaSessao).first();
+        // verifica se tem permissao
+        if (objUsuario != null) {
+            List<Agendamentos> listAgendamentos = new ArrayList<Agendamentos>();
+            // verifica se o formulário submeteu alguma data
+            if (data != null) {
+                // Busca os agendamentos da data do formulário
+                listAgendamentos = Agendamentos.AR.find("data_ag = to_date('" + data + "','dd-mm-yy') order by hora_ag , cod_local")
+                        .fetch();
+                // busca os locais do forum do usuario
+                List<Locais> listLocais = Locais.AR.find(
+                        "cod_forum='" + objUsuario.getForumFk().getCod_forum() + "'")
+                        .fetch();
+                // Verifica se existe local naquele forum do usuário
+                if (listAgendamentos.size() != 0) {
+                    // para cada agendamento, inlcui na lista a sala que é do
+                    // forum daquele usu�rio
+                    List<Agendamentos> auxAgendamentos = new ArrayList<Agendamentos>();
+                    for (Integer i = 0; i < listAgendamentos.size(); i++) {
+                        // pega o agendamento
+                        for (Integer ii = 0; ii < listLocais.size(); ii++) {
+                            // varre os locais do forum
+                            if (listAgendamentos.get(i).getLocalFk().getCod_local() == listLocais
+                                    .get(ii).getCod_local()) {
+                                // pertence à lista de agendamentos do forum do
+                                // usuario
+                                auxAgendamentos
+                                        .add((Agendamentos) listAgendamentos
+                                                .get(i));
                             }
                         }
-                        listLocais.clear();
-                        listAgendamentos.clear();
-                        listAgendamentos.addAll(auxAgendamentos);
-                        auxAgendamentos.clear();
                     }
+                    listLocais.clear();
+                    listAgendamentos.clear();
+                    listAgendamentos.addAll(auxAgendamentos);
+                    auxAgendamentos.clear();
                 }
-                if (listAgendamentos.size() != 0) {
-                    List <Peritos> listPeritos = new ArrayList<Peritos>();
-                    listPeritos = Peritos.AR.findAll();
-                    // excluir do arraylist, os peritos que n�o possuem agendamentos nesta data.
-                    result.include("listAgendamentos", listAgendamentos);
-                    result.include("listPeritos", listPeritos);
-
-    //              render(listAgendamentos, listPeritos);
-                } else {
-    //              render();
-                }
-            } else {
-                exception();
             }
+            if (listAgendamentos.size() != 0) {
+                List <Peritos> listPeritos = new ArrayList<Peritos>();
+                listPeritos = Peritos.AR.findAll();
+                // excluir do arraylist, os peritos que n�o possuem agendamentos nesta data.
+                result.include("listAgendamentos", listAgendamentos);
+                result.include("listPeritos", listPeritos);
+            } else {
 
+            }
+        } else {
+            exception();
         }
+
+    }
 
     @Path("/atualiza/{cod_sala}/{data_ag}/{hora_ag}")
     public void atualiza(String cod_sala, String data_ag, String hora_ag) {
@@ -450,10 +448,10 @@ public class AgendamentoController extends PpController {
                 result.include("orgao_julgador", orgao_julgador);
                 result.include("listPeritos", listPeritos);
     		}else{
-    		    //TODO: Excecoes("Esse agendamento nao pode ser modificado; pertence a outra vara." , null);
+    		    redirecionaPaginaErro("Esse agendamento nao pode ser modificado; pertence a outra vara." , null);
     		}
     	} else {
-    	    //TODO: Excecoes("Usuario sem permissao" , null);
+    	    redirecionaPaginaErro("Usuario sem permissao" , null);
     	}
     }
 }
