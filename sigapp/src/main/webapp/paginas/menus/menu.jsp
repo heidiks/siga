@@ -14,7 +14,7 @@
 		</li>
 	</ul>
  </li>
- <li><a href="${linkTo[AgendamentoController].incluirAjax()}">Agendar</a>
+ <li><a href="${linkTo[AgendamentoController].incluirAjax}">Agendar</a>
 	<ul>
 	</ul>
  </li>

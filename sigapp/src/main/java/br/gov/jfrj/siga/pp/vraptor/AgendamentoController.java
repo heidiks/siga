@@ -236,6 +236,41 @@ public class AgendamentoController extends PpController {
 		}
     }
 
+    @Path("/incluirAjax")
+    public void incluirAjax(String fixo_perito_juizo) {
+        String fixo_perito_juizo_nome = "";
+        String lotacaoSessao = getUsuarioLotacao();
+        List<Locais> listSalas = new ArrayList<Locais>();
+        List<Peritos> listPeritos = new ArrayList<Peritos>();
+        // pega usuario do sistema
+        String matriculaSessao = getUsuarioMatricula();
+        UsuarioForum objUsuario = UsuarioForum.AR.find(
+                "matricula_usu =" + matriculaSessao).first();
+        if (objUsuario != null) {
+            // Pega o usuário do sistema, e, busca os locais(salas) daquele
+            // forum onde ele está.
+            listSalas = (List) Locais.AR.find(
+                    "cod_forum='" + objUsuario.getForumFk().getCod_forum()
+                            + "' order by ordem_apresentacao ").fetch(); // isso não dá erro no caso de retorno vazio.
+            listPeritos =  (List) Peritos.AR.find("1=1 order by nome_perito").fetch();
+            //   buscar o nome do perito fixo na lista se existir
+            if(fixo_perito_juizo!=null){
+                for(int i=0;i<listPeritos.size();i++) {
+                    if(listPeritos.get(i).getCpf_perito().trim().equals( fixo_perito_juizo.trim() ) ){
+                        fixo_perito_juizo_nome = listPeritos.get(i).getNome_perito();
+                    }
+                }
+            }
+            result.include("listSalas", listSalas);
+            result.include("lotacaoSessao", lotacaoSessao);
+            result.include("fixo_perito_juizo", fixo_perito_juizo);
+            result.include("fixo_perito_juizo_nome", fixo_perito_juizo_nome);
+            result.include("listPeritos", listPeritos);
+        } else {
+            redirecionaPaginaErro("Usuario sem permissao", null);
+        }
+    }
+
     @Path("/update")
     public void update(String cod_sala, String data_ag, String hora_ag, String processo, String periciado, String perito_juizo, String perito_parte, String orgao_ag){
 		String resultado = "";
