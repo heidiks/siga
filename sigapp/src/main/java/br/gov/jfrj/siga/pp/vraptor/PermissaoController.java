@@ -37,7 +37,6 @@ public class PermissaoController extends PpController {
 					UsuarioForum objUsuarioProibido = UsuarioForum.AR.find("matricula_usu='"+matricula_proibida+"'").first();
 					objUsuarioProibido.delete();
 					ContextoPersistencia.em().flush();
-					ContextoPersistencia.em().clear();
 					mensagem = "Ok";
 				}catch(Exception e){
 					e.printStackTrace();
