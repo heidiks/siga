@@ -49,31 +49,32 @@ public class AgendamentoController extends PpController {
 			Date hoje = new Date();
 			String dtt = df.format(hoje);
 			// busca agendamentos de hoje
-			if(criterioSalas.equals("")){criterioSalas="''";}
-			 List<Agendamentos> listAgendamentos = Agendamentos.AR.find("data_ag = to_date('" + dtt + "','dd-mm-yy') and localFk in("+criterioSalas+") order by hora_ag, cod_local").fetch();
-			 if (listAgendamentos.size() != 0) {
-				// busca as salas daquele forum
-				List<Locais> listLocais = Locais.AR.find(
-						"cod_forum='" + objUsuario.getForumFk().getCod_forum() + "'")
-						.fetch();
-				// lista auxiliar
-				List<Agendamentos> auxAgendamentos = new ArrayList<Agendamentos>();
-				for (int i = 0; i < listAgendamentos.size(); i++) {
-					// varre listAgendamentos
-					for (int ii = 0; ii < listLocais.size(); ii++) {
-						// compara com cada local do forum do usuÃ¡rio
-						if (listAgendamentos.get(i).getLocalFk().getCod_local() == listLocais
-								.get(ii).getCod_local()) {
-							auxAgendamentos.add((Agendamentos) listAgendamentos
-									.get(i));
-						}
-					}
-				}
-				List<Peritos> listPeritos = new ArrayList<Peritos>();
-				listPeritos = (ArrayList<Peritos>) Peritos.AR.findAll();
-				result.include("listAgendamentos", listAgendamentos);
-				result.include("listPeritos", listPeritos);
-			}
+            if (criterioSalas.equals("")) {
+                criterioSalas = "''";
+            }
+            List<Agendamentos> listAgendamentos = Agendamentos.AR.find(
+                    "data_ag = to_date('" + dtt
+                            + "','dd-mm-yy') and localFk in(" + criterioSalas
+                            + ") order by hora_ag, cod_local").fetch();
+            if (!listAgendamentos.isEmpty()) {
+                // busca as salas daquele forum
+                List<Locais> listLocais = Locais.AR.find("cod_forum='" + objUsuario.getForumFk().getCod_forum() + "'").fetch();
+                // lista auxiliar
+                List<Agendamentos> auxAgendamentos = new ArrayList<Agendamentos>();
+                for (int i = 0; i < listAgendamentos.size(); i++) {
+                    // varre listAgendamentos
+                    for (int ii = 0; ii < listLocais.size(); ii++) {
+                        // compara com cada local do forum do usuÃ¡rio
+                        if (listAgendamentos.get(i).getLocalFk().getCod_local() == listLocais.get(ii).getCod_local()) {
+                            auxAgendamentos.add((Agendamentos) listAgendamentos.get(i));
+                        }
+                    }
+                }
+                List<Peritos> listPeritos = new ArrayList<Peritos>();
+                listPeritos = (ArrayList<Peritos>) Peritos.AR.findAll();
+                result.include("listAgendamentos", listAgendamentos);
+                result.include("listPeritos", listPeritos);
+            }
 		} else {
 		    redirecionaPaginaErro("Usuario sem permissao" , null);
 		}
@@ -81,10 +82,8 @@ public class AgendamentoController extends PpController {
 
     @Path("/hojePrint")
     public void hojePrint(String frm_data_ag) {
-		// pega usuário do sistema
 		String matriculaSessao = getUsuarioMatricula();
-		UsuarioForum objUsuario = UsuarioForum.AR.find(
-		    "matricula_usu =" + matriculaSessao).first();
+		UsuarioForum objUsuario = UsuarioForum.AR.find("matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
 			// busca locais em função da configuração do usuário
 			String criterioSalas=" null ";
@@ -99,11 +98,11 @@ public class AgendamentoController extends PpController {
 			if (!frm_data_ag.isEmpty()){
 				List<Agendamentos> listAgendamentos = (List) Agendamentos.AR.find("data_ag=to_date('"+frm_data_ag.substring(0,10)+"','dd-mm-yy') and localFk in("+criterioSalas+") order by hora_ag , localFk" ).fetch();
 				List<Peritos> listPeritos = (List) new ArrayList<Peritos>();
-				//TODO: listPeritos = Peritos.AR.findAll();
+				listPeritos = Peritos.AR.findAll();
 				result.include("listAgendamentos", listAgendamentos);
 				result.include("listPeritos", listPeritos);
 			}
-		}else {
+		} else {
 		    redirecionaPaginaErro("Usuario sem permissao" , null);
 		}
     }
@@ -118,7 +117,7 @@ public class AgendamentoController extends PpController {
 		    redirecionaPaginaErro("Relatorio depende de numero de processo preenchido para ser impresso." , null);
 		}else{
 			List<Peritos> listPeritos = new ArrayList<Peritos>();
-			//TODO: listPeritos = Peritos.AR.findAll();
+			listPeritos = Peritos.AR.findAll();
 			result.include("frm_processo_ag", frm_processo_ag);
             result.include("listAgendamentos", listAgendamentos);
             result.include("listPeritos", listPeritos);
@@ -150,7 +149,7 @@ public class AgendamentoController extends PpController {
 
 			}
 			List<Peritos> listPeritos = new ArrayList<Peritos>();
-			//TODO:listPeritos = Peritos.AR.findAll();
+			listPeritos = Peritos.AR.findAll();
             result.include("local", local);
             result.include("listSalas", listSalas);
             result.include("listAgendamentosMeusSala", listAgendamentosMeusSala);
@@ -329,7 +328,7 @@ public class AgendamentoController extends PpController {
     			}
     		}
     		List<Peritos> listPeritos = new ArrayList<Peritos>();
-    		//TODO: listPeritos = Peritos.AR.findAll();
+    		listPeritos = Peritos.AR.findAll();
             result.include("listAgendamentos", listAgendamentos);
             result.include("listPeritos", listPeritos);
     	}else{
@@ -394,7 +393,7 @@ public class AgendamentoController extends PpController {
                         "cod_forum='" + objUsuario.getForumFk().getCod_forum() + "'")
                         .fetch();
                 // Verifica se existe local naquele forum do usuÃ¡rio
-                if (listAgendamentos.size() != 0) {
+                if (!listAgendamentos.isEmpty()) {
                     // para cada agendamento, inlcui na lista a sala que Ã© do
                     // forum daquele usuário
                     List<Agendamentos> auxAgendamentos = new ArrayList<Agendamentos>();
@@ -419,7 +418,7 @@ public class AgendamentoController extends PpController {
                 }
 
             }
-            if (listAgendamentos.size() != 0) {
+            if (!listAgendamentos.isEmpty()) {
                 List <Peritos> listPeritos = new ArrayList<Peritos>();
                 listPeritos = Peritos.AR.findAll();
                 // excluir do arraylist, os peritos que não possuem agendamentos nesta data.

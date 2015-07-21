@@ -11,11 +11,12 @@ import br.gov.jfrj.siga.model.Objeto;
 /**
  * @author Herval 11267
  */
-@Entity(name = "peritos")
-@Table(name = "peritos", schema = "SIGAPMP")
+@Entity(name = "Peritos")
+@Table(name = "Peritos", schema = "SIGAPMP")
 public class Peritos extends Objeto {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -4200845060498917465L;
+
     public static final ActiveRecord<Peritos> AR = new ActiveRecord<>(Peritos.class);
 
     @Id()

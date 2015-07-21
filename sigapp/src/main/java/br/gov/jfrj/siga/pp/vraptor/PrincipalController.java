@@ -56,6 +56,11 @@ public class PrincipalController extends PpController {
         }
     }
     
+    @Path("/app/creditos")
+    public void creditos() {
+        //Creditos
+    }
+    
     public void erro(String msg , String link) {
         result.include("msg", msg);
         result.include("link", link);
