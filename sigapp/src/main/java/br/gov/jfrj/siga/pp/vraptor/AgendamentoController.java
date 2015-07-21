@@ -3,6 +3,7 @@ package br.gov.jfrj.siga.pp.vraptor;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -160,7 +161,6 @@ public class AgendamentoController extends PpController {
 		}
     }
 
-    @Path("/insert")
     public void insert(String frm_data_ag,
     			String frm_hora_ag, String frm_cod_local, String matricula,
     			String periciado, String perito_juizo, String perito_parte,
@@ -204,7 +204,6 @@ public class AgendamentoController extends PpController {
 					objAgendamento.setHora_ag(hrAux + minAux);
 					objAgendamento.save();
 					ContextoPersistencia.em().flush();
-					ContextoPersistencia.em().clear();
 					minAux = String.valueOf(Integer.parseInt(minAux)
 							+ auxLocal.getIntervalo_atendimento());
 					if (Integer.parseInt(minAux) >= 60) {
@@ -254,7 +253,7 @@ public class AgendamentoController extends PpController {
             listPeritos =  (List) Peritos.AR.find("1=1 order by nome_perito").fetch();
             //   buscar o nome do perito fixo na lista se existir
             if(fixo_perito_juizo!=null){
-                for(int i=0;i<listPeritos.size();i++) {
+                for(int i=0;i<listPeritos.size();i++) { 
                     if(listPeritos.get(i).getCpf_perito().trim().equals( fixo_perito_juizo.trim() ) ){
                         fixo_perito_juizo_nome = listPeritos.get(i).getNome_perito();
                     }
@@ -488,4 +487,147 @@ public class AgendamentoController extends PpController {
     	}
     }
 
+    @Path("/calendarioVetor")
+    public void calendarioVetor(String frm_cod_local) {
+        List listDatasLotadas = new ArrayList();
+        List listDatasDoMes = new ArrayList();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Date parametro = new Date();
+        Date dt = new Date();
+        String dtt = df.format(dt);
+        Agendamentos objAgendamento = new Agendamentos(parametro, null, null,
+                null, null, null, null, null, null);
+        try {
+            List<Agendamentos> results = Agendamentos.AR.find(
+                    "data_ag >= to_date('" + dtt.trim()
+                            + "','dd/MM/yyyy') and cod_local='"
+                            + frm_cod_local.trim() + "'  order by data_ag")
+                    .fetch();
+            // verifica se veio algum agendamento
+            if (results.size() != 0) {
+                // preenche as datas do local no 'M√äS' na agenda
+                // CORRENTE
+                for (Iterator it = results.iterator(); it.hasNext();) {
+                    objAgendamento = (Agendamentos) it.next();
+                    listDatasDoMes.add(objAgendamento.getData_ag().toString());
+                }
+                String dia_ag_ant = "";
+                String dia_ag_prox;
+                int i = 0;
+                // conta os agendamentos de cada dia, do local que
+                // veio do form
+                for (Iterator it = listDatasDoMes.iterator(); it.hasNext();) {
+                    dia_ag_prox = (String) it.next(); // pegou o prÛximo
+                    if (i == 0) {
+                        dia_ag_ant = dia_ag_prox;
+                    }
+                    if (dia_ag_prox.equals(dia_ag_ant)) {
+                        i++; // contou a repetiÁ„o
+                    } else {
+                        i = 1;
+                        dia_ag_ant = dia_ag_prox;
+                    }
+                    // se a data estiver lotada, marca
+                    if (i >= 49) {
+                        listDatasLotadas.add(dia_ag_ant);
+                    } // guardou a data lotada
+                }
+                // veio algum agendamento
+                // System.out.println(results.size() + " agendamentos...");
+            } else {
+                // n„o veio nenhum agendamento
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        result.include("listDatasLotadas", listDatasLotadas);
+    }
+    
+    @Path("/horarioVetor")
+    public void horarioVetor(String frm_cod_local, String frm_data_ag) {
+        List<String> listHorasLivres = new ArrayList<String>();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Date dt = new Date();
+        String dtt = df.format(dt);
+        Agendamentos objAgendamento = new Agendamentos(null, null, null, null,
+                null, null, null, null, null);
+        List<Agendamentos> results = new ArrayList<Agendamentos>();
+        if (frm_data_ag != null && !frm_data_ag.isEmpty()) {
+            listHorasLivres.add("09:00");
+            listHorasLivres.add("09:10");
+            listHorasLivres.add("09:20");
+            listHorasLivres.add("09:30");
+            listHorasLivres.add("09:40");
+            listHorasLivres.add("09:50");
+            listHorasLivres.add("10:00");
+            listHorasLivres.add("10:10");
+            listHorasLivres.add("10:20");
+            listHorasLivres.add("10:30");
+            listHorasLivres.add("10:40");
+            listHorasLivres.add("10:50");
+            listHorasLivres.add("11:00");
+            listHorasLivres.add("11:10");
+            listHorasLivres.add("11:20");
+            listHorasLivres.add("11:30");
+            listHorasLivres.add("11:40");
+            listHorasLivres.add("11:50");
+            listHorasLivres.add("12:00");
+            listHorasLivres.add("12:10");
+            listHorasLivres.add("12:20");
+            listHorasLivres.add("12:30");
+            listHorasLivres.add("12:40");
+            listHorasLivres.add("12:50");
+            listHorasLivres.add("13:00");
+            listHorasLivres.add("13:10");
+            listHorasLivres.add("13:20");
+            listHorasLivres.add("13:30");
+            listHorasLivres.add("13:40");
+            listHorasLivres.add("13:50");
+            listHorasLivres.add("14:00");
+            listHorasLivres.add("14:10");
+            listHorasLivres.add("14:20");
+            listHorasLivres.add("14:30");
+            listHorasLivres.add("14:40");
+            listHorasLivres.add("14:50");
+            listHorasLivres.add("15:00");
+            listHorasLivres.add("15:10");
+            listHorasLivres.add("15:20");
+            listHorasLivres.add("15:30");
+            listHorasLivres.add("15:40");
+            listHorasLivres.add("15:50");
+            listHorasLivres.add("16:00");
+            listHorasLivres.add("16:10");
+            listHorasLivres.add("16:20");
+            listHorasLivres.add("16:30");
+            listHorasLivres.add("16:40");
+            listHorasLivres.add("16:50");
+            listHorasLivres.add("17:00");
+            df.applyPattern("dd-MM-yyyy");
+            try {
+                dtt = frm_data_ag;
+                results = Agendamentos.AR.find(
+                        "data_ag = to_date('" + dtt.trim()
+                                + "','dd-mm-yy') and cod_local='"
+                                + frm_cod_local.trim() + "'").fetch();
+                // zera os hor√°rios ocupados na frm_data_ag
+                // selecionada, no local frm_cod_local
+                String hrr = "";
+                for (Iterator it = results.iterator(); it.hasNext();) {
+                    objAgendamento = (Agendamentos) it.next();
+                    hrr = objAgendamento.getHora_ag();
+                    hrr = hrr.substring(0, 2) + ":" + hrr.substring(2, 4);
+                    listHorasLivres.set(listHorasLivres.indexOf(hrr), "");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                if (e.getMessage().equals("-1")) {
+                    listHorasLivres.clear();
+                    listHorasLivres.add("Erro de hor·rio inv·lido na base.");
+                }
+            } finally {
+                result.include("listHorasLivres", listHorasLivres);
+            }
+        }
+
+    }
 }

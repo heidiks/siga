@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import br.gov.jfrj.siga.model.ActiveRecord;
 import br.gov.jfrj.siga.model.Objeto;
+import br.gov.jfrj.siga.pp.dao.PpDao;
 
 @Entity(name = "Agendamentos")
 @Table(name = "Agendamentos", schema = "SIGAPMP")
@@ -128,4 +129,8 @@ public class Agendamentos extends Objeto {
         this.orgao = orgao;
     }
 
+    @Override
+    public void save() {
+        PpDao.getInstance().gravar(this);
+    }
 }
