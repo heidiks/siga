@@ -29,7 +29,8 @@ function formata(){
 			<c:if test="${!b}"> 
 				bgcolor="#dddddd"
 			</c:if>
-		/> 		
+		/>
+		<c:set var="b" value="${!b}"/>		
 		<td>&nbsp; ${locais.cod_local}
 		</td>
 		<td>&nbsp; ${locais.local}</td>
