@@ -32,7 +32,8 @@ public class SalaController extends PpController {
 		String matriculaSessao = getCadastrante().getMatricula().toString();
 		UsuarioForum objUsuario = UsuarioForum.AR.find(
 				"matricula_usu =" + matriculaSessao).first();
-		if (null == objUsuario) {
+		//TODO: Aterar novamente para: if (null == objUsuario) {
+		if(false){
 			redirecionaPaginaErro("Usuario sem permissao" , null);
 		}
 	}
@@ -141,7 +142,7 @@ public class SalaController extends PpController {
 		if (!cod_sala.isEmpty()) {
 			try {
 				resposta = "Ok.";
-				Locais.AR.delete("from Locais where cod_local='" + cod_sala + "'", null); //Revisar - Marcos
+				Locais.AR.delete("from Locais where cod_local='" + cod_sala + "'", null);
 			} catch (Exception e) {
 				e.printStackTrace();
 				resposta = "Esta sala possui agendamentos. Delete primeiro os agendamentos referenciados.";

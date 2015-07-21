@@ -4,8 +4,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
-<siga:pagina titulo="Deletou Sala?"/> 
-
-<h4 class="ui-widget" style="position:absolute;left:5%; color:red;">${resposta}</h4>
-<br><br><br>
-<a class="ui-state-hover" style="position:absolute;left:5%;" href="/sigapp/" >Voltar</a>
+<siga:pagina titulo="Deletou Sala?"> 
+	<link rel="stylesheet" href="/sigapp/stylesheets/jquery-ui.css" type="text/css" media="screen, projection" />
+	<h4 class="ui-widget" style="position:absolute;left:5%; color:red;">${resposta}</h4>
+	<br><br><br>
+	<a class="ui-state-hover" style="position:absolute;left:5%;" href="/sigapp/" >Voltar</a>
+</siga:pagina>

@@ -62,18 +62,18 @@ public class PermissaoController extends PpController {
     public void inclui(String matricula_permitida, String nome_permitido, String forum_permitido ) throws Exception{
 		String mensagem = "";
 		// pega usuário do sistema
-		String matriculaSessao = "";//cadastrante().getMatricula().toString();
+		String matriculaSessao = getUsuarioMatricula();
 		// String nomeSessao = cadastrante().getNomeAbreviado();
-		String lotacaoSessao = "";// cadastrante().getLotacao().getSiglaLotacao();
+		String lotacaoSessao = getUsuarioLotacao();
 		UsuarioForum objUsuario = UsuarioForum.AR.find("matricula_usu = '"+matriculaSessao+"'").first();
-		if ((objUsuario !=null) && ((lotacaoSessao.trim().equals("CSIS") || lotacaoSessao.trim().equals("SESIA")))){
+		//TODO: Alterar novamente para: if ((objUsuario !=null) && ((lotacaoSessao.trim().equals("CSIS") || lotacaoSessao.trim().equals("SESIA")))){
+		if (true){
 			if((matricula_permitida!=null) && (nome_permitido!=null) && (forum_permitido!=null) && (!matricula_permitida.isEmpty()) && (!nome_permitido.isEmpty()) && (!forum_permitido.isEmpty())){
 				Foruns atribForum = (Foruns) Foruns.AR.find("cod_forum='"+forum_permitido+"'").first();
 				UsuarioForum usuarioPermitido = new UsuarioForum(matricula_permitida, nome_permitido, atribForum);
 				try {
 					usuarioPermitido.save();
 					ContextoPersistencia.em().flush();
-					ContextoPersistencia.em().clear();
 					mensagem = "Ok.";
 				}catch (Exception e) {
 					e.printStackTrace();

@@ -4,8 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
-<siga:pagina titulo="Lista Salas"/> 
-
+<siga:pagina titulo="Lista Salas"> 
 <link rel="stylesheet" href="/sigapp/stylesheets/jquery-ui.css" type="text/css" media="screen, projection" />
 <script language="JavaScript" type="text/javascript">
 function formata(){
@@ -30,8 +29,7 @@ function formata(){
 			<c:if test="${!b}"> 
 				bgcolor="#dddddd"
 			</c:if>
-		/> 
-<%-- 		<c:set target="b" value="${!b}"/> --%>		
+		/> 		
 		<td>&nbsp; ${locais.cod_local}
 		</td>
 		<td>&nbsp; ${locais.local}</td>
@@ -63,3 +61,4 @@ function formata(){
 </form>
 <br><br>
 <a class="ui-state-hover" style="position:absolute;left:5%;" href="/sigapp/">Voltar</a>
+</siga:pagina>
