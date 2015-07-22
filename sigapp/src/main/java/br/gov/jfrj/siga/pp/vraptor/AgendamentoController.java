@@ -75,6 +75,7 @@ public class AgendamentoController extends PpController {
                 listPeritos = (ArrayList<Peritos>) Peritos.AR.findAll();
                 result.include("listAgendamentos", listAgendamentos);
                 result.include("listPeritos", listPeritos);
+                result.include("dataHoje", dtt);
             }
 		} else {
 		    redirecionaPaginaErro("Usuario sem permissao" , null);
@@ -87,7 +88,7 @@ public class AgendamentoController extends PpController {
 		UsuarioForum objUsuario = UsuarioForum.AR.find("matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
 			// busca locais em função da configuração do usuário
-			String criterioSalas=" null ";
+			String criterioSalas="";
 			List<Locais> listaDeSalas = Locais.AR.find("forumFk="+objUsuario.getForumFk().getCod_forum()).fetch();
 			// monta string de criterio
 			for(int j=0; j<listaDeSalas.size();j++){
@@ -108,7 +109,7 @@ public class AgendamentoController extends PpController {
 		}
     }
 
-    @Path("/print/{frm_data_ag}/{frm_sala_ag}/{frm_processo_ag}/{frm_periciado}")
+    @Path("/print")
     public void print(String frm_data_ag, String frm_sala_ag, String frm_processo_ag, String frm_periciado ){
 		List listAgendamentos = (List) Agendamentos.AR.find(
 		   "data_ag=to_date('"+frm_data_ag.substring(0,10)+"','yy-mm-dd') and localFk.cod_local='"+frm_sala_ag+"' and processo='"+frm_processo_ag+"' and periciado='"+frm_periciado+"'" ).fetch();
@@ -188,7 +189,6 @@ public class AgendamentoController extends PpController {
 					agendamentoEmConflito = Agendamentos.AR.find("perito_juizo like '"+perito_juizo.trim()+"%' and perito_juizo <> '-' and hora_ag='" +horaPretendida+ "' and data_ag=to_date('"+ frm_data_ag +"' , 'yy-mm-dd')"  ).first();
 					if (agendamentoEmConflito!=null){
 					    redirecionaPaginaErro("Perito nao disponivel no horario de " + agendamentoEmConflito.getHora_ag().substring(0,2)+ "h" + agendamentoEmConflito.getHora_ag().substring(2,4) + "min" , null );
-
 					}
 					minAux = String.valueOf(Integer.parseInt(minAux)
 							+ auxLocal.getIntervalo_atendimento());
@@ -309,18 +309,18 @@ public class AgendamentoController extends PpController {
 		UsuarioForum objUsuario = UsuarioForum.AR.find(
 				"matricula_usu =" + matriculaSessao).first();
     	if (objUsuario != null) {
-    		if(frm_data_ag==null){
+    		if(frm_data_ag==null)
     			frm_data_ag = "";
-    		}else{
+    		else{
     			listAgendamentos = Agendamentos.AR.find( "data_ag=to_date('" + frm_data_ag + "','dd-mm-yy') order by hora_ag, cod_local" ).fetch();
     			DpPessoa p = null;
     			// deleta os agendamentos de outros orgãos
     			for(int i=0;i<listAgendamentos.size();i++){
-    				 p = null;//(DpPessoa) DpPessoa.find("orgaoUsuario.idOrgaoUsu = " + cadastrante().getOrgaoUsuario().getIdOrgaoUsu()
-    							//		+ " and dataFimPessoa is null and matricula='"+ listAgendamentos.get(i).matricula + "'").first();
-    				if(lotacaoSessao.trim().equals(p.getLotacao().getSiglaLotacao().toString().trim())){
+    				 p = (DpPessoa) DpPessoa.AR.find("orgaoUsuario.idOrgaoUsu = " + getCadastrante().getOrgaoUsuario().getIdOrgaoUsu()
+    								+ " and dataFimPessoa is null and matricula='"+ listAgendamentos.get(i).getMatricula() + "'").first();
+    				if(lotacaoSessao.trim().equals(p.getLotacao().getSiglaLotacao().toString().trim()))
     					System.out.println("");
-    				}else{
+    				else{
     					listAgendamentos.remove(i);
     					i--;
     				}
@@ -330,25 +330,22 @@ public class AgendamentoController extends PpController {
     		listPeritos = Peritos.AR.findAll();
             result.include("listAgendamentos", listAgendamentos);
             result.include("listPeritos", listPeritos);
-    	}else{
+    	} else
     	    redirecionaPaginaErro("Usuario sem permissao" , null);
-    	}
+    	
    	}
 
-    @Path("/delete/{formAgendamento}")
-    public void delete(Agendamentos formAgendamento,
-    			String cod_local) {
+    public void delete(String data_ag, String hora_ag, String cod_local) {
     	String resultado = "";
-    	SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-    	String dtt = df.format(formAgendamento.getData_ag());
+    	
     	try {
     		Agendamentos ag = Agendamentos.AR.find(
-    				"hora_ag = '" + formAgendamento.getHora_ag()
+    				"hora_ag = '" + hora_ag
     						+ "' and localFk.cod_local='" + cod_local
-    						+ "' and data_ag = to_date('" + dtt
+    						+ "' and data_ag = to_date('" + data_ag
     						+ "','dd/mm/yy')").first();
     		//--------------------------
-    		String lotacaoSessao = getUsuarioLotacao();
+    		String lotacaoSessao = getCadastrante().getLotacao().getIdLotacao().toString();
     		String matricula_ag = ag.getMatricula();
     		DpPessoa p = (DpPessoa) DpPessoa.AR.find(
     				"orgaoUsuario.idOrgaoUsu = "
@@ -360,6 +357,7 @@ public class AgendamentoController extends PpController {
     		if(lotacaoSessao.trim().equals(lotacao_ag.trim())){
     		//--------------------------
     		ag.delete();
+    		ContextoPersistencia.em().flush();
     		resultado = "Ok.";
     		}else{
     		    redirecionaPaginaErro("Esse agendamento nao pode ser deletado; pertence a outra vara." , null);
@@ -369,7 +367,7 @@ public class AgendamentoController extends PpController {
     		resultado = "Não Ok.";
     	} finally {
     	    result.include("resultado", resultado);
-    	    result.include("dtt", dtt);
+    	    result.include("dtt", data_ag);
     	}
     }
 
@@ -432,7 +430,7 @@ public class AgendamentoController extends PpController {
         }
     }
 
-    @Path("/atualiza/{cod_sala}/{data_ag}/{hora_ag}")
+    @Path("/atualiza")
     public void atualiza(String cod_sala, String data_ag, String hora_ag) {
     	// pega usuario do sistema
     	String matriculaSessao = getUsuarioMatricula();
@@ -443,7 +441,7 @@ public class AgendamentoController extends PpController {
     		// forum onde ele está.
     		Locais objSala = Locais.AR.find("cod_forum='" + objUsuario.getForumFk().getCod_forum() + "' and cod_local='" + cod_sala + "'").first(); // isso não dá erro no caso de retorno vazio?
     		String sala_ag = objSala.getLocal();
-    		String lotacaoSessao = getUsuarioLotacao();
+    		String lotacaoSessao = getCadastrante().getLotacao().getIdLotacao().toString();;
     		//System.out.println(lotacaoSessao);
     		Agendamentos objAgendamento = Agendamentos.AR.find("cod_local='" + cod_sala + "' and data_ag = to_date('" + data_ag + "','yy-mm-dd') and hora_ag='" + hora_ag + "'").first();
     		String matricula_ag = objAgendamento.getMatricula();
@@ -486,6 +484,7 @@ public class AgendamentoController extends PpController {
     	    redirecionaPaginaErro("Usuario sem permissao" , null);
     	}
     }
+    
 
     @Path("/calendarioVetor")
     public void calendarioVetor(String frm_cod_local) {

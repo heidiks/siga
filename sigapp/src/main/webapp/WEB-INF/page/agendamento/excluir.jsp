@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <siga:pagina titulo="Cancelar Agendamento">
 	
@@ -46,7 +47,15 @@
 				<tr class="ui-button-icon-only" bgcolor="#dddddd">
 			</c:otherwise>
 		</c:choose>
-	<%-- 	#{set b: !b /} --%>
+	<c:choose>
+		<c:when test="${b}">
+			<tr class="ui-button-icon-only" >
+		</c:when>
+		<c:otherwise>
+			<tr class="ui-button-icon-only" bgcolor="#dddddd">
+		</c:otherwise>
+	</c:choose>
+	<c:set var="b" value="${!b}"></c:set>
 		<td>&nbsp ${ag.data_ag.toString().substring(8,10)}-${ag.data_ag.toString().substring(5,7)}-${ag.data_ag.toString().substring(0,4)}</td>
 		<td>&nbsp ${ag.hora_ag.substring(0,2)}:${ag.hora_ag.substring(2,4)}</td>
 		<td>&nbsp ${ag.localFk.local}</td>
@@ -55,7 +64,7 @@
 		<td>&nbsp ${ag.processo}</td>
 		<td>&nbsp
 		<c:choose>
-			<c:when test="${g.perito_juizo==null}">
+			<c:when test="${ag.perito_juizo==null}">
 				Sem perito do ju&iacute;zo
 			</c:when>
 			<c:otherwise>
@@ -72,8 +81,28 @@
 			</td>	
 		<td>&nbsp ${ag.perito_parte}</td>
 	
-		<td>&nbsp <form name="agendamento_deleta01" action="@{agendamento_delete()}" method="post" enctype="multipart/form-data"><img  src="/siga/css/famfamfam/icons/delete.png"><input type="hidden" name="cod_local" value=${ag.localFk.cod_local} /><input type="hidden" name="formAgendamento.data_ag" value=${ag.data_ag}/> <input type="hidden" name=formAgendamento.hora_ag value=${ag.hora_ag} />&nbsp<input type="submit" value="Exclui"/> </form></td>
-		<td>&nbsp <form name="agendamento_atualiza01" action="@{agendamento_atualiza()}" method="get" enctype="multipart/form-data">&nbsp &nbsp<img src="/siga/css/famfamfam/icons/user_edit.png"><input type="hidden" name="cod_sala" value=${ag.localFk.cod_local} /><input type="hidden" name="data_ag" value=${ag.data_ag}/> <input type="hidden" name="hora_ag" value=${ag.hora_ag} />&nbsp <input type="submit" value="Edita" /> </form></td>
+		<td>&nbsp; 
+			<form name="agendamento_deleta01" action="${linkTo[AgendamentoController].delete}" method="post">
+				<img  src="/siga/css/famfamfam/icons/delete.png">
+					<input type="hidden" name="data_ag" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${ag.data_ag}" />"/> 
+					<input type="hidden" name="hora_ag" value="${ag.hora_ag}" />
+					<input type="hidden" name="cod_local" value="${ag.localFk.cod_local}" />
+					&nbsp;
+					<input type="submit" value="Exclui"/> 
+			</form>
+		</td>
+		<td>
+			&nbsp 
+			<form name="agendamento_atualiza01" action="${linkTo[AgendamentoController].atualiza}" method="get" enctype="multipart/form-data">
+				&nbsp &nbsp
+				<img src="/siga/css/famfamfam/icons/user_edit.png">
+				<input type="hidden" name="cod_sala" value=${ag.localFk.cod_local} />
+				<input type="hidden" name="data_ag" value=${ag.data_ag}/> 
+				<input type="hidden" name="hora_ag" value=${ag.hora_ag} />
+				&nbsp 
+				<input type="submit" value="Edita" /> 
+			</form>
+		</td>
 		</tr>
 	</c:forEach>
 	 </table>
