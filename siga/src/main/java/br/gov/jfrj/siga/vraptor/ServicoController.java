@@ -38,6 +38,8 @@ import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.view.Results;
+import br.gov.jfrj.base.rpc.FaultMethodResponseRPC;
+import br.gov.jfrj.base.rpc.SimpleMethodResponseRPC;
 import br.gov.jfrj.siga.base.AplicacaoException;
 import br.gov.jfrj.siga.cp.CpConfiguracao;
 import br.gov.jfrj.siga.cp.CpServico;
@@ -49,8 +51,6 @@ import br.gov.jfrj.siga.dp.CpTipoLotacao;
 import br.gov.jfrj.siga.dp.DpLotacao;
 import br.gov.jfrj.siga.dp.DpPessoa;
 import br.gov.jfrj.siga.dp.dao.CpDao;
-import br.gov.jfrj.siga.libs.rpc.FaultMethodResponseRPC;
-import br.gov.jfrj.siga.libs.rpc.SimpleMethodResponseRPC;
 import br.gov.jfrj.siga.vraptor.suporte.ConfiguracaoConfManual;
 
 //MIGRAÇÃO VRAPTOR DA CLASSE WEB-WORK "package br.gov.jfrj.webwork.action.SelfConfigAction"
