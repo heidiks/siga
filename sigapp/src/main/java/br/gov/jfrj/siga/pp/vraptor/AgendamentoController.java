@@ -75,6 +75,7 @@ public class AgendamentoController extends PpController {
                 listPeritos = (ArrayList<Peritos>) Peritos.AR.findAll();
                 result.include("listAgendamentos", listAgendamentos);
                 result.include("listPeritos", listPeritos);
+                result.include("dataHoje", dtt);
             }
 		} else {
 		    redirecionaPaginaErro("Usuario sem permissao" , null);
@@ -87,7 +88,7 @@ public class AgendamentoController extends PpController {
 		UsuarioForum objUsuario = UsuarioForum.AR.find("matricula_usu =" + matriculaSessao).first();
 		if (objUsuario != null) {
 			// busca locais em função da configuração do usuário
-			String criterioSalas=" null ";
+			String criterioSalas="";
 			List<Locais> listaDeSalas = Locais.AR.find("forumFk="+objUsuario.getForumFk().getCod_forum()).fetch();
 			// monta string de criterio
 			for(int j=0; j<listaDeSalas.size();j++){
@@ -108,7 +109,7 @@ public class AgendamentoController extends PpController {
 		}
     }
 
-    @Path("/print/{frm_data_ag}/{frm_sala_ag}/{frm_processo_ag}/{frm_periciado}")
+    @Path("/print")
     public void print(String frm_data_ag, String frm_sala_ag, String frm_processo_ag, String frm_periciado ){
 		List listAgendamentos = (List) Agendamentos.AR.find(
 		   "data_ag=to_date('"+frm_data_ag.substring(0,10)+"','yy-mm-dd') and localFk.cod_local='"+frm_sala_ag+"' and processo='"+frm_processo_ag+"' and periciado='"+frm_periciado+"'" ).fetch();
@@ -188,7 +189,6 @@ public class AgendamentoController extends PpController {
 					agendamentoEmConflito = Agendamentos.AR.find("perito_juizo like '"+perito_juizo.trim()+"%' and perito_juizo <> '-' and hora_ag='" +horaPretendida+ "' and data_ag=to_date('"+ frm_data_ag +"' , 'yy-mm-dd')"  ).first();
 					if (agendamentoEmConflito!=null){
 					    redirecionaPaginaErro("Perito nao disponivel no horario de " + agendamentoEmConflito.getHora_ag().substring(0,2)+ "h" + agendamentoEmConflito.getHora_ag().substring(2,4) + "min" , null );
-
 					}
 					minAux = String.valueOf(Integer.parseInt(minAux)
 							+ auxLocal.getIntervalo_atendimento());
@@ -309,18 +309,18 @@ public class AgendamentoController extends PpController {
 		UsuarioForum objUsuario = UsuarioForum.AR.find(
 				"matricula_usu =" + matriculaSessao).first();
     	if (objUsuario != null) {
-    		if(frm_data_ag==null){
+    		if(frm_data_ag==null)
     			frm_data_ag = "";
-    		}else{
+    		else{
     			listAgendamentos = Agendamentos.AR.find( "data_ag=to_date('" + frm_data_ag + "','dd-mm-yy') order by hora_ag, cod_local" ).fetch();
     			DpPessoa p = null;
     			// deleta os agendamentos de outros orgãos
     			for(int i=0;i<listAgendamentos.size();i++){
-    				 p = null;//(DpPessoa) DpPessoa.find("orgaoUsuario.idOrgaoUsu = " + cadastrante().getOrgaoUsuario().getIdOrgaoUsu()
-    							//		+ " and dataFimPessoa is null and matricula='"+ listAgendamentos.get(i).matricula + "'").first();
-    				if(lotacaoSessao.trim().equals(p.getLotacao().getSiglaLotacao().toString().trim())){
+    				 p = (DpPessoa) DpPessoa.AR.find("orgaoUsuario.idOrgaoUsu = " + getCadastrante().getOrgaoUsuario().getIdOrgaoUsu()
+    								+ " and dataFimPessoa is null and matricula='"+ listAgendamentos.get(i).getMatricula() + "'").first();
+    				if(lotacaoSessao.trim().equals(p.getLotacao().getSiglaLotacao().toString().trim()))
     					System.out.println("");
-    				}else{
+    				else{
     					listAgendamentos.remove(i);
     					i--;
     				}
@@ -330,9 +330,9 @@ public class AgendamentoController extends PpController {
     		listPeritos = Peritos.AR.findAll();
             result.include("listAgendamentos", listAgendamentos);
             result.include("listPeritos", listPeritos);
-    	}else{
+    	} else
     	    redirecionaPaginaErro("Usuario sem permissao" , null);
-    	}
+    	
    	}
 
     public void delete(String data_ag, String hora_ag, String cod_local) {

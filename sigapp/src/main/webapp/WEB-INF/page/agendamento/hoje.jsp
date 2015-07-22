@@ -2,24 +2,18 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <siga:pagina titulo="Agendadas Hoje">
 	<link rel="stylesheet" href="/sigapp/stylesheets/jquery-ui.css" type="text/css" media="screen, projection" />
 	<center class="ui-tabs">
 		Per&iacute;cias marcadas para hoje:
-		<c:if test="${listAgendamentos!=null}">
-	 		${listAgendamentos.data_ag.toString().substring(9,11)}-${listAgendamentos.data_ag.toString().substring(6,8)}-${listAgendamentos.data_ag.toString().substring(1,5)}
+		<c:if test="${listAgendamentos != null}">
+			${dataHoje}
 	 	</c:if>
 	</center>
-	<form action="${linkTo[AgendamentoController].hojePrint}" method="get"
-		style="position: relative; left: 10%;">
-		<input type="hidden" name="frm_data_ag"
-			<c:if test="${listAgendamentos==null}">
-	    		value=""
-	    	</c:if>
-			<c:if test="${listAgendamentos!=null}">
-	    		value="${listAgendamentos.data_ag.toString().substring(9,11)}-${listAgendamentos.data_ag.toString().substring(6,8)}-${listAgendamentos.data_ag.toString().substring(1,5)}"
-	    	</c:if> />
+	<form action="${linkTo[AgendamentoController].hojePrint}" method="get" style="position: relative; left: 10%;">
+		<input type="hidden" name="frm_data_ag" value="${dataHoje}" />
 		<input type="submit" value="imprime" />
 	</form>
 	<table class="ui-tabs" align="center" style="font-size: 100%;">
@@ -45,15 +39,21 @@
 				<td>&nbsp; <c:if test="${null == ag.perito_juizo}">
 					Sem perito do ju&iacute;zo
 				</c:if> 
-				<c:if test="${null != ag.perito_juizo}">
-						<c:if test="${'' == ag.perito_juizo.trim()}">
-							<c:forEach items="${listPeritos}" var="prt">
-								<c:if test="${ag.perito_juizo.trim() == prt.cpf_perito.trim()}">
-									${prt.nome_perito}	
-								</c:if>
-							</c:forEach>
+				<c:choose>
+					<c:when test="${ag.perito_juizo==null}">
+						Sem perito do ju&iacute;zo
+					</c:when>
+					<c:otherwise>
+						<c:if test="${ag.perito_juizo.trim()==''}">
+							Sem perito do ju&iacute;zo.
 						</c:if>
-				</c:if>
+						<c:forEach items="${listPeritos}" var="prt">
+							<c:if test="${ag.perito_juizo.trim()==prt.cpf_perito.trim()}">
+								${prt.nome_perito}
+							</c:if>
+						</c:forEach>
+					</c:otherwise>
+				</c:choose>
 				</td>
 				<td>&nbsp; ${ag.localFk.local}</td>
 			</tr>
