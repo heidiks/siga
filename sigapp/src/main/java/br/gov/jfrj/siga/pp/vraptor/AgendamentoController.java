@@ -335,20 +335,17 @@ public class AgendamentoController extends PpController {
     	}
    	}
 
-    @Path("/delete/{formAgendamento}")
-    public void delete(Agendamentos formAgendamento,
-    			String cod_local) {
+    public void delete(String data_ag, String hora_ag, String cod_local) {
     	String resultado = "";
-    	SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-    	String dtt = df.format(formAgendamento.getData_ag());
+    	
     	try {
     		Agendamentos ag = Agendamentos.AR.find(
-    				"hora_ag = '" + formAgendamento.getHora_ag()
+    				"hora_ag = '" + hora_ag
     						+ "' and localFk.cod_local='" + cod_local
-    						+ "' and data_ag = to_date('" + dtt
+    						+ "' and data_ag = to_date('" + data_ag
     						+ "','dd/mm/yy')").first();
     		//--------------------------
-    		String lotacaoSessao = getUsuarioLotacao();
+    		String lotacaoSessao = getCadastrante().getLotacao().getIdLotacao().toString();
     		String matricula_ag = ag.getMatricula();
     		DpPessoa p = (DpPessoa) DpPessoa.AR.find(
     				"orgaoUsuario.idOrgaoUsu = "
@@ -360,6 +357,7 @@ public class AgendamentoController extends PpController {
     		if(lotacaoSessao.trim().equals(lotacao_ag.trim())){
     		//--------------------------
     		ag.delete();
+    		ContextoPersistencia.em().flush();
     		resultado = "Ok.";
     		}else{
     		    redirecionaPaginaErro("Esse agendamento nao pode ser deletado; pertence a outra vara." , null);
@@ -369,7 +367,7 @@ public class AgendamentoController extends PpController {
     		resultado = "Não Ok.";
     	} finally {
     	    result.include("resultado", resultado);
-    	    result.include("dtt", dtt);
+    	    result.include("dtt", data_ag);
     	}
     }
 
@@ -432,7 +430,7 @@ public class AgendamentoController extends PpController {
         }
     }
 
-    @Path("/atualiza/{cod_sala}/{data_ag}/{hora_ag}")
+    @Path("/atualiza")
     public void atualiza(String cod_sala, String data_ag, String hora_ag) {
     	// pega usuario do sistema
     	String matriculaSessao = getUsuarioMatricula();
@@ -443,7 +441,7 @@ public class AgendamentoController extends PpController {
     		// forum onde ele está.
     		Locais objSala = Locais.AR.find("cod_forum='" + objUsuario.getForumFk().getCod_forum() + "' and cod_local='" + cod_sala + "'").first(); // isso não dá erro no caso de retorno vazio?
     		String sala_ag = objSala.getLocal();
-    		String lotacaoSessao = getUsuarioLotacao();
+    		String lotacaoSessao = getCadastrante().getLotacao().getIdLotacao().toString();;
     		//System.out.println(lotacaoSessao);
     		Agendamentos objAgendamento = Agendamentos.AR.find("cod_local='" + cod_sala + "' and data_ag = to_date('" + data_ag + "','yy-mm-dd') and hora_ag='" + hora_ag + "'").first();
     		String matricula_ag = objAgendamento.getMatricula();
@@ -486,6 +484,7 @@ public class AgendamentoController extends PpController {
     	    redirecionaPaginaErro("Usuario sem permissao" , null);
     	}
     }
+    
 
     @Path("/calendarioVetor")
     public void calendarioVetor(String frm_cod_local) {

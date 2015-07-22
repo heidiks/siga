@@ -159,7 +159,7 @@
 			</option>
 		</c:if>
 		<c:forEach items="${listPeritos}" var="perito">
-			<option value="${perito.cpf_perito.substring(0,12).trim()}">
+			<option value="${perito.cpf_perito.trim()}">
 				${perito.nome_perito}
 			</option>
 		</c:forEach>

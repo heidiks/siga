@@ -9,7 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import br.gov.jfrj.siga.feature.converter.entity.vraptor.ConvertableEntity;
 import br.gov.jfrj.siga.model.ActiveRecord;
+import br.gov.jfrj.siga.model.ContextoPersistencia;
 import br.gov.jfrj.siga.model.Objeto;
 import br.gov.jfrj.siga.pp.dao.PpDao;
 
@@ -56,7 +58,7 @@ public class Agendamentos extends Objeto {
         this.processo = processo;
         this.orgao = orgao;
     }
-
+    
     public Date getData_ag() {
         return data_ag;
     }
@@ -133,4 +135,10 @@ public class Agendamentos extends Objeto {
     public void save() {
         PpDao.getInstance().gravar(this);
     }
+    
+    @Override
+    public void delete() {
+        ContextoPersistencia.em().remove(this);
+    }
+
 }

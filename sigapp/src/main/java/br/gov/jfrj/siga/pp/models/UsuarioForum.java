@@ -78,15 +78,5 @@ public class UsuarioForum extends Objeto {
     public void save() {
         PpDao.getInstance().gravar(this);
     }
-
-//    @Override
-//    public String getId() {
-//        return getMatricula_usu();
-//    }
-//
-//    @Override
-//    public int compareTo(UsuarioForum o) {
-//        return this.matricula_usu.compareTo(o.matricula_usu);
-//    }
     
 }
