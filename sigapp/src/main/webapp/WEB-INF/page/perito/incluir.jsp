@@ -11,7 +11,7 @@
 		<div style="position:absolute;left:5%;right:77%;">
 			<input class="ui-button" type="Submit" value="Incluir Perito" >
 		</div>
+		<div id="div_msg" class="ui-widget"></div>
+		<a style="position:fixed;left:5%;top:55%;" class="ui-state-hover" href="/sigapp/">Voltar</a>
 	</form>
-	<a style="position:absolute;left:5%;top:60%;" class="ui-state-hover" href="/sigapp/">Voltar</a>
-	<div id="div_msg" class="ui-widget"></div>
 </siga:pagina>
