@@ -33,8 +33,8 @@ public class UsuarioFormController extends PpController {
         if (objUsuario != null) {
             String descricaoForum = "";
             if (paramCodForum != null && !paramCodForum.isEmpty()) {
-                Foruns objForum = Foruns.AR.findById(Long
-                        .parseLong(paramCodForum));
+                Foruns objForum = Foruns.AR.findById(Integer
+                        .parseInt(paramCodForum));
                 descricaoForum = objForum.getDescricao_forum();
                 objUsuario.delete();
                 ContextoPersistencia.em().flush();
@@ -50,9 +50,9 @@ public class UsuarioFormController extends PpController {
                     mensagem = "Não Ok.";
                 }
             } else {
-                paramCodForum = Long.toString(objUsuario.getForumFk().getCod_forum());
+                paramCodForum = Integer.toString(objUsuario.getForumFk().getCod_forum());
                 Foruns objForum = Foruns.AR.find(
-                        "cod_forum = " + Long.parseLong(paramCodForum))
+                        "cod_forum = " + Integer.parseInt(paramCodForum))
                         .first();
                 descricaoForum = objForum.getDescricao_forum();
                 ContextoPersistencia.em().flush();
