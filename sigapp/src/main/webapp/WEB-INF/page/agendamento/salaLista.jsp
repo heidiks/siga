@@ -5,8 +5,6 @@
 
 <siga:pagina titulo="Agenda Sala Lista">
 	<link rel="stylesheet" href="/sigapp/stylesheets/jquery-ui.css" type="text/css" media="screen, projection" />
-	<script src="public/javascripts/jquery-1.9.1.js"></script>
-	<script src="public/javascripts/jquery-ui.js"></script>
 	<script type="text/javascript" language="Javascript1.1" >
 	function funcData(){
 		var dt = document.getElementById('datepicker').value;
@@ -36,7 +34,7 @@
 		auxCodLocal = "frm_cod_local= ";
 		auxCodLocal = auxCodLocal + frm_agendamento_sala_lista.frm_cod_local.value;
 		$.ajax({
-				url: "calendario_vetor?"+auxCodLocal,
+				url: "calendarioVetor?"+auxCodLocal,
 				type: "get",	
 				success: function(response){calendario_resposta(response)} ,
 				error: "" ,
