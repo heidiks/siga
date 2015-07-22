@@ -64,7 +64,7 @@
 		<td>&nbsp ${ag.processo}</td>
 		<td>&nbsp
 		<c:choose>
-			<c:when test="${g.perito_juizo==null}">
+			<c:when test="${ag.perito_juizo==null}">
 				Sem perito do ju&iacute;zo
 			</c:when>
 			<c:otherwise>
