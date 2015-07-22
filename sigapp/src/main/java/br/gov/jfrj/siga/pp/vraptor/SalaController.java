@@ -45,7 +45,7 @@ public class SalaController extends PpController {
     	String varCodLocal = formLocal.getCod_local();
     	String resposta = "";
     	try {
-
+    	    ContextoPersistencia.em().detach(formLocal);
     		System.out.println(ContextoPersistencia.em().createQuery("from Locais where cod_local ='" + varCodLocal+ "'").getSingleResult());
     		resposta = "Sala ja existe. Confira o codigo da sala. ";
 
