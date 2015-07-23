@@ -278,7 +278,6 @@ public class AgendamentoController extends PpController {
 			// Devo verificar agendamento conflitante, antes de fazer o UPDATE.
 			System.out.println(perito_juizo.trim()+""+dtt+" "+hora_ag.substring(0,2)+hora_ag.substring(3,5));
 			agendamentoEmConflito = Agendamentos.AR.find("perito_juizo like '"+perito_juizo.trim()+"%' and perito_juizo <> '-' and hora_ag='" +hora_ag.substring(0,2)+hora_ag.substring(3,5)+ "' and data_ag=to_date('"+ dtt +"', 'dd-mm-yy' ) and localFk<>'"+cod_sala+"'").first();
-			agendamentoEmConflito = new Agendamentos();
 			if (agendamentoEmConflito!=null)
 				redirecionaPaginaErro("Perito nao disponivel no horario de " + agendamentoEmConflito.getHora_ag().substring(0,2) +"h"+agendamentoEmConflito.getHora_ag().substring(2,4)+"min" , " excluir?data="+dtt);
 		        
