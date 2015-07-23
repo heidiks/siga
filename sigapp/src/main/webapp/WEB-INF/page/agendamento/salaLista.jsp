@@ -10,17 +10,17 @@
 		var dt = document.getElementById('datepicker').value;
 		var sl = document.getElementById('frm_cod_local01').value;
 		if(sl=="Escolha a sala"){
-			alert('A sala de peicia nao foi escolhida.');
+			alert('A sala de per\u00edcia n\u00e3o foi escolhida');
 			return;	
 		}
 		if(dt==""){
-			alert('A data nao foi escolhida');
+			alert('A data n\u00e3o foi escolhida');
 			return;
 		}
 		
 		if(dt=="--"){
 			document.getElementById('datepicker').value="";
-			alert('Campo data nao foi preenchido');
+			alert('Campo data n\u00e3o foi preenchido');
 			return;
 		}else{
 			if(dt!=""){
