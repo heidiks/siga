@@ -97,7 +97,7 @@ public class AgendamentoController extends PpController {
 					criterioSalas = criterioSalas + ",";
 				}
 			}
-			if (!frm_data_ag.isEmpty()){
+			if ((null != frm_data_ag) && !(frm_data_ag.isEmpty())){
 				List<Agendamentos> listAgendamentos = (List) Agendamentos.AR.find("data_ag=to_date('"+frm_data_ag.substring(0,10)+"','dd-mm-yy') and localFk in("+criterioSalas+") order by hora_ag , localFk" ).fetch();
 				List<Peritos> listPeritos = (List) new ArrayList<Peritos>();
 				listPeritos = Peritos.AR.findAll();
