@@ -27,8 +27,8 @@ public class PermissaoController extends PpController {
     public void exclui(String matricula_proibida){
 		String mensagem = "";
 		// pega usuário do sistema
-		String matriculaSessao = getCadastrante().getMatricula().toString();
-		String lotacaoSessao = getCadastrante().getLotacao().getSiglaLotacao();
+		String matriculaSessao = getUsuarioMatricula();
+		String lotacaoSessao = getUsuarioLotacao();
 		UsuarioForum objUsuario = UsuarioForum.AR.find("matricula_usu = '"+matriculaSessao+"'").first();
 		if ((objUsuario !=null) && ( (lotacaoSessao.trim().equals("CSIS")||lotacaoSessao.trim().equals("SESIA")) )){ //pode excluir a permissão
 			List<UsuarioForum> listPermitidos = new ArrayList<UsuarioForum>();
@@ -65,7 +65,7 @@ public class PermissaoController extends PpController {
 		// String nomeSessao = cadastrante().getNomeAbreviado();
 		String lotacaoSessao = getUsuarioLotacao();
 		UsuarioForum objUsuario = UsuarioForum.AR.find("matricula_usu = '"+matriculaSessao+"'").first();
-		//TODO: Alterar novamente para: if ((objUsuario !=null) && ((lotacaoSessao.trim().equals("CSIS") || lotacaoSessao.trim().equals("SESIA")))){
+		//TODO  Marcos: Alterar novamente para: if ((objUsuario !=null) && ((lotacaoSessao.trim().equals("CSIS") || lotacaoSessao.trim().equals("SESIA")))){
 		if (true){
 			if((matricula_permitida!=null) && (nome_permitido!=null) && (forum_permitido!=null) && (!matricula_permitida.isEmpty()) && (!nome_permitido.isEmpty()) && (!forum_permitido.isEmpty())){
 				Foruns atribForum = (Foruns) Foruns.AR.find("cod_forum='"+forum_permitido+"'").first();

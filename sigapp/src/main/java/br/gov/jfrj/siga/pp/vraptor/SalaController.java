@@ -29,10 +29,9 @@ public class SalaController extends PpController {
     @Path("/incluir")
     public void incluir() {
 		// pega usuario do sistema
-		String matriculaSessao = getCadastrante().getMatricula().toString();
-		UsuarioForum objUsuario = UsuarioForum.AR.find(
-				"matricula_usu =" + matriculaSessao).first();
-		//TODO: Aterar novamente para: if (null == objUsuario) {
+		String matriculaSessao = getUsuarioMatricula();
+		UsuarioForum objUsuario = UsuarioForum.findByMatricula(matriculaSessao);
+		//TODO  Marcos: Aterar novamente para: if (null == objUsuario) {
 		if(false){
 			redirecionaPaginaErro("Usuario sem permissao" , null);
 		}
@@ -67,8 +66,7 @@ public class SalaController extends PpController {
 			String desc_forum) {
 		// pega usuario do sistema
 		String matriculaSessao = getUsuarioMatricula();
-		UsuarioForum objUsuario = UsuarioForum.AR.find(
-				"matricula_usu =" + matriculaSessao).first();
+		UsuarioForum objUsuario = UsuarioForum.findByMatricula(matriculaSessao);
 		if (objUsuario != null) {
 			List<Locais> listLocais = new ArrayList<Locais>();
 			if (desc_forum == null) {
