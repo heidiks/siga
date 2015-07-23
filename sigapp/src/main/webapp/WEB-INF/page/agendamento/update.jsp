@@ -11,7 +11,7 @@
 <h4 class="ui-widget" style="position:absolute;left:5%; color:red;">${resultado}</h4>
 <br>
 <form name="agendamento_edita01" method="get"  action="${linkTo[AgendamentoController].excluir}" enctype="multipart/form-data">
-	<input type="hidden" name="frm_data_ag" value=${data_ag} />
+	<input type="hidden" name="data" value=${data_ag} />
 	<input class="ui-button" style="position: absolute; left:35%;" type="submit"  value="Retornar a tela anterior"  />
 </form>
 <br><br><br>

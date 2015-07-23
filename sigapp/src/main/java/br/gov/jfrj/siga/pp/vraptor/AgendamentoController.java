@@ -272,18 +272,19 @@ public class AgendamentoController extends PpController {
     @Path("/update")
     public void update(String cod_sala, String data_ag, String hora_ag, String processo, String periciado, String perito_juizo, String perito_parte, String orgao_ag){
 		String resultado = "";
+		String dtt = data_ag.replaceAll("/", "-");
 		Agendamentos agendamentoEmConflito = null;
 		try{
 			// Devo verificar agendamento conflitante, antes de fazer o UPDATE.
-			System.out.println(perito_juizo.trim()+""+data_ag+" "+hora_ag.substring(0,2)+hora_ag.substring(3,5));
-			agendamentoEmConflito = Agendamentos.AR.find("perito_juizo like '"+perito_juizo.trim()+"%' and perito_juizo <> '-' and hora_ag='" +hora_ag.substring(0,2)+hora_ag.substring(3,5)+ "' and data_ag=to_date('"+ data_ag +"', 'dd-mm-yy' ) and localFk<>'"+cod_sala+"'").first();
-
-			if (agendamentoEmConflito!=null){
-				redirecionaPaginaErro("Perito nao disponivel no horario de " + agendamentoEmConflito.getHora_ag().substring(0,2) +"h"+agendamentoEmConflito.getHora_ag().substring(2,4)+"min" , " agendamento_excluir?frm_data_ag="+data_ag);
-			}
-			ContextoPersistencia.em().createQuery("update Agendamentos set processo = '"+ processo +"', "+ "periciado='"+ periciado +"', perito_juizo='"+ perito_juizo.trim() +"', perito_parte='"+perito_parte+"', orgao='"+orgao_ag+"' where cod_local='"+cod_sala+"' and  hora_ag='"+hora_ag.substring(0,2)+hora_ag.substring(3,5)+"' and data_ag=to_date('"+data_ag+"','dd-mm-yy')").executeUpdate();
+			System.out.println(perito_juizo.trim()+""+dtt+" "+hora_ag.substring(0,2)+hora_ag.substring(3,5));
+			agendamentoEmConflito = Agendamentos.AR.find("perito_juizo like '"+perito_juizo.trim()+"%' and perito_juizo <> '-' and hora_ag='" +hora_ag.substring(0,2)+hora_ag.substring(3,5)+ "' and data_ag=to_date('"+ dtt +"', 'dd-mm-yy' ) and localFk<>'"+cod_sala+"'").first();
+			agendamentoEmConflito = new Agendamentos();
+			if (agendamentoEmConflito!=null)
+				redirecionaPaginaErro("Perito nao disponivel no horario de " + agendamentoEmConflito.getHora_ag().substring(0,2) +"h"+agendamentoEmConflito.getHora_ag().substring(2,4)+"min" , " excluir?data="+dtt);
+		        
+			ContextoPersistencia.em().createQuery("update Agendamentos set processo = '"+ processo +"', "+ "periciado='"+ periciado +"', perito_juizo='"+ perito_juizo.trim() +"', perito_parte='"+perito_parte+"', orgao='"+orgao_ag+"' where cod_local='"+cod_sala+"' and  hora_ag='"+hora_ag.substring(0,2)+hora_ag.substring(3,5)+"' and data_ag=to_date('"+dtt+"','dd-mm-yy')").executeUpdate();
 			ContextoPersistencia.em().flush();
-			Agendamentos objAgendamento = (Agendamentos) Agendamentos.AR.find("cod_local='"+cod_sala+"' and  hora_ag='"+hora_ag.substring(0,2)+hora_ag.substring(3,5)+"' and data_ag=to_date('"+data_ag+"','dd-mm-yy')" ).first();
+			Agendamentos objAgendamento = (Agendamentos) Agendamentos.AR.find("cod_local='"+cod_sala+"' and  hora_ag='"+hora_ag.substring(0,2)+hora_ag.substring(3,5)+"' and data_ag=to_date('"+dtt+"','dd-mm-yy')" ).first();
 			if(objAgendamento==null){
 				resultado = "Nao Ok.";
 			}else{
@@ -297,7 +298,7 @@ public class AgendamentoController extends PpController {
 			resultado = "Não Ok.";
 		}finally{
 		    result.include("resultado", resultado);
-		    result.include("data_ag", data_ag);
+		    result.include("data_ag", dtt);
 		}
     }
 
