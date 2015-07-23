@@ -5,6 +5,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <siga:pagina titulo="Erro">
+	<link rel="stylesheet" href="/sigapp/stylesheets/jquery-ui.css" type="text/css" media="screen, projection" />
 	<div style="position:absolute;left:30%;"><img src="/siga/css/famfamfam/icons/bell_error.png" /><h2>${msg}</h2></div>
 	<br><br>
 	<c:if test="${link != null}">
