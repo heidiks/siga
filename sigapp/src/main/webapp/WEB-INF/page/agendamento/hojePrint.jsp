@@ -43,7 +43,7 @@
 					<td>${ag.hora_ag.substring(0,2)}:${ag.hora_ag.substring(2,4)}
 					</td>
 					<td>${ag.localFk.local}&nbsp;</td>
-					<td>${ag.periciado}</td>
+					<td>${ag.periciado != 'null' ? ag.periciado : ''}</td>
 					<td>${ag.orgao}&nbsp;</td>
 					<td><c:if test="${null == ag.perito_juizo}">
 					Sem perito do ju&iacute;zo
@@ -57,7 +57,7 @@
 	 					</c:if>
 							</c:forEach>
 						</c:if> &nbsp;</td>
-					<td>${ag.perito_parte}&nbsp;</td>
+					<td>${ag.perito_parte != 'null' ? ag.perito_parte : ''}&nbsp;</td>
 				</tr>
 			</c:forEach>
 		</table>

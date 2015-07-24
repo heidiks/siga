@@ -60,7 +60,7 @@
 							</c:forEach>
 						</c:if>
 					</td>
-					<td>${ag.perito_parte}&nbsp;</td>
+					<td>${ag.perito_parte != 'null' ? ag.perito_parte : ''}&nbsp;</td>
 				</tr>
 			</c:forEach>
 		</table>
