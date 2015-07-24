@@ -34,7 +34,7 @@ function formata(){
 	<input type="hidden" name="formLocal.ordem_apresentacao" value="0" />  <!-- int --> 
 <br/>
 	<div style="position:absolute;left:5%;">
-	<input class="ui-button" type="submit" value="Grava"  /> <input class="ui-button" type="button" value="Lista" onclick="chamada('@{salas_listar()}');" />
+	<input class="ui-button" type="submit" value="Grava"  /> <input class="ui-button" type="button" value="Lista" onclick="chamada('${linkTo[SalaController].listar}');" />
 	<br/>
 	</div>
 </form>
