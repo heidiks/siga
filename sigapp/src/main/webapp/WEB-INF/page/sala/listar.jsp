@@ -10,6 +10,7 @@
 function formata(){
 	var aux = document.getElementById('cod_local01').value.toUpperCase();
 	document.getElementById('cod_local01').value = aux;
+	document.charset = 'ISO-8859-1';
 }
 </script>
 <br>
@@ -50,7 +51,7 @@ function formata(){
 	</c:forEach>
 </table>
 <br> 
-<form  style="border-style: groove; border-color: silver;" name="restringe_foruns" action="${linkTo[SalaController].listar}" method="get" onsubmit="formata()" enctype="multipart/form-data">
+<form  style="border-style: groove; border-color: silver;" name="restringe_foruns" action="${linkTo[SalaController].listar}" method="get" onsubmit="formata()" enctype="multipart/form-data" accept-charset="ISO-8859-1">
 <br>
 <font class="ui-state-default" size="3px" style="position:absolute;left:5%;right:79%;"> C&oacute;digo: </font><input id="cod_local01" type="text" name="cod_local" class="ui-widget" style="position:absolute;left:25%;" maxlength="3" size="3" /><br>
 <br>
