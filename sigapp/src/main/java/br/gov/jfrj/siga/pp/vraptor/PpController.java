@@ -21,10 +21,12 @@ public class PpController extends SigaController {
         super(request, result, dao, so, em);
     }
 
+    @Override
     protected  CpDao dao() {
         return PpDao.getInstance();
     }
     
+    @Override
     protected void assertAcesso(String pathServico) throws AplicacaoException {
         super.assertAcesso("SR:Módulo de Serviços;" + pathServico);
     }
