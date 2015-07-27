@@ -38,13 +38,11 @@ public class PrincipalController extends PpController {
                 Foruns objForum = Foruns.AR.find("cod_forum=" + objUsuario.getForumFk().getCod_forum()).first();
                 ArrayList<String> vetorForuns = new ArrayList<String>();
                 String texto = objForum.getMural();
-                int i = 0;
                 while (texto.length() > 4) {
                     vetorForuns.add(texto.substring(0, texto.indexOf("<br>")));
                     texto = texto.substring(texto.indexOf("<br>"),
                             texto.length());
                     texto = texto.substring(4, texto.length());
-                    i++;
                 }
                 result.include("lstLocais", lstLocais);
                 result.include("vetorForuns", vetorForuns);
