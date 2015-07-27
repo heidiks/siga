@@ -115,8 +115,10 @@ public class AgendamentoController extends PpController {
 		   "data_ag=to_date('"+frm_data_ag.substring(0,10)+"','yy-mm-dd') and localFk.cod_local='"+frm_sala_ag+"' and processo='"+frm_processo_ag+"' and periciado='"+frm_periciado+"'" ).fetch();
 		if(frm_periciado.isEmpty()){
 		    redirecionaPaginaErro("Relatorio depende de nome de periciado preenchido para ser impresso." , null);
+		    return;
 		}else if(frm_processo_ag.isEmpty()){
 		    redirecionaPaginaErro("Relatorio depende de numero de processo preenchido para ser impresso." , null);
+		    return;
 		}else{
 			List<Peritos> listPeritos = new ArrayList<Peritos>();
 			listPeritos = Peritos.AR.findAll();
@@ -189,6 +191,7 @@ public class AgendamentoController extends PpController {
 					agendamentoEmConflito = Agendamentos.AR.find("perito_juizo like '"+perito_juizo.trim()+"%' and perito_juizo <> '-' and hora_ag='" +horaPretendida+ "' and data_ag=to_date('"+ frm_data_ag +"' , 'yy-mm-dd')"  ).first();
 					if (agendamentoEmConflito!=null){
 					    redirecionaPaginaErro("Perito nao disponivel no horario de " + agendamentoEmConflito.getHora_ag().substring(0,2)+ "h" + agendamentoEmConflito.getHora_ag().substring(2,4) + "min" , null );
+					    return;
 					}
 					minAux = String.valueOf(Integer.parseInt(minAux)
 							+ auxLocal.getIntervalo_atendimento());
@@ -278,8 +281,10 @@ public class AgendamentoController extends PpController {
 			// Devo verificar agendamento conflitante, antes de fazer o UPDATE.
 			System.out.println(perito_juizo.trim()+""+dtt+" "+hora_ag.substring(0,2)+hora_ag.substring(3,5));
 			agendamentoEmConflito = Agendamentos.AR.find("perito_juizo like '"+perito_juizo.trim()+"%' and perito_juizo <> '-' and hora_ag='" +hora_ag.substring(0,2)+hora_ag.substring(3,5)+ "' and data_ag=to_date('"+ dtt +"', 'dd-mm-yy' ) and localFk<>'"+cod_sala+"'").first();
-			if (agendamentoEmConflito!=null)
+			if (agendamentoEmConflito!=null) {
 				redirecionaPaginaErro("Perito nao disponivel no horario de " + agendamentoEmConflito.getHora_ag().substring(0,2) +"h"+agendamentoEmConflito.getHora_ag().substring(2,4)+"min" , " excluir?data="+dtt);
+				return;
+			}
 		        
 			ContextoPersistencia.em().createQuery("update Agendamentos set processo = '"+ processo +"', "+ "periciado='"+ periciado +"', perito_juizo='"+ perito_juizo.trim() +"', perito_parte='"+perito_parte+"', orgao='"+orgao_ag+"' where cod_local='"+cod_sala+"' and  hora_ag='"+hora_ag.substring(0,2)+hora_ag.substring(3,5)+"' and data_ag=to_date('"+dtt+"','dd-mm-yy')").executeUpdate();
 			ContextoPersistencia.em().flush();
