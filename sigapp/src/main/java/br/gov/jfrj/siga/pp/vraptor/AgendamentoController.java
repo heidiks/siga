@@ -114,7 +114,7 @@ public class AgendamentoController extends PpController {
 		if(frm_periciado == "" || frm_periciado == null){
 		    redirecionaPaginaErro("Relatorio depende de nome de periciado preenchido para ser impresso." , null);
 		    return;
-		}else if(frm_processo_ag  == "" || frm_periciado == null){
+		}else if(frm_processo_ag  == "" || frm_processo_ag == null){
 		    redirecionaPaginaErro("Relatorio depende de numero de processo preenchido para ser impresso." , null);
 		    return;
 		}else{
@@ -272,12 +272,6 @@ public class AgendamentoController extends PpController {
         }
     }
 
-    private String verificaCampoEInicializaCasoNull(String campo) {
-        if(campo == null)
-            return "";
-        
-        return campo;
-    }
     @Path("/update")
     public void update(String cod_sala, String data_ag, String hora_ag, String processo, String periciado, String perito_juizo, String perito_parte, String orgao_ag){
         processo = verificaCampoEInicializaCasoNull(processo);
@@ -644,5 +638,12 @@ public class AgendamentoController extends PpController {
             }
         }
 
+    }
+
+    private String verificaCampoEInicializaCasoNull(String campo) {
+        if(campo == null)
+            return "";
+        
+        return campo;
     }
 }
