@@ -30,7 +30,7 @@ public class PrincipalController extends PpController {
     
     @Path("/app/home")
     public void home() {
-        String matriculaSessao = getCadastrante().getMatricula().toString();
+        String matriculaSessao = getUsuarioMatricula();
         UsuarioForum objUsuario = UsuarioForum.findByMatricula(matriculaSessao);
         if (objUsuario != null) {
             try {
