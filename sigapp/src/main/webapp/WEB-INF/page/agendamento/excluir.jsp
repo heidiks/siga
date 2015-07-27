@@ -59,9 +59,9 @@
 		<td>&nbsp ${ag.data_ag.toString().substring(8,10)}-${ag.data_ag.toString().substring(5,7)}-${ag.data_ag.toString().substring(0,4)}</td>
 		<td>&nbsp ${ag.hora_ag.substring(0,2)}:${ag.hora_ag.substring(2,4)}</td>
 		<td>&nbsp ${ag.localFk.local}</td>
-		<td>&nbsp ${ag.periciado != 'null' ? ag.periciado : ''}</td>
+		<td>&nbsp ${ag.periciado}</td>
 		<td>&nbsp ${ag.orgao}</td>
-		<td>&nbsp ${ag.processo != 'null' ? ag.processo : ''}</td>
+		<td>&nbsp ${ag.processo}</td>
 		<td>&nbsp
 		<c:choose>
 			<c:when test="${ag.perito_juizo==null}">
@@ -79,7 +79,7 @@
 			</c:otherwise>
 		</c:choose>
 			</td>	
-		<td>&nbsp ${ag.perito_parte != 'null' ? ag.perito_parte : ''}</td>
+		<td>&nbsp ${ag.perito_parte}</td>
 	
 		<td>&nbsp; 
 			<form name="agendamento_deleta01" action="${linkTo[AgendamentoController].delete}" method="post">

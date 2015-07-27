@@ -4,14 +4,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://localhost/jeetags" prefix="siga"%>
 
-<siga:pagina titulo="Agenda Insert"/>
-<title>Agenda Insert</title>
-
-<h4 class="ui-widget" style="position:absolute;left:5%; color:red;">${resposta}</h4><br>
-<br>
-<form name="frm_agendamento_insert01" method="get" action="${linkTo[AgendamentoController].incluirAjax}" enctype="multipart/form-data">
- <input type="hidden" name="fixo_perito_juizo" value="${perito_juizo}" />
- <input class="ui-button" style="position:absolute;left:35%;" type="submit" value="Continuar agendando." />
-</form>
-<br><br><br>
-<a style="position:absolute;left:5%;" class="ui-state-hover" href="/sigapp/">Voltar</a>
+<siga:pagina titulo="Agenda Insert">
+	<link rel="stylesheet" href="/sigapp/stylesheets/jquery-ui.css" type="text/css" media="screen, projection" />
+	<h4 class="ui-widget" style="position:absolute;left:5%; color:red;">${resposta}</h4><br>
+	<br>
+	<form name="frm_agendamento_insert01" method="get" action="${linkTo[AgendamentoController].incluirAjax}" enctype="multipart/form-data">
+	 <input type="hidden" name="fixo_perito_juizo" value="${perito_juizo}" />
+	 <input class="ui-button" style="position:absolute;left:35%;" type="submit" value="Continuar agendando." />
+	</form>
+	<br><br><br>
+	<a style="position:absolute;left:5%;" class="ui-state-hover" href="/sigapp/">Voltar</a>
+</siga:pagina>

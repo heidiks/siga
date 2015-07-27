@@ -33,9 +33,9 @@
 				<c:set var="b" value="${!b}" />
 				<td>&nbsp;
 					${ag.hora_ag.substring(0,2)}:${ag.hora_ag.substring(2,4)}</td>
-				<td>&nbsp; ${ag.periciado != 'null' ? ag.periciado : ''}</td>
+				<td>&nbsp; ${ag.periciado}</td>
 				<td>&nbsp; ${ag.orgao}</td>
-				<td>&nbsp; ${ag.processo != 'null' ? ag.processo : ''}</td>
+				<td>&nbsp; ${ag.processo}</td>
 				<td>&nbsp; <c:if test="${null == ag.perito_juizo}">
 					Sem perito do ju&iacute;zo
 				</c:if> 

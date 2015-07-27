@@ -84,8 +84,8 @@
 				  ${ag.hora_ag.substring(0,2)}:
 				  ${ag.hora_ag.substring(2,4)}
 			  </td>
-			  <td>&nbsp; ${ag.periciado != 'null' ? ag.periciado : ''} </td>
-			  <td>&nbsp; ${ag.processo != 'null' ? ag.processo : ''} </td>
+			  <td>&nbsp; ${ag.periciado} </td>
+			  <td>&nbsp; ${ag.processo} </td>
 			  <td>
 			  <c:if test="${null == ag.perito_juizo}"> Sem perito do ju&iacute;zo </c:if>
 			  <c:if test="${null != ag.perito_juizo}">
@@ -95,7 +95,7 @@
 			 		</c:forEach>
 			  </c:if>
 			  </td>
-			  <td>&nbsp; ${ag.perito_parte != 'null' ? ag.perito_parte : ''}</td>
+			  <td>&nbsp; ${ag.perito_parte}</td>
 			  <td>&nbsp; <form name="agendamento_sala-lista01" action="${linkTo[AgendamentoController].print}" method="get"><img  src="/siga/css/famfamfam/icons/printer.png"><input type="hidden" name="frm_sala_ag" value="${ag.localFk.cod_local}" /><input type="hidden" name="frm_data_ag" value="${ag.data_ag}" /> <input type="hidden" name="frm_periciado" value="${ag.periciado}" /> <input type="hidden" name="frm_processo_ag" value="${ag.processo}">&nbsp<input type="submit" value="Imprime"/></form></td>
 			  </tr>
 		</c:forEach>

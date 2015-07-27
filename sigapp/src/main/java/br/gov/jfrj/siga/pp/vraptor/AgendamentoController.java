@@ -111,15 +111,15 @@ public class AgendamentoController extends PpController {
 
     @Path("/print")
     public void print(String frm_data_ag, String frm_sala_ag, String frm_processo_ag, String frm_periciado ){
-		List listAgendamentos = (List) Agendamentos.AR.find(
-		   "data_ag=to_date('"+frm_data_ag.substring(0,10)+"','yy-mm-dd') and localFk.cod_local='"+frm_sala_ag+"' and processo='"+frm_processo_ag+"' and periciado='"+frm_periciado+"'" ).fetch();
-		if(frm_periciado.isEmpty()){
+		if(frm_periciado == "" || frm_periciado == null){
 		    redirecionaPaginaErro("Relatorio depende de nome de periciado preenchido para ser impresso." , null);
 		    return;
-		}else if(frm_processo_ag.isEmpty()){
+		}else if(frm_processo_ag  == "" || frm_periciado == null){
 		    redirecionaPaginaErro("Relatorio depende de numero de processo preenchido para ser impresso." , null);
 		    return;
 		}else{
+		    List listAgendamentos = (List) Agendamentos.AR.find(
+		            "data_ag=to_date('"+frm_data_ag.substring(0,10)+"','yy-mm-dd') and localFk.cod_local='"+frm_sala_ag+"' and processo='"+frm_processo_ag+"' and periciado='"+frm_periciado+"'" ).fetch();
 			List<Peritos> listPeritos = new ArrayList<Peritos>();
 			listPeritos = Peritos.AR.findAll();
 			result.include("frm_processo_ag", frm_processo_ag);
@@ -272,9 +272,19 @@ public class AgendamentoController extends PpController {
         }
     }
 
+    private String verificaCampoEInicializaCasoNull(String campo) {
+        if(campo == null)
+            return "";
+        
+        return campo;
+    }
     @Path("/update")
     public void update(String cod_sala, String data_ag, String hora_ag, String processo, String periciado, String perito_juizo, String perito_parte, String orgao_ag){
-		String resultado = "";
+        processo = verificaCampoEInicializaCasoNull(processo);
+        periciado = verificaCampoEInicializaCasoNull(periciado);
+        perito_parte = verificaCampoEInicializaCasoNull(perito_parte);
+        
+        String resultado = "";
 		String dtt = data_ag.replaceAll("/", "-");
 		Agendamentos agendamentoEmConflito = null;
 		try{
@@ -371,8 +381,9 @@ public class AgendamentoController extends PpController {
     		e.printStackTrace();
     		resultado = "Não Ok.";
     	} finally {
+    	    String dtt = data_ag.replace("/", "-");
     	    result.include("resultado", resultado);
-    	    result.include("dtt", data_ag);
+    	    result.include("dtt", dtt);
     	}
     }
 

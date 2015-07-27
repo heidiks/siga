@@ -25,12 +25,12 @@
 		  <br><br>
 		  <font class="ui-state-default" size="3px" style="position:absolute;left:25%;">N&uacute;mero processo: </font>
 		  
-		  <input class="ui-widget" name="processo"  type="text" style="position:absolute;left:40%;" size="25" maxlength="50" value="${processo  != 'null' ? processo : ''}" />
+		  <input class="ui-widget" name="processo"  type="text" style="position:absolute;left:40%;" size="25" maxlength="50" value="${processo}" />
 		  <c:if test="${processo != null}"></c:if>
 		  <br><br>
 		  <font class="ui-state-default" size="3px" style="position:absolute;left:25%;">Nome periciado: </font>
 		 
-		  <input class="ui-widget" name="periciado" type="text" style="position:absolute;left:40%;" size="50" maxlength="50" value="${periciado != 'null' ? periciado : ''}" />
+		  <input class="ui-widget" name="periciado" type="text" style="position:absolute;left:40%;" size="50" maxlength="50" value="${periciado}" />
 		  <br><br>
 		  <font class="ui-state-default" size="3px" style="position:absolute;left:25%;">Perito ju&iacute;zo: </font>
 		  <!--  
@@ -48,7 +48,7 @@
 		  <br><br>
 		  <font class="ui-state-default" size="3px" style="position:absolute;left:25%;">Perito parte: </font>
 		  
-		  <input class="ui-widget" name="perito_parte" type="text" style="position:absolute;left:40%;" size="50" maxlength="50" value="${perito_parte != 'null' ? perito_parte : ''}" />
+		  <input class="ui-widget" name="perito_parte" type="text" style="position:absolute;left:40%;" size="50" maxlength="50" value="${perito_parte}" />
 		  <br><br> 
 		  <font class="ui-state-default" size="3px" style="position:absolute;left:25%;left:25%;">&Oacute;“rg&atilde;o julgador: </font>
 		 
