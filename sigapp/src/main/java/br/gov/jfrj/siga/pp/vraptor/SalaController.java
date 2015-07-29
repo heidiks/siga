@@ -31,8 +31,7 @@ public class SalaController extends PpController {
 		// pega usuario do sistema
 		String matriculaSessao = getUsuarioMatricula();
 		UsuarioForum objUsuario = UsuarioForum.findByMatricula(matriculaSessao);
-		//TODO  Marcos: Aterar novamente para: if (null == objUsuario) {
-		if(false){
+		if (null == objUsuario) {
 			redirecionaPaginaErro("Usuario sem permissao" , null);
 		}
 	}
