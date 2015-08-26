@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -203,10 +205,16 @@ public class AgendamentoController extends PpController {
 				// sloop
 				hrAux = hr.substring(0, 2);
 				minAux = hr.substring(3, 5);
+			    EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+				EntityManager em = emf.createEntityManager();
+				  
+				em.getTransaction().begin();
 				for (int i = 0; i < lote; i++) {
 					objAgendamento.setHora_ag(hrAux + minAux);
-					objAgendamento.save();
-					ContextoPersistencia.em().flush();
+					em.persist(objAgendamento);
+					em.flush();
+		            em.clear();
+		            
 					minAux = String.valueOf(Integer.parseInt(minAux)
 							+ auxLocal.getIntervalo_atendimento());
 					if (Integer.parseInt(minAux) >= 60) {
@@ -215,6 +223,8 @@ public class AgendamentoController extends PpController {
 					}
 					resposta = "Ok.";
 				}
+				em.getTransaction().commit();
+			    em.close();
 				// floop
 				// end transaction, que, segundo o Da Rocha é automático; no fim
 				// da action
