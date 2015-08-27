@@ -6,6 +6,9 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 
+import org.hibernate.NonUniqueObjectException;
+import org.hibernate.exception.ConstraintViolationException;
+
 import br.com.caelum.vraptor.Path;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
@@ -58,7 +61,7 @@ public class PermissaoController extends PpController {
     }
 
     @Path("/inclui")
-    public void inclui(String matricula_permitida, String nome_permitido, String forum_permitido ) throws Exception{
+    public void inclui(String matricula_permitida, String nome_permitido, String forum_permitido ) throws Exception {
 		String mensagem = "";
 		// pega usuário do sistema
 		String matriculaSessao = getUsuarioMatricula();
@@ -73,9 +76,8 @@ public class PermissaoController extends PpController {
 					usuarioPermitido.save();
 					ContextoPersistencia.em().flush();
 					mensagem = "Ok.";
-				}catch (Exception e) {
-					e.printStackTrace();
-					if ((e.getMessage().substring(0,89).equals("a different object with the same identifier value was already associated with the session")) || (e.getMessage().substring(54,89).equals("Could not execute JDBC batch update"))){
+				} catch (Exception e) {
+					if (e.getClass().equals(NonUniqueObjectException.class) || e.getClass().equals(ConstraintViolationException.class)){
 						mensagem="Usuario ja tinha permissao.";
 					}else{
 						mensagem = "Nao Ok.";
@@ -87,12 +89,9 @@ public class PermissaoController extends PpController {
 				mensagem="";
 				result.include("mensagem", mensagem);
 			}
-
 		}else{
 		    redirecionaPaginaErro("Usuario sem permissao." , null );
 		}
     }
-
-
 
 }
