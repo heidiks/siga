@@ -29,7 +29,7 @@ public class UsuarioForum extends Objeto {
     // fk, e tem que atribuir via objeto forumfK
     private Foruns forumFk; // isso é coluna, mas tem que atribuir como objeto
 
-    @Column(name = "nome_usu", length = 50, nullable = true)
+    @Column(name = "nome_usu", length = 50, nullable = true, unique = true)
     private String nome_usu;
 
     public UsuarioForum(String matricula_usu_construt, String nome_usu_construt, Foruns cod_forum_construt) {
