@@ -69,16 +69,18 @@ public class PermissaoController extends PpController {
 		String lotacaoSessao = getUsuarioLotacao();
 		UsuarioForum objUsuario = UsuarioForum.AR.find("matricula_usu = '"+matriculaSessao+"'").first();
 		
-		if ((objUsuario !=null) && ((lotacaoSessao.trim().equals("SEADDA") || lotacaoSessao.trim().equals("SEDGET")))){
+		if ((objUsuario !=null) && ((lotacaoSessao.trim().equals("CSIS") || lotacaoSessao.trim().equals("SESIA")))){
 			if((matricula_permitida!=null) && (nome_permitido!=null) && (forum_permitido!=null) && (!matricula_permitida.isEmpty()) && (!nome_permitido.isEmpty()) && (!forum_permitido.isEmpty())){
 				Foruns atribForum = (Foruns) Foruns.AR.find("cod_forum='"+forum_permitido+"'").first();
 				UsuarioForum usuarioPermitido = new UsuarioForum(matricula_permitida, nome_permitido, atribForum);
 				try {
-					usuarioPermitido.save();
+					ContextoPersistencia.em().persist(usuarioPermitido);
 					ContextoPersistencia.em().flush();
 					mensagem = "Ok.";
 				} catch (Exception e) {
-					if (e.getClass().equals(NonUniqueObjectException.class) || e.getClass().equals(ConstraintViolationException.class)){
+				    e.printStackTrace();
+				    if (e.getMessage().contains("a different object with the same identifier value was already associated with the session") || e.getMessage().contains("Could not execute JDBC batch update")
+				            || e.getMessage().contains("org.hibernate.exception.ConstraintViolationException")){
 						mensagem="Usuario ja tinha permissao.";
 					}else{
 						mensagem = "Nao Ok.";
