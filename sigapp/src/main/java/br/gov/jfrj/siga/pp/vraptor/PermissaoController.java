@@ -68,7 +68,8 @@ public class PermissaoController extends PpController {
 		// String nomeSessao = cadastrante().getNomeAbreviado();
 		String lotacaoSessao = getUsuarioLotacao();
 		UsuarioForum objUsuario = UsuarioForum.AR.find("matricula_usu = '"+matriculaSessao+"'").first();
-		if ((objUsuario !=null) && ((lotacaoSessao.trim().equals("CSIS") || lotacaoSessao.trim().equals("SESIA")))){
+		
+		if ((objUsuario !=null) && ((lotacaoSessao.trim().equals("SEADDA") || lotacaoSessao.trim().equals("SEDGET")))){
 			if((matricula_permitida!=null) && (nome_permitido!=null) && (forum_permitido!=null) && (!matricula_permitida.isEmpty()) && (!nome_permitido.isEmpty()) && (!forum_permitido.isEmpty())){
 				Foruns atribForum = (Foruns) Foruns.AR.find("cod_forum='"+forum_permitido+"'").first();
 				UsuarioForum usuarioPermitido = new UsuarioForum(matricula_permitida, nome_permitido, atribForum);
