@@ -14,7 +14,7 @@ import br.gov.jfrj.siga.pp.dao.PpDao;
 
 @Entity
 @Table(name = "UsuarioForum", schema = "SIGAPMP")
-public class UsuarioForum extends Objeto {
+public class UsuarioForum extends Objeto{
 
     private static final long serialVersionUID = -698697354242184472L;
     public static final ActiveRecord<UsuarioForum> AR = new ActiveRecord<>(UsuarioForum.class);
@@ -77,6 +77,17 @@ public class UsuarioForum extends Objeto {
     @Override
     public void save() {
         PpDao.getInstance().gravar(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        UsuarioForum novo = (UsuarioForum) o;
+        
+        if(this.matricula_usu.equals(novo.getMatricula_usu()) && this.nome_usu.equals(novo.getNome_usu()) 
+                && this.forumFk.equals(novo.getForumFk()))
+            return true;
+        
+        return false;
     }
     
 }

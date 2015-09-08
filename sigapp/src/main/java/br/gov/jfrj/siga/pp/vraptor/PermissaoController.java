@@ -74,9 +74,13 @@ public class PermissaoController extends PpController {
 				Foruns atribForum = (Foruns) Foruns.AR.find("cod_forum='"+forum_permitido+"'").first();
 				UsuarioForum usuarioPermitido = new UsuarioForum(matricula_permitida, nome_permitido, atribForum);
 				try {
-					ContextoPersistencia.em().persist(usuarioPermitido);
-					ContextoPersistencia.em().flush();
-					mensagem = "Ok.";
+				    if(objUsuario.equals(usuarioPermitido))
+				        mensagem = "Usuario ja tinha permissao.";
+				    else {
+    					ContextoPersistencia.em().persist(usuarioPermitido);
+    					ContextoPersistencia.em().flush();
+    					mensagem = "Ok.";
+					}
 				} catch (Exception e) {
 				    e.printStackTrace();
 				    if (e.getMessage().contains("a different object with the same identifier value was already associated with the session") || e.getMessage().contains("Could not execute JDBC batch update")
@@ -96,5 +100,4 @@ public class PermissaoController extends PpController {
 		    redirecionaPaginaErro("Usuario sem permissao." , null );
 		}
     }
-
 }
